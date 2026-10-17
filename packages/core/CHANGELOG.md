@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Validate FastAng configuration before starting the development server, using the same loader and checks as production builds.
+
 - Optional TypeBox API contracts infer Fastify handler types and Angular JSON client requests and successful responses.
 - Shared contracts reuse runtime schemas, check file-route consistency and encode API URLs explicitly.
 

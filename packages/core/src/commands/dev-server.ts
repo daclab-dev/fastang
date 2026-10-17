@@ -6,6 +6,10 @@ import { listen } from '../listen.ts';
 import { tsImport } from 'tsx/esm/api';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { loadFastangConfig } from './load-config.ts';
+
+await loadFastangConfig('serve');
+
 const { configureServer } = await tsImport(pathToFileURL(resolve('src/server/plugins.ts')).href, import.meta.url);
 const { registerApi } = await tsImport(pathToFileURL(resolve('.fastang/api.ts')).href, import.meta.url);
 

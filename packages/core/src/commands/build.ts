@@ -2,15 +2,12 @@ import { mkdir, rm, writeFile } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { build } from 'vite';
-import { loadConfigFromFile } from 'vite';
 import { prepareVercelPlan } from '../adapters/vercel-plan.ts';
 import { buildVercelOutput } from '../adapters/vercel.ts';
 import { staticFile } from '../static-path.ts';
-import { validateConfig } from '../config.ts';
+import { loadFastangConfig } from './load-config.ts';
 
-const loaded = await loadConfigFromFile({ command: 'build', mode: 'production' }, 'fastang.config.ts');
-if (!loaded) throw new Error('Missing fastang.config.ts');
-const config = validateConfig(loaded.config);
+const config = await loadFastangConfig('build');
 
 const vercel = process.argv.includes('--vercel');
 

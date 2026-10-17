@@ -101,6 +101,21 @@ try {
     try {
       const base = await address();
       assert.match(await (await fetch(base + '/greet/Grace')).text(), /Hello, Grace!/);
+      // A plain config export must fail in dev too, then recover in the same CLI.
+      const configOffset = logs.length;
+      await writeFile(configFile, "export default { prerender: ['/about'], vercel: { prunePages: 'false' } };\n");
+      const invalidDeadline = Date.now() + 30_000;
+      while (!logs.slice(configOffset).includes('vercel.prunePages must be a boolean')) {
+        assert.ok(Date.now() < invalidDeadline, 'Development configuration validation timed out: ' + logs);
+        assert.equal(dev.exitCode, null, 'The development supervisor must remain alive');
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+      assert.doesNotMatch(logs.slice(configOffset), /Server listening at/);
+      const recoveryOffset = logs.length;
+      await writeFile(configFile, originalConfig);
+      const recovered = await address(recoveryOffset);
+      assert.match(await (await fetch(recovered + '/greet/Grace')).text(), /Hello, Grace!/);
+
       const offset = logs.length;
       const endpoint = join(app, 'src/server/api/greet/[name].get.ts');
       await writeFile(endpoint, (await readFile(endpoint, 'utf8')).replace('Hello,', 'Welcome,'));
@@ -126,7 +141,7 @@ try {
   const response = await inject(handler, '/greet/Linus');
   assert.equal(response.statusCode, 200);
   assert.match(response.body, browser ? /Hello, Linus!/ : /Welcome, Linus!/);
-  console.log(browser ? 'Typed API starter passed: production browser tests and packaged Vercel SSR function.' : 'Generator and independent starter passed: tarball installation, types, SSR, API, prerender, 404, dev restart and Vercel function.');
+  console.log(browser ? 'Typed API starter passed: production browser tests and packaged Vercel SSR function.' : 'Generator and independent starter passed: tarball installation, types, SSR, API, prerender, 404, dev configuration recovery, backend restart and Vercel function.');
 } finally {
   await rm(temporary, { recursive: true, force: true });
 }
