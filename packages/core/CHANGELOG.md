@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add read-only `fastang routes` inspection with page/layout/metadata ancestry and explicit API methods, including versioned JSON output.
+
 - Validate FastAng configuration before starting the development server, using the same loader and checks as production builds.
 
 - Optional TypeBox API contracts infer Fastify handler types and Angular JSON client requests and successful responses.

@@ -103,3 +103,39 @@ test('SSR route pruning keeps ancestors and 404s while retaining redirect metada
   assert.match(source, /import\("\.\/omitted.server"\)/);
   assert.match(source, /import\("\.\/pages\/\[\.\.\.slug\]\.page"\)/);
 });
+
+test('route inspection preserves layout ancestry and metadata without evaluating or generating files', async () => {
+  const { inspectRoutes } = await import('@fastang/core/routes');
+  const root = await mkdtemp(join(tmpdir(), 'fastang-inspect-'));
+  try {
+    const files = [
+      'src/app/pages/layout.ts', 'src/app/pages/layout.route.ts',
+      'src/app/pages/index.page.ts', 'src/app/pages/(shop)/layout.ts',
+      'src/app/pages/(shop)/products/[id].page.ts', 'src/app/pages/(shop)/products/[id].route.ts',
+      'src/app/pages/[...slug].page.ts', 'src/app/pages/_private/hidden.page.ts',
+      'src/server/api/products/[id].get.ts', 'src/server/api/products/[id].post.ts',
+      'src/server/api/helper.ts',
+    ];
+    for (const file of files) {
+      await mkdir(join(root, file, '..'), { recursive: true });
+      await writeFile(join(root, file), "throw new Error('Inspection must not execute application code');");
+    }
+    const manifest = await inspectRoutes(root);
+    assert.equal(manifest.schemaVersion, 1);
+    assert.deepEqual(manifest.pages.map(page => page.path), ['/products/:id', '/', '/**']);
+    const product = manifest.pages[0];
+    assert.equal(product.metadata, 'src/app/pages/(shop)/products/[id].route.ts');
+    assert.deepEqual(product.layouts, [
+      { path: '/', file: 'src/app/pages/layout.ts', metadata: 'src/app/pages/layout.route.ts' },
+      { path: '/', file: 'src/app/pages/(shop)/layout.ts' },
+    ]);
+    assert.deepEqual(manifest.api, [
+      { method: 'GET', path: '/api/products/:id', file: 'src/server/api/products/[id].get.ts' },
+      { method: 'POST', path: '/api/products/:id', file: 'src/server/api/products/[id].post.ts' },
+    ]);
+    await assert.rejects(readFile(join(root, 'src/app/fastang.routes.ts')), { code: 'ENOENT' });
+    await assert.rejects(readFile(join(root, '.fastang/api.ts')), { code: 'ENOENT' });
+    await writeFile(join(root, 'src/app/pages/(shop)/products/[name].page.ts'), '');
+    await assert.rejects(inspectRoutes(root), /Collisione/);
+  } finally { await rm(root, { recursive: true, force: true }); }
+});

@@ -52,3 +52,18 @@ npm pack --workspace @fastang/core --pack-destination /tmp
 
 Install the tarball into a copy of `examples/starter`. No global CLI, repository
 source files or website assets are required by the installed package.
+
+## Inspect file routes (next alpha)
+
+On main, `fastang routes` lists page paths in matching order with their source
+files, ancestor layouts and metadata files, followed by explicit API methods.
+Use `fastang routes --json` for a JSON document with `schemaVersion: 1`, `pages`
+and `api` arrays. This command is planned for the next alpha and is not included
+in npm `0.1.0-alpha.1`.
+
+Inspection uses the same discovery and collision checks as generation. It does
+not import application modules, evaluate configuration, write generated files,
+build the app or start a server. Paths describe file conventions: custom Angular
+router prefixes, routes registered by plugins and Fastify's implicit HEAD routes
+are not included. `**` denotes an Angular catch-all; API catch-alls use `*`.
+The output does not report prerendering or deployment-function assignment.

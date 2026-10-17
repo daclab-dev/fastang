@@ -44,3 +44,25 @@ Usa `RouterLink` per la navigazione interna. Non modificare `src/app/fastang.rou
 Non conservare dati di richieste o utenti in variabili di modulo. Per i provider mutabili di rotta usa una factory, per esempio `useFactory: () => ({ count: 0 })`. FastAng ricrea gli oggetti delle route per ogni rendering SSR.
 
 Continua con [caricamento dati e rendering](rendering.md). Per il comportamento standard consulta [il router Angular](https://angular.dev/guide/routing).
+
+## Ispezionare le rotte (prossima alpha)
+
+Da un’app che usa il ramo main o la prossima alpha, esegui:
+
+```sh
+npx fastang routes
+npx fastang routes --json
+```
+
+La vista testuale elenca le pagine nell’ordine di corrispondenza, con file
+sorgente, layout antenati e metadati, seguite dai metodi API. Il JSON restituisce
+un documento con `schemaVersion: 1` e gli array `pages` e `api`; ogni pagina
+include i propri `layouts` dall’esterno verso l’interno. I file sono relativi
+alla cartella dell’app.
+
+L’ispezione legge i nomi dei file senza eseguire codice applicativo, generare file
+o avviare un server. Rotte ambigue e metadati senza pagina producono gli stessi
+errori della generazione. La mappa descrive le convenzioni dei file: non include
+prefissi aggiunti dal router Angular, rotte dei plugin o rotte HEAD implicite.
+Non deduce le regole di rendering o deploy. Il comando non è presente in npm
+`0.1.0-alpha.1`.

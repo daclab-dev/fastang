@@ -182,6 +182,43 @@ export async function discoverPageTree(directory: string): Promise<PageRouteNode
   return buildPageTree(await listFiles(directory));
 }
 
+export interface RouteInspection {
+  schemaVersion: 1;
+  pages: {
+    path: string;
+    file: string;
+    metadata?: string;
+    layouts: { path: string; file: string; metadata?: string }[];
+  }[];
+  api: { method: string; path: string; file: string }[];
+}
+
+/** Inspect file conventions without evaluating application modules or writing files. */
+export async function inspectRoutes(root = process.cwd()): Promise<RouteInspection> {
+  const [tree, endpoints] = await Promise.all([
+    discoverPageTree(resolve(root, 'src/app/pages')),
+    discover(resolve(root, 'src/server/api'), 'api'),
+  ]);
+  const pages: RouteInspection['pages'] = [];
+  const describe = (node: PageRouteNode) => ({
+    path: '/' + node.fullPath,
+    file: 'src/app/pages/' + node.file,
+    ...(node.metadata ? { metadata: 'src/app/pages/' + node.metadata } : {}),
+  });
+  function visit(nodes: PageRouteNode[], layouts: RouteInspection['pages'][number]['layouts']) {
+    for (const node of nodes) {
+      if (node.kind === 'layout') visit(node.children ?? [], [...layouts, describe(node)]);
+      else pages.push({ ...describe(node), layouts });
+    }
+  }
+  visit(tree, []);
+  return {
+    schemaVersion: 1,
+    pages,
+    api: endpoints.map(route => ({ method: route.method!, path: '/api' + (route.path ? '/' + route.path : ''), file: 'src/server/api/' + route.file })),
+  };
+}
+
 async function writeChanged(file: string, content: string): Promise<void> {
   await mkdir(dirname(file), { recursive: true });
   if (await readFile(file, 'utf8').catch(() => '') !== content) await writeFile(file, content);

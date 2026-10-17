@@ -44,3 +44,23 @@ Use `RouterLink` for internal navigation. Do not edit `src/app/fastang.routes.ts
 Do not keep request or user data in module variables. Use a factory for mutable route providers, for example `useFactory: () => ({ count: 0 })`. FastAng creates fresh route objects for every SSR application.
 
 Continue with [data loading and rendering](rendering.md). See [Angular routing](https://angular.dev/guide/routing) for standard router behavior.
+
+## Inspect the route map (next alpha)
+
+From an application using the main branch or the next alpha, run:
+
+```sh
+npx fastang routes
+npx fastang routes --json
+```
+
+The text view lists pages in matching order with their source files, ancestor
+layouts and route metadata, followed by API methods. JSON returns a
+`schemaVersion: 1` document with `pages` and `api` arrays; each page includes its
+`layouts` in outermost-to-innermost order. File paths are relative to the app.
+
+Inspection reads file names without executing application code, generating files
+or starting a server. Ambiguous routes and orphan metadata fail with the same
+errors as generation. This is the file-based map: prefixes added by your Angular
+router, plugin routes and implicit HEAD routes are not shown. It does not infer
+rendering or deployment rules. This command is not in npm `0.1.0-alpha.1`.

@@ -36,6 +36,17 @@ try {
     try { await run('npm', args, { cwd: app, maxBuffer: 8 * 1024 * 1024, timeout: 180_000 }); }
     catch (error) { console.error((error as { stdout?: string; stderr?: string }).stdout, (error as { stderr?: string }).stderr); throw error; }
   };
+  const inspect = await run(process.execPath, ['node_modules/@fastang/core/bin/fastang.mjs', 'routes', '--json'], { cwd: app });
+  const routeManifest = JSON.parse(inspect.stdout);
+  assert.equal(routeManifest.schemaVersion, 1);
+  assert.ok(routeManifest.pages.some((page: { path: string }) => page.path === '/greet/:name'));
+  assert.ok(routeManifest.api.some((route: { path: string; method: string }) => route.path === '/api/health' && route.method === 'GET'));
+  const listing = await run(process.execPath, ['node_modules/@fastang/core/bin/fastang.mjs', 'routes'], { cwd: app });
+  assert.match(listing.stdout, /PAGE \/greet\/:name/);
+  await assert.rejects(run(process.execPath, ['node_modules/@fastang/core/bin/fastang.mjs', 'routes', '--unknown'], { cwd: app }), error => {
+    assert.match(String((error as { stderr?: string }).stderr), /Usage: fastang routes/);
+    return true;
+  });
   if (browser) {
     await command(['install', '@sinclair/typebox@^0.34.41', '--no-audit', '--no-fund']);
     await cp(resolve('examples/typed-api/src'), join(app, 'src'), { recursive: true });
@@ -141,7 +152,7 @@ try {
   const response = await inject(handler, '/greet/Linus');
   assert.equal(response.statusCode, 200);
   assert.match(response.body, browser ? /Hello, Linus!/ : /Welcome, Linus!/);
-  console.log(browser ? 'Typed API starter passed: production browser tests and packaged Vercel SSR function.' : 'Generator and independent starter passed: tarball installation, types, SSR, API, prerender, 404, dev configuration recovery, backend restart and Vercel function.');
+  console.log(browser ? 'Typed API starter passed: production browser tests and packaged Vercel SSR function.' : 'Generator and independent starter passed: tarball installation, route inspection, types, SSR, API, prerender, 404, dev configuration recovery, backend restart and Vercel function.');
 } finally {
   await rm(temporary, { recursive: true, force: true });
 }
