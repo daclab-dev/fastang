@@ -2,6 +2,8 @@
 
 **Native Angular. Full Fastify.**
 
+A [DacLab](https://github.com/daclab-dev) project, created by Dario Chiapperini.
+
 FastAng is an experimental full-stack framework that brings Angular interfaces, Fastify APIs and server rendering into one project, with clear responsibilities on each side.
 
 **Prototype 0.1 — under active development.** This repository contains the framework runtime, build tools and a working demonstration site. It is not yet an installable npm framework or project generator. APIs and conventions may change.

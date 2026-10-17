@@ -49,5 +49,13 @@
     "vite": "8.3.4"
   },
   "license": "MIT",
-  "author": "Dario Chiapperini"
+  "author": "Dario Chiapperini",
+  "homepage": "https://fastang.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daclab-dev/fastang.git"
+  },
+  "bugs": {
+    "url": "https://github.com/daclab-dev/fastang/issues"
+  }
 }

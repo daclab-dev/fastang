@@ -1,5 +1,7 @@
 # FastAng
 
+Un progetto [DacLab](https://github.com/daclab-dev), creato da Dario Chiapperini.
+
 [English overview](README.md) · [Contribuire](CONTRIBUTING.md) · [Licenze e asset](NOTICE.md)
 
 Angular nativo, Fastify completo. Una prima base funzionante per un meta-framework fullstack orientato al runtime Node.js.
