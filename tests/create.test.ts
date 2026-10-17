@@ -17,7 +17,8 @@ test('generator creates a complete standalone app with a normalized package name
     assert.equal(project.name, 'my-app');
     const manifest = JSON.parse(await readFile(join(project.directory, 'package.json'), 'utf8'));
     assert.equal(manifest.name, 'my-app');
-    assert.equal(manifest.dependencies['@fastang/core'], '0.1.0-alpha.0');
+    const core = JSON.parse(await readFile(resolve('packages/core/package.json'), 'utf8'));
+    assert.equal(manifest.dependencies['@fastang/core'], core.version);
     assert.match(await readFile(join(project.directory, '.gitignore'), 'utf8'), /dist/);
     const files = await readdir(project.directory);
     assert.ok(!files.some(file => ['_gitignore', 'node_modules', '.fastang', 'package-lock.json'].includes(file)));
