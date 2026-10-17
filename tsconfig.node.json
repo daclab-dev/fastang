@@ -13,6 +13,7 @@
     "src/shared/**/*.ts",
     "tests/**/*.ts",
     "fastang.config.ts",
-    "vite.config.ts"
+    "vite.config.ts",
+    "playwright.config.ts"
   ]
 }

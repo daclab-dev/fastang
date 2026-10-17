@@ -61,3 +61,23 @@ license. Asset exceptions are documented in NOTICE.md.
 Public tutorials live in `docs/guide/it` and `docs/guide/en`; the website renders those same files. Keep guide slugs and executable code identical between languages. A fenced TypeScript block annotated with `file=src/...` or `file=fastang.config.ts` is a complete file applied to a fresh starter by `npm run test:docs`. This checks templates, types, rendering and the documented HTTP behavior. Run a subset with `npm run test:docs -- errors configuration` while iterating.
 
 The website supports headings, paragraphs, lists, tables, code fences and inline code/links/strong text. Raw HTML is displayed as text. Keep examples within this subset and include working internal Markdown links.
+
+## Browser tests
+
+```bash
+npx playwright install --with-deps chromium
+npm run test:e2e
+```
+
+This installs both packages from local tarballs into an independent generated app,
+adds test-only greeting links, a guard and an API error fallback, and builds it
+for production. Playwright checks desktop and mobile Chromium: SSR DOM reuse,
+interactive hydration, HTTP transfer cache, client navigation and history,
+redirects, API failures and 404 recovery. Fixtures live in `tests/e2e/fixture`;
+they do not alter the published starter. The server uses a temporary port and
+closes after the run. It does not reuse or stop a running development server.
+
+CI runs the same command and saves the HTML report, failure screenshots and
+traces for seven days. Open a local report with `npx playwright show-report`.
+These checks cover Chromium at two viewport sizes; they do not establish
+Firefox, Safari or real-device compatibility.
