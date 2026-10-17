@@ -8,7 +8,7 @@ FastAng is an experimental full-stack framework that brings Angular interfaces, 
 
 **Prototype 0.1 — under active development.** This workspace contains the independently packaged `@fastang/core` runtime and tools, a minimal starter and a working demonstration site. The first alpha is available on npm as `@fastang/core` and `create-fastang` under the `alpha` tag. APIs and conventions may change.
 
-[Guida completa in italiano](README.it.md) · [Contributing](CONTRIBUTING.md) · [License and assets](NOTICE.md)
+[English tutorials](docs/guide/en/getting-started.md) · [Guide pratiche in italiano](docs/guide/it/getting-started.md) · [Riferimento completo in italiano](README.it.md) · [Contributing](CONTRIBUTING.md) · [License and assets](NOTICE.md)
 
 ## Why FastAng?
 

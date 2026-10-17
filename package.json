@@ -26,7 +26,8 @@
     "create:build": "npm run build --workspace create-fastang",
     "create": "npm run create:build && create-fastang",
     "release:pack": "node --import tsx scripts/pack-release.ts",
-    "release:check": "npm run check && npm test && npm run build:vercel && npm run test:production && npm run test:vercel && npm run test:starter && npm audit --audit-level=high && npm run release:pack"
+    "release:check": "npm run check && npm test && npm run build:vercel && npm run test:production && npm run test:vercel && npm run test:starter && npm run test:docs && npm audit --audit-level=high && npm run release:pack",
+    "test:docs": "node --import tsx scripts/test-docs.ts"
   },
   "dependencies": {
     "@angular/common": "22.2.3",

@@ -18,6 +18,7 @@ import brandMark from '../assets/brand/fastang-shield-96.webp';
         <a [routerLink]="'/about' | localePath" routerLinkActive="active">{{ 'Pagina statica' | t }}</a>
         <a [routerLink]="'/products/starter' | localePath" routerLinkActive="active">{{ 'Prodotto SSR' | t }}</a>
         <a [routerLink]="'/request' | localePath" routerLinkActive="active">Request context</a>
+        <a [routerLink]="'/docs' | localePath" routerLinkActive="active">Docs</a>
         <a [routerLink]="'/brand' | localePath" routerLinkActive="active">Brand</a>
       </nav>
       <span class="runtime" [attr.data-hydrated]="hydrated()"><i></i>{{ (hydrated() ? 'Client connesso' : 'Server render') | t }}</span>

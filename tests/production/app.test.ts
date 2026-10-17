@@ -198,3 +198,26 @@ test('the executable entry starts listen() even when the build has multiple entr
     return true;
   });
 });
+
+test('documentation is prerendered in both languages and unknown guides return HTTP 404', async () => {
+  const { guideNavigation } = await import('../../src/app/docs/navigation');
+  const app = await createProductionServer();
+  try {
+    for (const prefix of ['', '/en']) {
+      const index = await app.inject(prefix + '/docs');
+      assert.equal(index.statusCode, 200);
+      assert.equal(index.headers['x-fastang-render'], 'prerender');
+      for (const guide of guideNavigation) {
+        const response = await app.inject(prefix + '/docs/' + guide.slug);
+        assert.equal(response.statusCode, 200);
+        assert.equal(response.headers['x-fastang-render'], 'prerender');
+        assert.match(response.body, prefix ? /<html lang="en"/ : /<html lang="it"/);
+        assert.match(response.body, /aria-current="page"/);
+        assert.match(response.body, /<h1>/);
+      }
+      const unknown = await app.inject(prefix + '/docs/unknown');
+      assert.equal(unknown.statusCode, 404);
+      assert.match(unknown.body, prefix ? /Guide not found/ : /Guida non trovata/);
+    }
+  } finally { await app.close(); }
+});

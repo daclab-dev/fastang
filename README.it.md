@@ -251,7 +251,7 @@ vercel: {
 },
 ```
 
-In modalità `routes`, attiva in questa demo, il build aggiunge `functions/__fastang/pages/<id>.func/` per ogni pagina SSR del filesystem e `functions/__fastang/endpoints/<id>.func/` per ogni forma di percorso API. I metodi HTTP dello stesso percorso condividono una funzione (incluso HEAD); i nomi dei parametri possono differire tra metodi. Le versioni italiana e inglese di una pagina condividono la stessa funzione. Una pagina interamente prerenderizzata non genera una funzione dedicata. Il risultato attuale è di **11 funzioni**: 6 pagine, 3 endpoint e 2 fallback. Il manifest leggibile è `dist/vercel-manifest.json` e non viene pubblicato sulla CDN.
+In modalità `routes`, attiva in questa demo, il build aggiunge `functions/__fastang/pages/<id>.func/` per ogni pagina SSR del filesystem e `functions/__fastang/endpoints/<id>.func/` per ogni forma di percorso API. I metodi HTTP dello stesso percorso condividono una funzione (incluso HEAD); i nomi dei parametri possono differire tra metodi. Le versioni italiana e inglese di una pagina condividono la stessa funzione. Una pagina interamente prerenderizzata non genera una funzione dedicata. Il risultato attuale è di **12 funzioni**: 7 pagine, 3 endpoint e 2 fallback. Il manifest leggibile è `dist/vercel-manifest.json` e non viene pubblicato sulla CDN.
 
 Le funzioni della modalità per rotta sono sotto il prefisso interno riservato `/__fastang`, così non oscurano pagine pubbliche come `/ssr` o endpoint come `/api`. I pattern specifici precedono quelli dinamici. I catch-all, le route definite manualmente nel router Angular e le API registrate dai plugin restano raggiungibili tramite i fallback. `pagePrefixes` è esplicito perché l'adapter non esegue né interpreta configurazioni Angular arbitrarie: deve riflettere i prefissi pubblici aggiunti dall'app. Prefissi riservati e alias equivalenti di pagine diverse vengono rifiutati.
 
@@ -337,3 +337,9 @@ La [guida del generatore](packages/create-fastang/README.md) descrive anche l'us
 ## Preparazione della release alpha
 
 `npm run release:check` esegue i controlli completi e prepara tarball verificati, con integrità SHA-512 e commit di origine. La [guida di pubblicazione](docs/releases.md) descrive ordine di pubblicazione, tag `alpha` e verifica dal registry. La versione iniziale è `0.1.0-alpha.0`.
+
+## Guide pratiche
+
+Le guide in [italiano](docs/guide/it/getting-started.md) e [inglese](docs/guide/en/getting-started.md) sono pubblicate anche su `/docs` e `/en/docs`. Coprono avvio, routing, API, rendering, errori, plugin e deploy. Il sito legge gli stessi Markdown del repository.
+
+`npm run test:docs` applica i file TypeScript degli esempi a copie dello starter, compila i template ed esegue le verifiche HTTP descritte nelle guide. Gli esempi delle due lingue devono rimanere identici.

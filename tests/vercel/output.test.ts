@@ -95,7 +95,7 @@ test('packaged functions run outside the project with only their traced dependen
 test('route functions dispatch specific URLs, group languages and isolate API registrations', async () => {
   const manifest = JSON.parse(await readFile('dist/vercel-manifest.json', 'utf8'));
   assert.equal(manifest.mode, 'routes');
-  assert.equal(manifest.functions.length, 11);
+  assert.equal(manifest.functions.length, 12);
   const config = JSON.parse(await readFile(join(output, 'config.json'), 'utf8'));
   const destination = (url: string) => config.routes.find((route: any) => route.src && route.dest && new RegExp(route.src).test(url))?.dest;
   const home = manifest.functions.find((fn: any) => fn.paths.includes('/'));
@@ -106,6 +106,7 @@ test('route functions dispatch specific URLs, group languages and isolate API re
   assert.equal(destination('/missing'), '/__fastang/ssr');
   assert.equal(destination('/api/unknown'), '/__fastang/api');
   assert.equal(destination('/en/about'), '/en/about/index.html');
+  assert.equal(destination('/en/docs/getting-started'), '/en/docs/getting-started/index.html');
   const isolated = await mkdtemp(join(tmpdir(), 'fastang-route-functions-'));
   try {
     for (const fn of manifest.functions.filter((fn: any) => fn.paths.length)) {
@@ -125,7 +126,7 @@ test('route functions dispatch specific URLs, group languages and isolate API re
           assert.equal((await inject(handler, '/api/products/missing')).statusCode, 404);
         }
       } else {
-        const url = fn.paths.find((path: string) => path.startsWith('/en'))!.replace(':id', 'starter');
+        const url = fn.paths.find((path: string) => path.startsWith('/en'))!.replace(':id', 'starter').replace(':slug', 'getting-started');
         const response = await inject(handler, url);
         assert.equal(response.statusCode, 200, url);
         assert.match(response.body, /<html lang="en"/);
@@ -133,6 +134,10 @@ test('route functions dispatch specific URLs, group languages and isolate API re
         assert.match(response.headers['cache-control']!, /private, no-store/);
         if (fn.sources[0].file === 'index.page.ts') {
           assert.equal((await inject(handler, '/en/brand')).statusCode, 404, 'An omitted component must not become an empty HTTP 200');
+        }
+        if (url.includes('/docs/')) {
+          assert.match(response.body, /Get started with FastAng/);
+          assert.equal((await inject(handler, '/en/docs/unknown')).statusCode, 404);
         }
         if (url.includes('/products/')) {
           assert.match(response.body, /FastAng Starter/);

@@ -44,9 +44,11 @@ npm view create-fastang@0.1.0-alpha.0 version dist.integrity --json
 
 Compare registry integrity with `release.json`. Check the distribution tags with
 `npm dist-tag ls <package>`. On the initial publication npm may automatically
-assign `latest` as well; remove it with `npm dist-tag rm <package> latest` to
-keep this release on the `alpha` channel. This metadata change may require its
-own interactive 2FA approval.
+assign `latest` as well. The registry rejected removal of this tag with HTTP 400
+for the initial FastAng release; the same behavior is recorded in
+[npm/cli#8490](https://github.com/npm/cli/issues/8490). Do not rely on removing
+`latest` as a prerelease safeguard. Keep an explicit prerelease version and
+document `npm create fastang@alpha` as the installation command.
 
 npm may ask for an interactive
 second-factor approval; complete that locally. Do not bypass it with credentials

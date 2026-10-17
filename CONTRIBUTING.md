@@ -55,3 +55,9 @@ credentials, private customer data or unpublished code in issues or tests.
 
 Contributions to code and documentation are accepted under the project's MIT
 license. Asset exceptions are documented in NOTICE.md.
+
+## Documentation
+
+Public tutorials live in `docs/guide/it` and `docs/guide/en`; the website renders those same files. Keep guide slugs and executable code identical between languages. A fenced TypeScript block annotated with `file=src/...` or `file=fastang.config.ts` is a complete file applied to a fresh starter by `npm run test:docs`. This checks templates, types, rendering and the documented HTTP behavior. Run a subset with `npm run test:docs -- errors configuration` while iterating.
+
+The website supports headings, paragraphs, lists, tables, code fences and inline code/links/strong text. Raw HTML is displayed as text. Keep examples within this subset and include working internal Markdown links.

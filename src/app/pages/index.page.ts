@@ -11,7 +11,7 @@ import brandMark from '../../assets/brand/fastang-shield-880.webp';
         <div class="eyebrow"><span></span> ANGULAR + FASTIFY / FULLSTACK FRAMEWORK</div>
         <h1>{{ 'Un frontend solido.' | t }}<br><em>{{ 'Energia, fino al server.' | t }}</em></h1>
         <p class="lead">{{ 'La struttura di Angular incontra la flessibilità di Fastify. Un\\'unica base per interfacce, API e rendering sul server.' | t }}</p>
-        <div class="actions"><a class="button" [routerLink]="'/products/starter' | localePath">{{ 'Esplora la demo' | t }} <span>↗</span></a><a class="text-link" [routerLink]="'/brand' | localePath">{{ 'Dentro il brand' | t }} <span>→</span></a></div>
+        <div class="actions"><a class="button" [routerLink]="'/docs/getting-started' | localePath">{{ 'Inizia a costruire' | t }} <span>↗</span></a><a class="text-link" [routerLink]="'/products/starter' | localePath">{{ 'Esplora la demo' | t }} <span>→</span></a></div>
         <div class="hero-signature"><span class="signature-line"></span> {{ 'SOLIDITÀ ANGULAR. ENERGIA FASTIFY.' | t }}</div>
       </div>
       <div class="hero-emblem" [aria-label]="'Scudo FastAng: blu metallico e fiamma arancio' | t" role="img">
@@ -22,7 +22,7 @@ import brandMark from '../../assets/brand/fastang-shield-880.webp';
       </div>
     </section>
     <section class="terminal" [aria-label]="'Avvio del progetto' | t">
-      <div class="terminal-command"><span class="terminal-symbol">›_</span><code><span class="muted">$</span> npm run dev</code></div>
+      <div class="terminal-command"><span class="terminal-symbol">›_</span><code><span class="muted">$</span> npm create fastang@alpha my-app</code></div>
       <div class="terminal-stack"><span><i></i> Angular + Vite</span><span><i></i> Fastify API + SSR</span></div>
       <a href="/api/health" target="_blank" rel="noopener">API health <span>↗</span></a>
     </section>
