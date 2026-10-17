@@ -21,7 +21,7 @@ npm run build
 npm start
 ```
 
-The package has not been published to npm. Do not replace the tarball with a registry version yet.
+The alpha is also available from npm. To generate a new project directly, run `npm create fastang@alpha my-app -- --install`.
 
 ## Files and commands
 

@@ -7,7 +7,7 @@ promise. Track concrete work in repository issues once the project is public.
 
 - Framework extraction and a tarball-tested starter are implemented in `packages/core` and `examples/starter`.
 - Define and document the public API and supported environment matrix.
-- The `create-fastang` scaffolding command and its packaged template are implemented and tested outside the workspace. Registry publication remains pending.
+- The `create-fastang` scaffolding command and its packaged template are implemented and tested outside the workspace. Version `0.1.0-alpha.0` is available on npm under the `alpha` tag.
 - Add browser automation for hydration and client routing regressions.
 - Validate the Vercel adapter on a real Preview deployment.
 - Prepare versioning, changelogs and npm release tooling.

@@ -6,7 +6,7 @@ Un progetto [DacLab](https://github.com/daclab-dev), creato da Dario Chiapperini
 
 Angular nativo, Fastify completo. Una prima base funzionante per un meta-framework fullstack orientato al runtime Node.js.
 
-**Stato: prototipo 0.1.** Il workspace include il pacchetto `@fastang/core`, uno starter minimo indipendente e il sito dimostrativo. Il pacchetto espone la CLI `fastang`, ma non è ancora pubblicato su npm e anche il generatore `create-fastang` è disponibile solo localmente. Non sono dichiarati vantaggi prestazionali rispetto ad Analog senza benchmark comparabili.
+**Stato: prototipo 0.1.** Il workspace include il pacchetto `@fastang/core`, uno starter minimo indipendente e il sito dimostrativo. Il pacchetto espone la CLI `fastang`, ed è disponibile su npm insieme a `create-fastang`, con il tag `alpha`. Non sono dichiarati vantaggi prestazionali rispetto ad Analog senza benchmark comparabili.
 
 ## Avvio
 
@@ -306,13 +306,21 @@ Per preparare una pubblicazione: `npm ci`, `npm run build`, `npm run test:produc
 
 `npm ci` compila automaticamente `@fastang/core`. Dopo modifiche ai sorgenti del pacchetto esegui `npm run core:build`. Il sito e `examples/starter` usano lo stesso runtime: il framework riceve le API attraverso `registerApi(app)` e non importa file dell'applicazione.
 
-La [guida dello starter](examples/starter/README.md) spiega come installarlo nel workspace oppure copiarlo altrove e installare il tarball prodotto da `npm pack --workspace @fastang/core --pack-destination /tmp`. Non è ancora disponibile una versione sul registry npm.
+La [guida dello starter](examples/starter/README.md) spiega come installarlo nel workspace oppure copiarlo altrove e installare il tarball prodotto da `npm pack --workspace @fastang/core --pack-destination /tmp`. La prima release è disponibile sul registry npm con il tag `alpha`.
 
 `npm run test:starter` installa il tarball in una cartella temporanea fuori dal repository e verifica tipi, build, SSR, API, prerendering, 404, sviluppo con riavvio del backend e una funzione Vercel.
 
 ## Generare un progetto
 
-`create-fastang` crea un'applicazione indipendente usando lo starter come unica sorgente. I pacchetti non sono ancora pubblicati sul registry:
+`create-fastang` crea un'applicazione indipendente usando lo starter come unica sorgente. Per usare la release pubblica dal registry:
+
+```sh
+npm create fastang@alpha my-app -- --install
+cd my-app
+npm run dev
+```
+
+Per provare modifiche locali prima di una nuova release:
 
 ```sh
 npm pack --workspace @fastang/core --pack-destination /tmp

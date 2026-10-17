@@ -6,7 +6,7 @@ A [DacLab](https://github.com/daclab-dev) project, created by Dario Chiapperini.
 
 FastAng is an experimental full-stack framework that brings Angular interfaces, Fastify APIs and server rendering into one project, with clear responsibilities on each side.
 
-**Prototype 0.1 — under active development.** This workspace contains the independently packaged `@fastang/core` runtime and tools, a minimal starter and a working demonstration site. The core and `create-fastang` generator are not yet published to npm. APIs and conventions may change.
+**Prototype 0.1 — under active development.** This workspace contains the independently packaged `@fastang/core` runtime and tools, a minimal starter and a working demonstration site. The first alpha is available on npm as `@fastang/core` and `create-fastang` under the `alpha` tag. APIs and conventions may change.
 
 [Guida completa in italiano](README.it.md) · [Contributing](CONTRIBUTING.md) · [License and assets](NOTICE.md)
 
@@ -148,7 +148,15 @@ Source code and documentation are MIT-licensed. Logos and the author photograph 
 
 ## Create a project
 
-The unpublished generator can already create independent projects from local packages:
+Create an app from the npm registry:
+
+```sh
+npm create fastang@alpha my-app -- --install
+cd my-app
+npm run dev
+```
+
+To test local package changes before another release:
 
 ```sh
 npm pack --workspace @fastang/core --pack-destination /tmp
@@ -158,7 +166,7 @@ npm install
 npm run dev
 ```
 
-See [create-fastang](packages/create-fastang/README.md) for naming, optional installation and packaged-generator usage. The destination must be a new directory. `npm create fastang` is reserved for the future registry release and is not available yet.
+See [create-fastang](packages/create-fastang/README.md) for naming, optional installation and packaged-generator usage. The destination must be a new directory. Use `npm create fastang@alpha` explicitly: this is an experimental prerelease.
 
 ## Alpha release preparation
 

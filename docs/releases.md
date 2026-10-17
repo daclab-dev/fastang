@@ -42,7 +42,13 @@ npm publish .fastang/releases/0.1.0-alpha.0/create-fastang-0.1.0-alpha.0.tgz --a
 npm view create-fastang@0.1.0-alpha.0 version dist.integrity --json
 ```
 
-Compare registry integrity with `release.json`. npm may ask for an interactive
+Compare registry integrity with `release.json`. Check the distribution tags with
+`npm dist-tag ls <package>`. On the initial publication npm may automatically
+assign `latest` as well; remove it with `npm dist-tag rm <package> latest` to
+keep this release on the `alpha` channel. This metadata change may require its
+own interactive 2FA approval.
+
+npm may ask for an interactive
 second-factor approval; complete that locally. Do not bypass it with credentials
 stored in a workflow or committed file.
 
