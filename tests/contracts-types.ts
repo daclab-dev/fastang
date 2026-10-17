@@ -1,4 +1,5 @@
 // Compile-time checks: tsc must reject these calls or report unused @ts-expect-error.
+import { defineApiRoute } from '@fastang/core/api';
 import { Type } from '@sinclair/typebox';
 import type { Observable } from 'rxjs';
 import type { HttpClient } from '@angular/common/http';
@@ -21,14 +22,43 @@ function check(http: HttpClient) {
   api.request(contract, { params: { name: 'one' }, body: { text: 'Hi' } });
   // @ts-expect-error error responses are not successful Observable values
   const wrong: Observable<{ error: string }> = response;
-  defineContractRoute(contract, { handler: async (request, reply) => {
-    const text: string = request.body.text;
-    // @ts-expect-error response type is tied to the HTTP status
-    reply.code(404).send({ message: text });
-    // @ts-expect-error handler body is inferred from its schema
-    request.body.notInSchema;
-    return reply.code(201).send({ message: text });
-  } });
+  defineContractRoute(contract, {
+    bodyLimit: 4096,
+    preHandler: async (request, reply) => {
+      const text: string = request.body.text;
+      // @ts-expect-error hooks preserve the contract's input types
+      request.body.notInSchema;
+      if (text === 'blocked') return reply.code(404).send({ error: 'Missing' });
+      // @ts-expect-error hook replies preserve status-specific response types
+      reply.code(404).send({ message: text });
+    },
+    handler: async (request, reply) => {
+      const text: string = request.body.text;
+      // @ts-expect-error response type is tied to the HTTP status
+      reply.code(404).send({ message: text });
+      // @ts-expect-error handler body is inferred from its schema
+      request.body.notInSchema;
+      return reply.code(201).send({ message: text });
+    },
+  });
+  // @ts-expect-error file routing owns the method
+  defineApiRoute({ method: 'GET', handler: async () => true });
+  // @ts-expect-error file routing owns the URL
+  defineApiRoute({ url: '/other', handler: async () => true });
+  // @ts-expect-error contracts own runtime schemas
+  defineContractRoute(contract, { schema: {}, handler: async (_request, reply) => reply.code(404).send({ error: 'Missing' }) });
+  defineApiRoute<{ Body: { text: string } }, { label: string }>({
+    config: { label: 'messages' },
+    preHandler: async request => {
+      const label: string = request.routeOptions.config.label;
+      void label;
+      const text: string = request.body.text;
+      // @ts-expect-error native hooks retain explicit request body types
+      const wrong: number = text;
+      void wrong;
+    },
+    handler: async request => request.body,
+  });
   const search = defineApiContract({ method: 'GET', path: '/api/search', schema: {
     querystring: Type.Object({ page: Type.Optional(Type.Number()) }),
     response: { 200: Type.Array(Type.String()) },

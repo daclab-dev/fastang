@@ -101,3 +101,12 @@ code generation, hidden RPC layer or change to file-based routing.
 
 References: [TypeBox](https://github.com/sinclairzx81/typebox),
 [Angular HttpClient](https://angular.dev/api/common/http/HttpClient).
+
+## Native hooks and route options
+
+`defineContractRoute(contract, options)` accepts native Fastify route options such
+as `preHandler`, `onRequest`, `onSend`, `bodyLimit`, `config` and `exposeHeadRoute`.
+Hook request and reply types are inferred from the contract, including error
+response statuses. You cannot override `method`, `url` or `schema` in options:
+file routing and the contract own those values. Fastify still controls hook
+ordering, early replies and normal function `this` binding.

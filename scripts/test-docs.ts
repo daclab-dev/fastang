@@ -40,6 +40,12 @@ try {
       assert.equal((await server.inject('/missing')).statusCode, 404);
       if (guide.slug === 'routing') assert.match(greeting.body, /aria-label="Greetings"/);
       if (guide.slug === 'api') {
+        const limited = await server.inject({ method: 'POST', url: '/api/limited', payload: { text: ' Hi ' } });
+        assert.equal(limited.statusCode, 200);
+        assert.deepEqual(limited.json(), { message: 'Hi' });
+        assert.equal(limited.headers['x-route-example'], 'limited');
+        assert.equal((await server.inject({ method: 'POST', url: '/api/limited', payload: { text: 'x'.repeat(100) } })).statusCode, 413);
+
         const created = await server.inject({ method: 'POST', url: '/api/messages', payload: { text: 'Hello' } });
         assert.equal(created.statusCode, 201);
         assert.deepEqual(created.json(), { message: 'Hello' });

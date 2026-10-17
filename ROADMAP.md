@@ -14,6 +14,8 @@ promise. Track concrete work in repository issues once the project is public.
 
 ## Framework capabilities
 
+- API helpers expose native Fastify route options with typed hooks, per-route limits and config, while retaining file-derived methods/URLs and contract-derived schemas (main, next alpha).
+
 - Read-only `fastang routes` inspection lists the discovered page/layout/metadata tree and explicit API methods, with versioned JSON output (main, next alpha).
 
 - Configuration validation rejects invalid options and unsafe or conflicting prerender paths before starting the development server or replacing build output. The development supervisor recovers after a corrected config is saved (main, next alpha). More explicit rendering policies remain future work.

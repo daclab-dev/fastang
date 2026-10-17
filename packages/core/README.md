@@ -67,3 +67,13 @@ build the app or start a server. Paths describe file conventions: custom Angular
 router prefixes, routes registered by plugins and Fastify's implicit HEAD routes
 are not included. `**` denotes an Angular catch-all; API catch-alls use `*`.
 The output does not report prerendering or deployment-function assignment.
+
+## Native API route options (next alpha)
+
+On main, `defineApiRoute()` forwards native Fastify route options, including hooks,
+`bodyLimit`, `config`, `exposeHeadRoute` and route error handlers. Method and URL
+remain controlled by file routing. Hooks preserve the request/reply generic types;
+a second generic describes custom route config. Schemas are optional, as in
+Fastify. `defineContractRoute()` from `/contract-route` accepts the same options,
+except that its schema comes from the shared contract. These additions are not
+included in npm `0.1.0-alpha.1`.

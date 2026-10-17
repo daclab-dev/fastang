@@ -1,16 +1,14 @@
 import type {
-  FastifyInstance, FastifySchema, HTTPMethods, RawReplyDefaultExpression,
-  RawRequestDefaultExpression, RawServerDefault, RouteGenericInterface, RouteHandlerMethod,
+  FastifyInstance, HTTPMethods, RawReplyDefaultExpression,
+  RawRequestDefaultExpression, RawServerDefault, RouteGenericInterface, RouteOptions,
 } from 'fastify';
 
-type Handler<T extends RouteGenericInterface> = RouteHandlerMethod<
-  RawServerDefault, RawRequestDefaultExpression, RawReplyDefaultExpression, T
->;
+/** Native Fastify route options; the file convention owns method and URL. */
+export type ApiRouteOptions<T extends RouteGenericInterface = RouteGenericInterface, ContextConfig = Record<string, unknown>> = Omit<
+  RouteOptions<RawServerDefault, RawRequestDefaultExpression, RawReplyDefaultExpression, T, ContextConfig>,
+  'method' | 'url'
+> & { method?: never; url?: never };
 
-// I tipi rimangono nel closure: nessun cast quando si registra la rotta generata.
-export function defineApiRoute<T extends RouteGenericInterface>(options: {
-  schema: FastifySchema;
-  handler: Handler<T>;
-}): (app: FastifyInstance, method: HTTPMethods, url: string) => void {
-  return (app, method, url) => { app.route<T>({ ...options, method, url }); };
+export function defineApiRoute<T extends RouteGenericInterface, ContextConfig = Record<string, unknown>>(options: ApiRouteOptions<T, ContextConfig>): (app: FastifyInstance, method: HTTPMethods, url: string) => void {
+  return (app, method, url) => { app.route<T, ContextConfig>({ ...options, method, url }); };
 }

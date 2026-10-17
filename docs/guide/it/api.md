@@ -47,3 +47,44 @@ L'handler riceve `request` e `reply` nativi: puoi leggere parametri e header o i
 Non importare moduli di `src/server` nei componenti Angular. Per condividere tipi usa un modulo senza dipendenze dal server e import di tipo quando possibile. Questa alpha non genera ancora un client API tipizzato per percorso.
 
 Prosegui con [resolver e SSR](rendering.md). Approfondisci [validazione e serializzazione Fastify](https://fastify.dev/docs/latest/Reference/Validation-and-Serialization/).
+
+## Opzioni native della rotta (prossima alpha)
+
+Nel ramo main, `defineApiRoute()` accetta opzioni native Fastify come `preHandler`,
+array di hook, `onSend`, `bodyLimit`, `config`, `exposeHeadRoute` e gestori di errore
+per rotta. Questo esempio richiede la prossima alpha; non è incluso in npm
+`0.1.0-alpha.1`.
+
+```ts file=src/server/api/limited.post.ts
+import { defineApiRoute } from '@fastang/core';
+
+export default defineApiRoute<{ Body: { text: string } }>({
+  bodyLimit: 64,
+  schema: {
+    body: {
+      type: 'object', required: ['text'],
+      properties: { text: { type: 'string' } },
+    },
+  },
+  preHandler: async request => { request.body.text = request.body.text.trim(); },
+  onSend: async (_request, reply, payload) => {
+    reply.header('x-route-example', 'limited');
+    return payload;
+  },
+  handler: async request => ({ message: request.body.text }),
+});
+```
+
+`POST /api/limited` rimuove gli spazi dal body validato e aggiunge un header alla
+risposta. Un body JSON oltre 64 byte restituisce HTTP 413. Ordine degli hook,
+risposte anticipate, validazione ed errori restano quelli di Fastify. Gli hook
+scritti con `function` mantengono il `this` di Fastify; le arrow function usano il
+normale legame lessicale di JavaScript.
+
+Metodo e URL derivano sempre dal nome del file e non sono opzioni configurabili.
+`defineContractRoute()` accetta le stesse opzioni, inferendo i tipi anche negli
+hook, ma prende lo schema dal contratto condiviso. Le risposte di errore devono
+corrispondere agli stati dichiarati nel contratto. I tipi delle opzioni specifiche
+di un plugin restano nella sua estensione dei tipi Fastify. Un secondo parametro
+generico permette di descrivere un oggetto `config` personalizzato. Sono ammesse
+rotte senza schema, come in Fastify; i tipi TypeScript non validano l’input.

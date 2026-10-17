@@ -47,3 +47,43 @@ The handler receives native `request` and `reply`: read parameters and headers o
 Do not import `src/server` modules into Angular components. Share types through a module without server dependencies and use type-only imports where possible. This alpha does not generate a route-typed API client yet.
 
 Continue with [resolvers and SSR](rendering.md). Read more about [Fastify validation and serialization](https://fastify.dev/docs/latest/Reference/Validation-and-Serialization/).
+
+## Native route options (next alpha)
+
+On main, `defineApiRoute()` accepts native Fastify route options such as
+`preHandler`, hook arrays, `onSend`, `bodyLimit`, `config`, `exposeHeadRoute` and
+route error handlers. The following example requires the next alpha; it is not
+included in npm `0.1.0-alpha.1`.
+
+```ts file=src/server/api/limited.post.ts
+import { defineApiRoute } from '@fastang/core';
+
+export default defineApiRoute<{ Body: { text: string } }>({
+  bodyLimit: 64,
+  schema: {
+    body: {
+      type: 'object', required: ['text'],
+      properties: { text: { type: 'string' } },
+    },
+  },
+  preHandler: async request => { request.body.text = request.body.text.trim(); },
+  onSend: async (_request, reply, payload) => {
+    reply.header('x-route-example', 'limited');
+    return payload;
+  },
+  handler: async request => ({ message: request.body.text }),
+});
+```
+
+`POST /api/limited` trims the validated body and adds a response header. A JSON
+body larger than 64 bytes returns HTTP 413. Hook ordering, short-circuit replies,
+validation and error behavior remain Fastify's. Ordinary function hooks retain
+Fastify's `this` binding; arrow functions use normal JavaScript lexical binding.
+
+Method and URL always come from the filename and cannot be supplied as options.
+`defineContractRoute()` accepts the same options, with request/reply types inferred
+in hooks, but its schema always comes from the shared contract. Its error replies
+must match the statuses declared there. Keep plugin-specific option types in the
+plugin's Fastify type augmentation. A second generic parameter can describe a
+custom route `config` object. Schema-less routes are allowed, as in native Fastify;
+TypeScript types alone never validate input.

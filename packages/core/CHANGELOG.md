@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Accept native Fastify per-route options in API and contract helpers, including typed hooks, body limits, route config and HEAD behavior. File routing and shared contract schemas remain authoritative.
+
 - Add read-only `fastang routes` inspection with page/layout/metadata ancestry and explicit API methods, including versioned JSON output.
 
 - Validate FastAng configuration before starting the development server, using the same loader and checks as production builds.
