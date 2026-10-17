@@ -10,7 +10,9 @@ export default defineConfig({
     ssr: { define: { ngServerMode: 'true' } },
   },
   ssr: {
-    noExternal: [/^@angular\//],
+    // Keep Fastify's injection chain in the ESM bundle: Vercel's launcher can
+    // disable require(ESM), which light-my-request needs for cookie v2.
+    noExternal: [/^@angular\//, 'fastify', 'light-my-request', 'cookie'],
   },
   build: { outDir: 'dist/client' },
 });

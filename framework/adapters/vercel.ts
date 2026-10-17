@@ -1,5 +1,6 @@
 import { copyFile, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
+import { createRequire } from 'node:module';
 import { nodeFileTrace } from '@vercel/nft';
 import { staticFile } from '../server';
 import { sortAndValidate } from '../routes';
@@ -28,7 +29,10 @@ export async function buildVercelOutput(plan: VercelPlan, root = process.cwd()):
   for (const { name, entry, kind, bundle } of plan.functions) {
     const directory = resolve(output, `functions/${name}.func`);
     const entryFile = bundle ?? `dist/server/${entry}.js`;
-    const trace = traces.get(entryFile) ?? await nodeFileTrace([entryFile], {
+    // The bundled CommonJS runtime uses a require shim that tracing cannot
+    // always recognize. Trace Fastify's original graph for external helpers.
+    const fastifyEntry = createRequire(resolve(root, 'package.json')).resolve('fastify');
+    const trace = traces.get(entryFile) ?? await nodeFileTrace([entryFile, fastifyEntry], {
       base: root, processCwd: root,
       // Only the private SSR template is needed; public assets stay on the CDN.
       ignore: ['dist/**/client/**', 'dist/client/**', 'dist/**/prerender.json', 'dist/prerender.json'],

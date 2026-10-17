@@ -5,8 +5,38 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import inject from 'light-my-request';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
 
 const output = resolve('.vercel/output');
+test('SSR API calls work when the runtime disables require(ESM)', async () => {
+  const handler = pathToFileURL(join(output, 'functions/__fastang/ssr.func/dist/server/vercel.js')).href;
+  // Vercel's launcher can disable require(ESM), even on Node versions that support it.
+  const script = `
+    import assert from 'node:assert/strict';
+    import { createServer } from 'node:http';
+    const { default: handler } = await import(${JSON.stringify(handler)});
+    const server = createServer(handler);
+    await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+    try {
+      const base = 'http://127.0.0.1:' + server.address().port;
+      for (const prefix of ['', '/en']) {
+        const product = await fetch(base + prefix + '/products/starter');
+        assert.equal(product.status, 200);
+        assert.match(await product.text(), /FastAng Starter/);
+        const request = await fetch(base + prefix + '/request', {
+          headers: { 'x-request-label': 'vercel_runtime_regression' },
+        });
+        assert.equal(request.status, 200);
+        assert.match(await request.text(), /vercel_runtime_regression/);
+      }
+    } finally {
+      await new Promise(resolve => server.close(resolve));
+    }
+  `;
+  await promisify(execFile)(process.execPath, ['--no-experimental-require-module', '--input-type=module', '-e', script], { timeout: 30_000 });
+});
+
 test('Vercel output keeps the SSR template private and routes public HTML to CDN', async () => {
   const config = JSON.parse(await readFile(join(output, 'config.json'), 'utf8'));
   assert.equal(config.version, 3);
