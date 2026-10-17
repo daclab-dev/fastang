@@ -7,7 +7,7 @@ promise. Track concrete work in repository issues once the project is public.
 
 - Framework extraction and a tarball-tested starter are implemented in `packages/core` and `examples/starter`.
 - Define and document the public API and supported environment matrix.
-- The `create-fastang` scaffolding command and its packaged template are implemented and tested outside the workspace. Version `0.1.0-alpha.0` is available on npm under the `alpha` tag.
+- The `create-fastang` scaffolding command and its packaged template are implemented and tested outside the workspace. Version `0.1.0-alpha.1` is available on npm under the `alpha` tag.
 - Browser automation covers hydration, client routing, data, redirects and failures on Chromium, Firefox and WebKit, including mobile emulation.
 - Validate the Vercel adapter on a real Preview deployment.
 - Versioning, changelogs and verified npm tarball tooling are implemented.
@@ -22,6 +22,6 @@ promise. Track concrete work in repository issues once the project is public.
 
 ## Measurement
 
-- Reproducible build-size, startup and request benchmarks.
+- A reproducible production-starter benchmark records build sizes, fresh-process startup and sequential HTTP latency, with raw JSON samples and environment metadata. See [the measurement guide](docs/benchmarks.md).
 - Comparisons with plain Angular SSR and Analog using equivalent workloads.
 - Documented tradeoffs between shared and per-route deployment functions.

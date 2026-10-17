@@ -65,6 +65,13 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run test:starter
+      - run: npm run benchmark -- --smoke
+      - uses: actions/upload-artifact@v5
+        with:
+          name: starter-benchmark-smoke
+          path: .fastang/benchmarks/*.json
+          if-no-files-found: error
+          retention-days: 7
 
   docs:
     name: Executable documentation (Node 24)

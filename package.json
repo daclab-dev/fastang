@@ -30,7 +30,8 @@
     "test:docs": "node --import tsx scripts/test-docs.ts",
     "test:e2e": "node --import tsx scripts/test-starter.ts --browser",
     "test:auth": "node --import tsx scripts/test-auth.ts",
-    "create:auth": "node --import tsx scripts/create-auth.ts"
+    "create:auth": "node --import tsx scripts/create-auth.ts",
+    "benchmark": "npm run core:build && node --import tsx scripts/benchmark.ts"
   },
   "dependencies": {
     "@angular/common": "22.2.3",

@@ -351,3 +351,7 @@ Da un checkout del repository, `npm run create:auth -- /percorso/nuova-app` gene
 ## Anteprima dei contratti API tipizzati
 
 Nel ramo main è disponibile l'integrazione opzionale con TypeBox: un contratto condiviso definisce gli schemi e permette di inferire parametri e risposte degli handler Fastify e delle chiamate Angular. È prevista per la prossima alpha e non è inclusa in npm `0.1.0-alpha.1`. L'[esempio greeting](examples/typed-api/README.md) descrive utilizzo e limiti. La validazione resta a Fastify, le richieste passano da HttpClient e il routing deriva ancora dai file.
+
+## Misure delle prestazioni
+
+`npm run benchmark` compila una copia isolata dello starter in produzione e misura dimensioni della build, avvio in processi nuovi e latenza HTTP per SSR, prerender e API. I report JSON conservano campioni e informazioni sull’ambiente. La [guida alle misure](docs/benchmarks.md) spiega condizioni e limiti; `-- --smoke` verifica il funzionamento con pochi campioni.
