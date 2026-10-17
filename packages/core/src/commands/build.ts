@@ -5,25 +5,20 @@ import { build } from 'vite';
 import { loadConfigFromFile } from 'vite';
 import { prepareVercelPlan } from '../adapters/vercel-plan.ts';
 import { buildVercelOutput } from '../adapters/vercel.ts';
-import { staticFile } from '../server.ts';
+import { staticFile } from '../static-path.ts';
+import { validateConfig } from '../config.ts';
 
 const loaded = await loadConfigFromFile({ command: 'build', mode: 'production' }, 'fastang.config.ts');
 if (!loaded) throw new Error('Missing fastang.config.ts');
-const config = loaded.config as unknown as import('../config.ts').FastangConfig;
+const config = validateConfig(loaded.config);
 
 const vercel = process.argv.includes('--vercel');
 
-await rm('dist', { recursive: true, force: true });
 const paths = [...new Set(config.prerender)];
-for (const path of paths) {
-  staticFile(path);
-  if (path === '/' || path === '/api' || path.startsWith('/api/') || path.startsWith('/assets/')) {
-    throw new Error(`Percorso riservato al runtime: ${path}`);
-  }
-}
 const vercelPlan = vercel ? await prepareVercelPlan(paths, config.vercel) : undefined;
 const endpointEntries = Object.fromEntries((vercelPlan?.functions ?? []).filter((fn) => fn.entry.startsWith('endpoint-')).map((fn) => [fn.entry, `.fastang/vercel/${fn.entry}.ts`]));
 
+await rm('dist', { recursive: true, force: true });
 await build({ build: { outDir: 'dist/client' } });
 await build({ build: {
   outDir: 'dist/server', minify: true, ssr: vercel ? true : 'src/server/start.ts',

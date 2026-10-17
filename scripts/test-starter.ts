@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { execFile, spawn } from 'node:child_process';
-import { cp, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { cp, mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -38,6 +38,19 @@ try {
   if (browser) {
     await cp(resolve('tests/e2e/fixture'), join(app, 'src/app/pages/greet'), { recursive: true });
   }
+  // A plain config export must fail before removing a previous successful build.
+  const configFile = join(app, 'fastang.config.ts');
+  const originalConfig = await readFile(configFile, 'utf8');
+  await mkdir(join(app, 'dist'), { recursive: true });
+  await writeFile(join(app, 'dist/previous-build.txt'), 'keep');
+  await writeFile(configFile, "export default { prerender: ['/about'], vercel: { prunePages: 'false' } };\n");
+  try {
+    await assert.rejects(run('npm', ['run', 'build'], { cwd: app, maxBuffer: 8 * 1024 * 1024, timeout: 120_000 }), error => {
+      assert.match(String((error as { stderr?: string }).stderr), /vercel.prunePages must be a boolean/);
+      return true;
+    });
+    assert.equal(await readFile(join(app, 'dist/previous-build.txt'), 'utf8'), 'keep');
+  } finally { await writeFile(configFile, originalConfig); }
   await command(['run', 'build']);
   const { createProductionServer } = await import(pathToFileURL(join(app, 'dist/server/index.js')).href);
   const server = await createProductionServer();

@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 import { mkdir, rm, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import type { VercelOptions } from '../config.ts';
+import { validateVercelOptions, type VercelOptions } from '../config.ts';
 import { discover, discoverPageTree, pageRoutesSource, renderedPageFiles, type FileRoute } from '../routes.ts';
 
 export interface FunctionPlan {
@@ -32,13 +32,9 @@ function identifier(path: string): string {
 }
 
 export function planVercelFunctions(pages: FileRoute[], apis: FileRoute[], prerendered: string[], options: VercelOptions = {}): VercelPlan {
+  validateVercelOptions(options);
   const mode = options.functions ?? 'shared';
-  if (mode !== 'shared' && mode !== 'routes') throw new Error('vercel.functions must be shared or routes');
   const prefixes = [...new Set(options.pagePrefixes ?? [''])];
-  if (!prefixes.length || prefixes.some((prefix) => prefix !== '' && !/^\/(?:[\w-]+)(?:\/[\w-]+)*$/.test(prefix))) {
-    throw new Error('vercel.pagePrefixes must contain empty or absolute static prefixes without a trailing slash');
-  }
-  if (prefixes.some((prefix) => /^\/(?:api|assets|__fastang)(?:\/|$)/.test(prefix))) throw new Error('Reserved Vercel page prefix');
   const functions: FunctionPlan[] = [
     { name: mode === 'routes' ? '__fastang/ssr' : 'ssr', kind: 'ssr', entry: 'vercel', paths: [], sources: [] },
     { name: mode === 'routes' ? '__fastang/api' : 'api', kind: 'api', entry: 'api', paths: [], sources: [] },

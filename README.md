@@ -128,7 +128,7 @@ vercel: {
 
 ## Current limits
 
-- No published packages, scaffolding CLI or stable compatibility guarantee.
+- Experimental alpha packages and generator; no stable compatibility guarantee.
 - No ISR/on-demand revalidation, Edge runtime or image optimization.
 - No authentication system or route-derived typed API client.
 - The Angular HTTP bridge does not support streaming, multipart/binary uploads or automatic propagation of API cookies/redirects into the HTML response.

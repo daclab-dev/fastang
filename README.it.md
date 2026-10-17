@@ -271,9 +271,9 @@ Riferimenti del contratto: [Build Output API](https://vercel.com/docs/build-outp
 
 ## Verifiche e prossimi passi
 
-I test coprono collisioni e precedenze, layout annidati e pathless, metadati orfani, rimozione delle route, import transitivi server nel client, validazione API, bridge JSON, errori, contesti concorrenti, SSR reale, stato HTTP, transfer cache su richieste successive, escaping dei dati e file prerenderizzati. Sul bundle reale verificano anche titoli, resolver, guard eseguite prima delle API, redirect HTTP con query codificate e isolamento dei provider di rotta su richieste sequenziali e concorrenti. Il runtime è verificato anche contro redirect esterni, header injection e stati non validi. La navigazione e l'interattività sono state verificate anche nel browser; non esiste ancora una suite browser automatizzata nel repository.
+I test coprono collisioni e precedenze, layout annidati e pathless, metadati orfani, rimozione delle route, import transitivi server nel client, validazione API, bridge JSON, errori, contesti concorrenti, SSR reale, stato HTTP, transfer cache su richieste successive, escaping dei dati e file prerenderizzati. Sul bundle reale verificano anche titoli, resolver, guard eseguite prima delle API, redirect HTTP con query codificate e isolamento dei provider di rotta su richieste sequenziali e concorrenti. Il runtime è verificato anche contro redirect esterni, header injection e stati non validi. La suite browser automatizzata esegue 30 verifiche sullo starter generato in produzione, con Chromium, Firefox e WebKit e profili mobile simulati. Si avvia con `npm run test:e2e`.
 
-Le prossime estensioni sono configurazione delle modalità di rendering, client API derivato dai contratti, autenticazione con test dedicati, packaging/CLI e benchmark riproducibili contro Angular SSR e Analog. Il compilatore Vite è quello di `@analogjs/vite-plugin-angular`; FastAng implementa il proprio runtime Fastify e la propria pipeline.
+Le prossime estensioni sono configurazione delle modalità di rendering, client API derivato dai contratti, autenticazione con test dedicati e benchmark riproducibili contro Angular SSR e Analog. Il compilatore Vite è quello di `@analogjs/vite-plugin-angular`; FastAng implementa il proprio runtime Fastify e la propria pipeline.
 
 ## Brand
 

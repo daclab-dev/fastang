@@ -3,18 +3,18 @@
 This is a direction for the prototype, not a release schedule or compatibility
 promise. Track concrete work in repository issues once the project is public.
 
-## Before the first installable release
+## Alpha foundation
 
 - Framework extraction and a tarball-tested starter are implemented in `packages/core` and `examples/starter`.
 - Define and document the public API and supported environment matrix.
 - The `create-fastang` scaffolding command and its packaged template are implemented and tested outside the workspace. Version `0.1.0-alpha.0` is available on npm under the `alpha` tag.
-- Add browser automation for hydration and client routing regressions.
+- Browser automation covers hydration, client routing, data, redirects and failures on Chromium, Firefox and WebKit, including mobile emulation.
 - Validate the Vercel adapter on a real Preview deployment.
-- Prepare versioning, changelogs and npm release tooling.
+- Versioning, changelogs and verified npm tarball tooling are implemented.
 
 ## Framework capabilities
 
-- More explicit rendering policies and safer configuration validation.
+- Configuration validation rejects invalid options and unsafe or conflicting prerender paths before replacing build output. More explicit rendering policies remain future work.
 - Typed API clients derived from route contracts.
 - Cookie/session and authentication integration with isolation tests.
 - A defined contract for API cookies and redirects during SSR.

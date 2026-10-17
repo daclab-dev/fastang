@@ -1,3 +1,5 @@
+import { staticFile } from './static-path.ts';
+export { staticFile } from './static-path.ts';
 import { createHttpServer } from './http-server.ts';
 import { type FastifyInstance, type FastifyServerOptions, type HTTPMethods } from 'fastify';
 import { readFile } from 'node:fs/promises';
@@ -16,12 +18,6 @@ export interface ServerOptions {
   configure?: (app: FastifyInstance) => Promise<void> | void;
 }
 
-export function staticFile(path: string): string {
-  if (!path.startsWith('/') || path.includes('//') || !/^\/[a-zA-Z0-9_/-]*$/.test(path) || path.split('/').includes('..')) {
-    throw new Error(`Percorso di prerendering non supportato: ${path}`);
-  }
-  return `${path.replace(/^\/|\/$/g, '')}${path === '/' ? '' : '/'}index.html`;
-}
 
 export async function createApiServer(options: Pick<ServerOptions, 'logger' | 'configure' | 'registerApi'> = {}): Promise<FastifyInstance> {
   return createHttpServer({

@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Validate prerender and Vercel configuration before changing build output, including plain config exports.
+- Reject unknown options, invalid types, reserved paths and conflicting prerender destinations.
+
 ## 0.1.0-alpha.0
 
 Initial experimental release.
