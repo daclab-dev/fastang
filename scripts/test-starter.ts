@@ -118,7 +118,8 @@ try {
   const plan = JSON.parse(await readFile(join(app, 'dist/vercel-manifest.json'), 'utf8'));
   const greetingFunction = plan.functions.find((fn: { paths: string[] }) => fn.paths.includes('/greet/:name'));
   assert.ok(greetingFunction);
-  const directory = join(app, '.vercel/output/functions', greetingFunction.name + '.func');
+  const directory = join(temporary, 'isolated-vercel-function');
+  await cp(join(app, '.vercel/output/functions', greetingFunction.name + '.func'), directory, { recursive: true });
   const config = JSON.parse(await readFile(join(directory, '.vc-config.json'), 'utf8'));
   const { default: handler } = await import(pathToFileURL(join(directory, config.handler)).href);
   const { default: inject } = await import('light-my-request');

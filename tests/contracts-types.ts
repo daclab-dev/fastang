@@ -29,10 +29,20 @@ function check(http: HttpClient) {
     request.body.notInSchema;
     return reply.code(201).send({ message: text });
   } });
+  const search = defineApiContract({ method: 'GET', path: '/api/search', schema: {
+    querystring: Type.Object({ page: Type.Optional(Type.Number()) }),
+    response: { 200: Type.Array(Type.String()) },
+  } });
+  const results: Observable<string[]> = api.request(search, { query: { page: 2 } });
+  api.request(search, { query: {} });
+  // @ts-expect-error query values are inferred from their schema
+  api.request(search, { query: { page: 'two' } });
+  // @ts-expect-error a declared query schema requires its request object
+  api.request(search);
   const ping = defineApiContract({ method: 'GET', path: '/api/ping', schema: { response: { 200: Type.Boolean() } } });
   const ok: Observable<boolean> = api.request(ping);
   // @ts-expect-error a body cannot be passed to a bodyless request
   api.request(ping, { body: 'unexpected' });
-  return [wrong, ok];
+  return [wrong, ok, results];
 }
 void check;
