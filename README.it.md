@@ -347,3 +347,7 @@ Le guide in [italiano](docs/guide/it/getting-started.md) e [inglese](docs/guide/
 ## Esempio opzionale di autenticazione
 
 Da un checkout del repository, `npm run create:auth -- /percorso/nuova-app` genera un'app separata con login, pagina SSR protetta e logout tramite i plugin ufficiali Fastify per sessione e limitazione dei tentativi. Il comando crea segreti casuali in un `.env` locale escluso da Git. L'esempio usa un solo account dimostrativo: la [guida dedicata](examples/auth/README.md) spiega avvio, packaging Vercel e limiti delle sessioni stateless. `npm run test:auth` esegue i controlli browser e sulle funzioni impacchettate. Il core e lo starter minimo pubblicato restano indipendenti dall'autenticazione.
+
+## Anteprima dei contratti API tipizzati
+
+Nel ramo main è disponibile l'integrazione opzionale con TypeBox: un contratto condiviso definisce gli schemi e permette di inferire parametri e risposte degli handler Fastify e delle chiamate Angular. È prevista per la prossima alpha e non è inclusa in npm `0.1.0-alpha.1`. L'[esempio greeting](examples/typed-api/README.md) descrive utilizzo e limiti. La validazione resta a Fastify, le richieste passano da HttpClient e il routing deriva ancora dai file.

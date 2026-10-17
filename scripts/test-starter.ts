@@ -37,6 +37,8 @@ try {
     catch (error) { console.error((error as { stdout?: string; stderr?: string }).stdout, (error as { stderr?: string }).stderr); throw error; }
   };
   if (browser) {
+    await command(['install', '@sinclair/typebox@^0.34.41', '--no-audit', '--no-fund']);
+    await cp(resolve('examples/typed-api/src'), join(app, 'src'), { recursive: true });
     await addBrowserProbe(app);
     await cp(resolve('tests/e2e/fixture'), join(app, 'src/app/pages/greet'), { recursive: true });
   }
@@ -111,19 +113,19 @@ try {
         await exited;
       }
     }
-    await command(['run', 'build:vercel']);
-    const plan = JSON.parse(await readFile(join(app, 'dist/vercel-manifest.json'), 'utf8'));
-    const greetingFunction = plan.functions.find((fn: { paths: string[] }) => fn.paths.includes('/greet/:name'));
-    assert.ok(greetingFunction);
-    const directory = join(app, '.vercel/output/functions', greetingFunction.name + '.func');
-    const config = JSON.parse(await readFile(join(directory, '.vc-config.json'), 'utf8'));
-    const { default: handler } = await import(pathToFileURL(join(directory, config.handler)).href);
-    const { default: inject } = await import('light-my-request');
-    const response = await inject(handler, '/greet/Linus');
-    assert.equal(response.statusCode, 200);
-    assert.match(response.body, /Welcome, Linus!/);
-    console.log('Generator and independent starter passed: tarball installation, types, SSR, API, prerender, 404, dev restart and Vercel function.');
   }
+  await command(['run', 'build:vercel']);
+  const plan = JSON.parse(await readFile(join(app, 'dist/vercel-manifest.json'), 'utf8'));
+  const greetingFunction = plan.functions.find((fn: { paths: string[] }) => fn.paths.includes('/greet/:name'));
+  assert.ok(greetingFunction);
+  const directory = join(app, '.vercel/output/functions', greetingFunction.name + '.func');
+  const config = JSON.parse(await readFile(join(directory, '.vc-config.json'), 'utf8'));
+  const { default: handler } = await import(pathToFileURL(join(directory, config.handler)).href);
+  const { default: inject } = await import('light-my-request');
+  const response = await inject(handler, '/greet/Linus');
+  assert.equal(response.statusCode, 200);
+  assert.match(response.body, browser ? /Hello, Linus!/ : /Welcome, Linus!/);
+  console.log(browser ? 'Typed API starter passed: production browser tests and packaged Vercel SSR function.' : 'Generator and independent starter passed: tarball installation, types, SSR, API, prerender, 404, dev restart and Vercel function.');
 } finally {
   await rm(temporary, { recursive: true, force: true });
 }

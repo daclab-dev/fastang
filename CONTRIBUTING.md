@@ -89,3 +89,7 @@ real iPhones or Android devices.
 `examples/auth` is an optional overlay for the generated starter. Run `npm run create:auth -- /path/to/new-app` to install it, or `npm run test:auth` to check the production example in all configured browser profiles and a packaged Vercel function. API, Origin, cookie and login-limit tests also run under `npm test`. The minimal published starter is unchanged. See [the example guide](examples/auth/README.md) for environment setup and the limits of this single-account demonstration.
 
 Browser test apps add a client-only readiness marker after `afterNextRender` and `ApplicationRef.whenStable()`. Tests wait for it before interacting; the DOM reuse test still captures the SSR element while JavaScript is blocked. This probe is added only to temporary test apps. Filter a run with `npm run test:e2e -- --project=mobile-chromium` or `npm run test:auth -- --project=firefox`.
+
+## Typed API contracts
+
+`tests/contracts-types.ts` contains positive and `@ts-expect-error` checks compiled by `npm run check`. Runtime tests cover URL encoding, Fastify validation/serialization and native HttpClient options/errors. Browser starter tests apply `examples/typed-api` before building and also verify its packaged Vercel SSR function. Copied files in `tests/e2e/fixture` use target-app-relative imports and are type-checked inside that standalone app, rather than by the repository node tsconfig.

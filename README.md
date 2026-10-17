@@ -168,6 +168,10 @@ npm run dev
 
 See [create-fastang](packages/create-fastang/README.md) for naming, optional installation and packaged-generator usage. The destination must be a new directory. Use `npm create fastang@alpha` explicitly: this is an experimental prerelease.
 
+## Typed API preview
+
+The main branch includes optional shared TypeBox contracts that infer Fastify handler inputs/status replies and Angular JSON requests/successful responses. This is planned for the next alpha and is not included in npm `0.1.0-alpha.1`. See [the typed greeting example](examples/typed-api/README.md). Existing endpoints and the minimal starter remain usable without this feature.
+
 ## Optional authentication example
 
 From a repository checkout, `npm run create:auth -- /path/to/new-app` creates a separate app with login, protected SSR and logout, using official Fastify session and rate-limit plugins. It generates private local secrets and keeps authentication out of the core and minimal npm starter. Read [the example guide](examples/auth/README.md) for startup, Vercel packaging and the limits of the single-account demonstration. Run `npm run test:auth` for browser and packaged-function checks.

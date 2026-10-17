@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Optional TypeBox API contracts infer Fastify handler types and Angular JSON client requests and successful responses.
+- Shared contracts reuse runtime schemas, check file-route consistency and encode API URLs explicitly.
+
 ## 0.1.0-alpha.1
 
 - Preserve separate Set-Cookie headers and allow explicit per-dispatch forwarding to HTML responses.

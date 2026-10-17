@@ -25,8 +25,8 @@ test('il build browser blocca un import transitivo dal backend', async () => {
 
 test('packaged server entry points stay out of browser bundles', async () => {
   const { isServerModule } = await import('@fastang/core/vite-plugin');
-  for (const path of ['/app/node_modules/@fastang/core/dist/server.js', '/repo/packages/core/dist/angular.js', '/app/node_modules/@fastang/core/dist/adapters/vercel.js']) {
+  for (const path of ['/app/node_modules/@fastang/core/dist/server.js', '/repo/packages/core/dist/angular.js', '/repo/packages/core/dist/contract-route.js', '/app/node_modules/@fastang/core/dist/adapters/vercel.js']) {
     assert.equal(isServerModule(path), true);
   }
-  assert.equal(isServerModule('/app/node_modules/@fastang/core/dist/config.js'), false);
+  for (const name of ['config', 'contracts', 'http-client']) assert.equal(isServerModule(`/app/node_modules/@fastang/core/dist/${name}.js`), false);
 });
