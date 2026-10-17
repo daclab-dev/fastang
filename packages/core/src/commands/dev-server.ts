@@ -1,14 +1,18 @@
 import { readFile } from 'node:fs/promises';
 import { createServer as createViteServer, type ViteDevServer } from 'vite';
 import middie from '@fastify/middie';
-import { createServer, type Renderer } from '../framework/server';
-import { listen } from '../framework/listen';
-import { configureServer } from '../src/server/plugins';
+import { createServer, type Renderer } from '../server.ts';
+import { listen } from '../listen.ts';
+import { tsImport } from 'tsx/esm/api';
+import { resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
+const { configureServer } = await tsImport(pathToFileURL(resolve('src/server/plugins.ts')).href, import.meta.url);
+const { registerApi } = await tsImport(pathToFileURL(resolve('.fastang/api.ts')).href, import.meta.url);
 
 let vite: ViteDevServer | undefined;
 try {
   const app = await createServer({
-    logger: true,
+    logger: true, registerApi,
     async configure(server) {
       vite = await createViteServer({ server: { middlewareMode: true, hmr: { server: server.server } }, appType: 'custom' });
       server.addHook('onClose', async () => { await vite?.close(); });

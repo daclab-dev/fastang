@@ -1,3 +1,5 @@
+import { existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { watch } from 'node:fs';
 import { spawn, type ChildProcess } from 'node:child_process';
 import { once } from 'node:events';
@@ -18,10 +20,10 @@ async function restart() {
   await stopChild();
   if (stopping) return;
   // Processo nuovo: anche le modifiche al generatore sono applicate al riavvio.
-  const generator = spawn(process.execPath, ['--import', 'tsx', 'scripts/generate.ts'], { stdio: 'inherit', env: process.env });
+  const generator = spawn(process.execPath, [fileURLToPath(new URL('../cli.js', import.meta.url)), 'generate'], { stdio: 'inherit', env: process.env });
   const [code] = await once(generator, 'exit');
   if (code !== 0) throw new Error('Generazione route fallita');
-  child = spawn(process.execPath, ['--import', 'tsx', 'scripts/dev-server.ts'], { stdio: 'inherit', env: process.env });
+  child = spawn(process.execPath, [fileURLToPath(new URL('./dev-server.js', import.meta.url))], { stdio: 'inherit', env: process.env });
   child.on('error', (error) => { console.error(error); process.exitCode = 1; });
 }
 function changed() {
@@ -31,14 +33,8 @@ function changed() {
   }, 150);
 }
 // Solo sorgenti backend e configurazione: i moduli temporanei di Vite non causano riavvii.
-const watchers = [
-  watch('src/server', { recursive: true }, changed),
-  watch('framework', { recursive: true }, changed),
-  watch('src/shared', { recursive: true }, changed),
-  watch('scripts/dev-server.ts', changed),
-  watch('vite.config.ts', changed),
-  watch('fastang.config.ts', changed),
-];
+const watchers = ['src/server', 'src/shared', 'vite.config.ts', 'fastang.config.ts'].filter(existsSync).map(path => watch(path, { recursive: true }, changed));
+
 async function shutdown() {
   stopping = true;
   clearTimeout(timer);

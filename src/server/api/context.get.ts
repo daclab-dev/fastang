@@ -1,4 +1,4 @@
-import { defineApiRoute } from '../../../framework/api';
+import { defineApiRoute } from '@fastang/core/api';
 import { ContextSchema, type RequestContextData } from '../../shared/contracts';
 
 export default defineApiRoute<{ Reply: RequestContextData }>({

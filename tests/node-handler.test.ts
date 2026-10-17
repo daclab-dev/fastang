@@ -2,8 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import Fastify from 'fastify';
 import inject from 'light-my-request';
-import { createNodeHandler } from '../framework/node-handler';
-import { DEFAULT_PORT } from '../framework/listen';
+import { createNodeHandler } from '@fastang/core/node-handler';
+import { DEFAULT_PORT } from '@fastang/core/listen';
 
 test('Node function preserves raw bodies, cookies and status while sharing only startup', async () => {
   const app = Fastify();

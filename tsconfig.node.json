@@ -8,7 +8,6 @@
     "noEmit": true
   },
   "include": [
-    "framework/**/*.ts",
     "scripts/**/*.ts",
     "src/server/**/*.ts",
     "src/shared/**/*.ts",

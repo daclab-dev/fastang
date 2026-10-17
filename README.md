@@ -6,7 +6,7 @@ A [DacLab](https://github.com/daclab-dev) project, created by Dario Chiapperini.
 
 FastAng is an experimental full-stack framework that brings Angular interfaces, Fastify APIs and server rendering into one project, with clear responsibilities on each side.
 
-**Prototype 0.1 — under active development.** This repository contains the framework runtime, build tools and a working demonstration site. It is not yet an installable npm framework or project generator. APIs and conventions may change.
+**Prototype 0.1 — under active development.** This workspace contains the independently packaged `@fastang/core` runtime and tools, a minimal starter and a working demonstration site. The core and `create-fastang` generator are not yet published to npm. APIs and conventions may change.
 
 [Guida completa in italiano](README.it.md) · [Contributing](CONTRIBUTING.md) · [License and assets](NOTICE.md)
 
@@ -59,17 +59,19 @@ This repository is the runnable prototype: clone or download it, install its dep
 ## Repository structure
 
 ```text
-framework/             Runtime, route discovery, HTTP bridge and adapters
-scripts/               Development, generation, build and test tools
+packages/core/         Packaged runtime, Angular renderer, CLI and adapters
+packages/create-fastang/ Project generator with a packaged starter template
+examples/starter/      Minimal app, usable outside this repository
+scripts/               Asset and integration-test tools
 src/app/pages/         Demo Angular pages, layouts and route metadata
 src/server/api/        File-based Fastify endpoints
 src/server/plugins.ts  Application plugins and hooks
 src/shared/            Runtime schemas, types and rendering contracts
-src/main.server.ts     Angular renderer and local HTTP backend
+src/main.server.ts     Application binding for the shared Angular renderer
 fastang.config.ts      Prerender URLs and Vercel options
 ```
 
-The demonstration app currently lives alongside the framework. Packaging the runtime and extracting a reusable starter are planned; this repository is not yet a monorepo of published packages.
+The demo and starter consume the same package. Run `npm run dev:starter` for the minimal app. `npm ci` compiles the workspace package; after changes to `packages/core/src`, run `npm run core:build`. See [the starter guide](examples/starter/README.md) for installation from a local tarball. `npm run test:starter` packs and installs the core and generator outside the workspace, creates an app with the installed CLI, then verifies development restarts, SSR, APIs, prerendering, 404s and a packaged Vercel function. No npm publication is performed.
 
 ## Pages and APIs
 
@@ -88,7 +90,7 @@ An endpoint named `src/server/api/hello.get.ts` becomes `GET /api/hello`:
 
 ```ts
 import { Type } from '@sinclair/typebox';
-import { defineApiRoute } from '../../../framework/api';
+import { defineApiRoute } from '@fastang/core/api';
 
 export default defineApiRoute<{ Reply: { message: string } }>({
   schema: { response: { 200: Type.Object({ message: Type.String() }) } },
@@ -143,3 +145,21 @@ Created by **Dario Chiapperini**, a full-stack developer and consultant based in
 FastAng uses Angular, Fastify and Vite. Its Angular compiler integration is supplied by [`@analogjs/vite-plugin-angular`](https://analogjs.org/docs/packages/vite-plugin-angular/overview); FastAng implements its own runtime and deployment pipeline. It is an independent project.
 
 Source code and documentation are MIT-licensed. Logos and the author photograph are excluded; bundled fonts retain their own licenses. See [LICENSE](LICENSE) and [NOTICE.md](NOTICE.md).
+
+## Create a project
+
+The unpublished generator can already create independent projects from local packages:
+
+```sh
+npm pack --workspace @fastang/core --pack-destination /tmp
+npm run create -- /tmp/my-fastang-app --core-package /tmp/fastang-core-0.1.0-alpha.0.tgz
+cd /tmp/my-fastang-app
+npm install
+npm run dev
+```
+
+See [create-fastang](packages/create-fastang/README.md) for naming, optional installation and packaged-generator usage. The destination must be a new directory. `npm create fastang` is reserved for the future registry release and is not available yet.
+
+## Alpha release preparation
+
+`npm run release:check` runs the release checks and prepares verified tarballs with SHA-512 integrity and source-commit metadata. See [the release guide](docs/releases.md) for publication order, the `alpha` distribution tag and registry smoke tests.

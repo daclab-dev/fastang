@@ -1,0 +1,46 @@
+{
+  "name": "create-fastang",
+  "version": "0.1.0-alpha.0",
+  "type": "module",
+  "description": "Create an Angular + Fastify project with FastAng.",
+  "license": "MIT",
+  "engines": {
+    "node": "^22.22.3 || ^24.15.0 || >=26.0.0"
+  },
+  "files": [
+    "bin",
+    "dist",
+    "template",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "bin": {
+    "create-fastang": "./bin/create-fastang.mjs"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/create.d.ts",
+      "import": "./dist/create.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json && node scripts/build-template.mjs",
+    "prepack": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daclab-dev/fastang.git",
+    "directory": "packages/create-fastang"
+  },
+  "publishConfig": {
+    "access": "public",
+    "tag": "alpha",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "homepage": "https://fastang.dev",
+  "bugs": {
+    "url": "https://github.com/daclab-dev/fastang/issues"
+  },
+  "author": "Dario Chiapperini"
+}

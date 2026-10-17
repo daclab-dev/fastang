@@ -13,8 +13,8 @@ npm ci
 npm run dev
 ```
 
-The app runs at http://localhost:3278. Framework sources live in `framework/`;
-`src/` contains the demo app and its server integration.
+The app runs at http://localhost:3278. Framework sources live in `packages/core/src/`;
+`src/` contains the demo app and its server integration. `examples/starter/` is the minimal consumer. `npm ci` compiles the package; run `npm run core:build` after changing its sources. `packages/create-fastang` contains the generator; `npm run create:build` compiles it and refreshes its template from the starter.
 
 Do not edit generated files in `.fastang/`, `src/app/fastang.routes.ts`, `dist/`
 or `.vercel/`. Commit dependency changes with `package-lock.json`.
@@ -28,6 +28,7 @@ npm run test:production
 npm run build:vercel
 npm run test:production
 npm run test:vercel
+npm run test:starter
 ```
 
 The two build commands both run strict TypeScript and Angular template checks.

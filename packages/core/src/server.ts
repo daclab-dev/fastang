@@ -1,14 +1,13 @@
-import { createHttpServer } from './http-server';
+import { createHttpServer } from './http-server.ts';
 import { type FastifyInstance, type FastifyServerOptions, type HTTPMethods } from 'fastify';
-import fastifyStatic from '@fastify/static';
 import { readFile } from 'node:fs/promises';
 import { extname, resolve } from 'node:path';
-import { registerApi } from '../.fastang/api';
-import type { RenderContext } from '../src/shared/render-context';
-import { normalizeRedirectLocation } from './redirect';
+import type { RenderContext } from './render-context.ts';
+import { normalizeRedirectLocation } from './redirect.ts';
 
 export type Renderer = (url: string, document: string, context: RenderContext) => Promise<string>;
 export interface ServerOptions {
+  registerApi?: (app: FastifyInstance) => void;
   logger?: FastifyServerOptions['logger'];
   render: Renderer;
   template: (url: string) => Promise<string>;
@@ -24,12 +23,12 @@ export function staticFile(path: string): string {
   return `${path.replace(/^\/|\/$/g, '')}${path === '/' ? '' : '/'}index.html`;
 }
 
-export async function createApiServer(options: Pick<ServerOptions, 'logger' | 'configure'> = {}): Promise<FastifyInstance> {
+export async function createApiServer(options: Pick<ServerOptions, 'logger' | 'configure' | 'registerApi'> = {}): Promise<FastifyInstance> {
   return createHttpServer({
     ...options,
     configure: async (app) => {
       await options.configure?.(app);
-      registerApi(app);
+      options.registerApi?.(app);
     },
   });
 }
@@ -38,6 +37,9 @@ export async function createServer(options: ServerOptions): Promise<FastifyInsta
   const app = await createApiServer(options);
   try {
     if (options.clientDir) {
+      // Vercel serves assets through its CDN and must not initialize the static
+      // plugin (or its require(ESM) dependency chain) in the SSR function.
+      const { default: fastifyStatic } = await import('@fastify/static');
       await app.register(fastifyStatic, {
         root: resolve(options.clientDir, 'assets'), prefix: '/assets/',
         immutable: true, maxAge: '1y', decorateReply: false,

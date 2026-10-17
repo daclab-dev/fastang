@@ -6,7 +6,7 @@ Un progetto [DacLab](https://github.com/daclab-dev), creato da Dario Chiapperini
 
 Angular nativo, Fastify completo. Una prima base funzionante per un meta-framework fullstack orientato al runtime Node.js.
 
-**Stato: prototipo 0.1.** Il repository include il runtime, gli strumenti di sviluppo e un'applicazione dimostrativa. Non è ancora un pacchetto pubblicato né una CLI installabile. Non sono dichiarati vantaggi prestazionali rispetto ad Analog senza benchmark comparabili.
+**Stato: prototipo 0.1.** Il workspace include il pacchetto `@fastang/core`, uno starter minimo indipendente e il sito dimostrativo. Il pacchetto espone la CLI `fastang`, ma non è ancora pubblicato su npm e anche il generatore `create-fastang` è disponibile solo localmente. Non sono dichiarati vantaggi prestazionali rispetto ad Analog senza benchmark comparabili.
 
 ## Avvio
 
@@ -55,12 +55,13 @@ L'header `x-request-label` serve esclusivamente a dimostrare l'isolamento: non �
 ## Struttura
 
 ```text
-framework/                    Runtime e strumenti FastAng
+packages/core/src/            Runtime, renderer Angular, CLI e adapter
+examples/starter/             Applicazione minima indipendente
   api.ts                      Registrazione tipizzata delle API Fastify
   routes.ts                   Discovery, precedenze e collisioni
   server.ts                   Factory Fastify e bridge API per SSR
   vite-plugin.ts              Rigenerazione route e confine server/client
-scripts/                      Dev server, build e test runner
+scripts/                      Asset e verifiche di integrazione
 src/
   app/
     pages/                    Componenti di pagina Angular
@@ -157,7 +158,7 @@ Il nome del file specifica il metodo: `src/server/api/hello.get.ts` diventa `GET
 
 ```ts
 import { Type, type Static } from '@sinclair/typebox';
-import { defineApiRoute } from '../../../framework/api';
+import { defineApiRoute } from '@fastang/core/api';
 
 const ResponseSchema = Type.Object({ message: Type.String() });
 type Response = Static<typeof ResponseSchema>;
@@ -228,7 +229,7 @@ npm run test:production    # Verifica il runtime Node della stessa build
 
 `vercel.json` imposta `npm run build:vercel` come build command con preset Other. Le funzioni usano **Node.js 24**; seleziona la stessa versione per il build nell'ambiente Vercel. Il deployment può essere generato dal repository oppure tramite il normale flusso CLI `vercel build` / `vercel deploy --prebuilt`, dopo aver collegato il progetto Vercel. Nessun deployment viene eseguito dagli script FastAng.
 
-L'adapter in `framework/adapters/vercel.ts` genera:
+L'adapter in `packages/core/src/adapters/vercel.ts` genera:
 
 - `static/assets/`: asset con hash sulla CDN, cache immutabile;
 - `static/<path>/index.html`: pagine prerenderizzate, servite direttamente agli URL configurati (incluse le versioni inglesi);
@@ -300,3 +301,31 @@ Le traduzioni del sito sono in `src/app/i18n/en.ts`, con il testo italiano come 
 `LocalizedTitleStrategy` aggiorna titoli, descrizione, `html[lang]`, canonical e alternate `hreflang` anche nelle navigazioni client. L'origine pubblica prevista è `https://fastang.dev` (`SITE_ORIGIN`): aggiornarla se cambia il dominio. `/about` e `/en/about` vengono prerenderizzate nella stessa build.
 
 Per preparare una pubblicazione: `npm ci`, `npm run build`, `npm run test:production`, poi `npm start` su un runtime Node compatibile con `package.json`. Il collegamento del dominio, HTTPS e l'hosting vanno configurati nell'ambiente di destinazione.
+
+## Pacchetto e starter indipendente
+
+`npm ci` compila automaticamente `@fastang/core`. Dopo modifiche ai sorgenti del pacchetto esegui `npm run core:build`. Il sito e `examples/starter` usano lo stesso runtime: il framework riceve le API attraverso `registerApi(app)` e non importa file dell'applicazione.
+
+La [guida dello starter](examples/starter/README.md) spiega come installarlo nel workspace oppure copiarlo altrove e installare il tarball prodotto da `npm pack --workspace @fastang/core --pack-destination /tmp`. Non è ancora disponibile una versione sul registry npm.
+
+`npm run test:starter` installa il tarball in una cartella temporanea fuori dal repository e verifica tipi, build, SSR, API, prerendering, 404, sviluppo con riavvio del backend e una funzione Vercel.
+
+## Generare un progetto
+
+`create-fastang` crea un'applicazione indipendente usando lo starter come unica sorgente. I pacchetti non sono ancora pubblicati sul registry:
+
+```sh
+npm pack --workspace @fastang/core --pack-destination /tmp
+npm run create -- /tmp/my-fastang-app --core-package /tmp/fastang-core-0.1.0-alpha.0.tgz
+cd /tmp/my-fastang-app
+npm install
+npm run dev
+```
+
+La destinazione deve essere una cartella nuova: il generatore rifiuta file, cartelle e link già esistenti. `--name` imposta il nome npm; `--install` installa subito le dipendenze, mentre il comportamento predefinito genera soltanto i file. Il tarball locale del core deve restare disponibile per le installazioni successive.
+
+La [guida del generatore](packages/create-fastang/README.md) descrive anche l'uso del pacchetto installato fuori dal repository. `npm run test:starter` verifica ora l'intero percorso: tarball del core e del generatore, creazione dell'app, installazione, build e server.
+
+## Preparazione della release alpha
+
+`npm run release:check` esegue i controlli completi e prepara tarball verificati, con integrità SHA-512 e commit di origine. La [guida di pubblicazione](docs/releases.md) descrive ordine di pubblicazione, tag `alpha` e verifica dal registry. La versione iniziale è `0.1.0-alpha.0`.

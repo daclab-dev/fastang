@@ -5,9 +5,9 @@ promise. Track concrete work in repository issues once the project is public.
 
 ## Before the first installable release
 
-- Separate framework packages from the demonstration site.
+- Framework extraction and a tarball-tested starter are implemented in `packages/core` and `examples/starter`.
 - Define and document the public API and supported environment matrix.
-- Add a minimal project starter and a reproducible scaffolding command.
+- The `create-fastang` scaffolding command and its packaged template are implemented and tested outside the workspace. Registry publication remains pending.
 - Add browser automation for hydration and client routing regressions.
 - Validate the Vercel adapter on a real Preview deployment.
 - Prepare versioning, changelogs and npm release tooling.

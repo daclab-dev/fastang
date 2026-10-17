@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.fastang/
+.angular/
+.vercel/
+src/app/fastang.routes.ts
+.env
+.env.*
+!.env.example

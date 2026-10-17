@@ -1,4 +1,4 @@
-import { defineApiRoute } from '../../../../framework/api';
+import { defineApiRoute } from '@fastang/core/api';
 import { ProductSchema, ProductParamsSchema, ErrorSchema, type Product, type ProductParams, type ApiError } from '../../../shared/contracts';
 import { findProduct } from '../../products';
 

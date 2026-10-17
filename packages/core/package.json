@@ -1,0 +1,123 @@
+{
+  "name": "@fastang/core",
+  "version": "0.1.0-alpha.0",
+  "type": "module",
+  "description": "Angular rendering, Fastify APIs and file-based routing.",
+  "license": "MIT",
+  "author": "Dario Chiapperini",
+  "engines": {
+    "node": "^22.22.3 || ^24.15.0 || >=26.0.0"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "bin",
+    "CHANGELOG.md"
+  ],
+  "bin": {
+    "fastang": "./bin/fastang.mjs"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./routes": {
+      "types": "./dist/routes.d.ts",
+      "import": "./dist/routes.js"
+    },
+    "./config": {
+      "types": "./dist/config.d.ts",
+      "import": "./dist/config.js"
+    },
+    "./vite-plugin": {
+      "types": "./dist/vite-plugin.d.ts",
+      "import": "./dist/vite-plugin.js"
+    },
+    "./redirect": {
+      "types": "./dist/redirect.d.ts",
+      "import": "./dist/redirect.js"
+    },
+    "./listen": {
+      "types": "./dist/listen.d.ts",
+      "import": "./dist/listen.js"
+    },
+    "./api": {
+      "types": "./dist/api.d.ts",
+      "import": "./dist/api.js"
+    },
+    "./render-context": {
+      "types": "./dist/render-context.d.ts",
+      "import": "./dist/render-context.js"
+    },
+    "./server": {
+      "types": "./dist/server.d.ts",
+      "import": "./dist/server.js"
+    },
+    "./http-server": {
+      "types": "./dist/http-server.d.ts",
+      "import": "./dist/http-server.js"
+    },
+    "./node-handler": {
+      "types": "./dist/node-handler.d.ts",
+      "import": "./dist/node-handler.js"
+    },
+    "./adapters/vercel": {
+      "types": "./dist/adapters/vercel.d.ts",
+      "import": "./dist/adapters/vercel.js"
+    },
+    "./adapters/vercel-plan": {
+      "types": "./dist/adapters/vercel-plan.d.ts",
+      "import": "./dist/adapters/vercel-plan.js"
+    },
+    "./angular": {
+      "types": "./dist/angular.d.ts",
+      "import": "./dist/angular.js"
+    },
+    "./vite": {
+      "types": "./dist/vite.d.ts",
+      "import": "./dist/vite.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "prepack": "npm run build"
+  },
+  "dependencies": {
+    "@fastify/middie": "^9.0.3",
+    "@fastify/static": "^10.1.6",
+    "@analogjs/vite-plugin-angular": "2.8.1",
+    "@vercel/nft": "^1.11.0",
+    "tsx": "^4.20.6"
+  },
+  "peerDependencies": {
+    "@angular/common": "22.2.3",
+    "@angular/compiler": "22.2.3",
+    "@angular/core": "22.2.3",
+    "@angular/platform-browser": "22.2.3",
+    "@angular/platform-server": "22.2.3",
+    "@angular/router": "22.2.3",
+    "fastify": "^5.12.7",
+    "rxjs": "^7.8.2",
+    "tslib": "^2.8.1",
+    "vite": "8.3.4",
+    "typescript": "~6.0.2",
+    "@angular/compiler-cli": "22.2.3",
+    "@angular/build": "22.2.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daclab-dev/fastang.git",
+    "directory": "packages/core"
+  },
+  "publishConfig": {
+    "access": "public",
+    "tag": "alpha",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "homepage": "https://fastang.dev",
+  "bugs": {
+    "url": "https://github.com/daclab-dev/fastang/issues"
+  }
+}

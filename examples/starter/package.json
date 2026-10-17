@@ -1,0 +1,36 @@
+{
+  "name": "fastang-starter",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "^22.22.3 || ^24.15.0 || >=26.0.0"
+  },
+  "scripts": {
+    "dev": "fastang dev",
+    "generate": "fastang generate",
+    "check": "fastang generate && ngc -p tsconfig.app.json --noEmit && tsc -p tsconfig.node.json --noEmit",
+    "build": "npm run check && fastang build",
+    "build:vercel": "npm run check && fastang build --vercel",
+    "start": "node dist/server/index.js"
+  },
+  "dependencies": {
+    "@angular/common": "22.2.3",
+    "@angular/compiler": "22.2.3",
+    "@angular/core": "22.2.3",
+    "@angular/platform-browser": "22.2.3",
+    "@angular/platform-server": "22.2.3",
+    "@angular/router": "22.2.3",
+    "fastify": "^5.12.7",
+    "rxjs": "^7.8.2",
+    "tslib": "^2.8.1",
+    "@fastang/core": "0.1.0-alpha.0"
+  },
+  "devDependencies": {
+    "@angular/build": "22.2.3",
+    "@angular/compiler-cli": "22.2.3",
+    "@types/node": "^22.19.0",
+    "typescript": "~6.0.2",
+    "vite": "8.3.4"
+  }
+}

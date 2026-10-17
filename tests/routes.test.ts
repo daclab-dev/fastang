@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { fileRoute, sortAndValidate, generate, buildPageTree } from '../framework/routes';
+import { fileRoute, sortAndValidate, generate, buildPageTree } from '@fastang/core/routes';
 import { mkdtemp, mkdir, writeFile, readFile, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
@@ -87,7 +87,7 @@ test('la generazione rifiuta metadati orfani, collisioni e layout catch-all', ()
 });
 
 test('SSR route pruning keeps ancestors and 404s while retaining redirect metadata', async () => {
-  const { pageRoutesSource, renderedPageFiles } = await import('../framework/routes');
+  const { pageRoutesSource, renderedPageFiles } = await import('@fastang/core/routes');
   const tree = buildPageTree([
     'index.page.ts', 'index.route.ts', 'author.page.ts', 'author.route.ts',
     'products/layout.ts', 'products/layout.route.ts', 'products/(detail)/layout.ts',

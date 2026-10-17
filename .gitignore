@@ -23,3 +23,6 @@ src/app/fastang.routes.ts
 .idea/
 .vscode/
 coverage/
+
+# Generated from examples/starter for the published generator
+packages/create-fastang/template/

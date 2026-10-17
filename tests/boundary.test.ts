@@ -4,7 +4,7 @@ import { mkdtemp, mkdir, writeFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { build } from 'vite';
-import { fastang } from '../framework/vite-plugin';
+import { fastang } from '@fastang/core/vite-plugin';
 
 test('il build browser blocca un import transitivo dal backend', async () => {
   const root = await mkdtemp(join(tmpdir(), 'fastang-boundary-'));
@@ -21,4 +21,12 @@ test('il build browser blocca un import transitivo dal backend', async () => {
       build: { write: false, lib: { entry: join(root, 'entry.ts'), formats: ['es'] } },
     }), /Modulo server importato nel client/);
   } finally { await rm(root, { recursive: true, force: true }); }
+});
+
+test('packaged server entry points stay out of browser bundles', async () => {
+  const { isServerModule } = await import('@fastang/core/vite-plugin');
+  for (const path of ['/app/node_modules/@fastang/core/dist/server.js', '/repo/packages/core/dist/angular.js', '/app/node_modules/@fastang/core/dist/adapters/vercel.js']) {
+    assert.equal(isServerModule(path), true);
+  }
+  assert.equal(isServerModule('/app/node_modules/@fastang/core/dist/config.js'), false);
 });

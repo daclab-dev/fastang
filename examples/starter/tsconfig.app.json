@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./.fastang/tsc",
+    "types": ["vite/client"],
+    "declaration": false
+  },
+  "angularCompilerOptions": {
+    "strictTemplates": true,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true
+  },
+  "include": ["src/app/**/*.ts", "src/shared/**/*.ts", "src/main.ts", "src/main.server.ts"]
+}

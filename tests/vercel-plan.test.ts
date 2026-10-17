@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { fileRoute, sortAndValidate } from '../framework/routes';
-import { planVercelFunctions, routePattern } from '../framework/adapters/vercel-plan';
+import { fileRoute, sortAndValidate } from '@fastang/core/routes';
+import { planVercelFunctions, routePattern } from '@fastang/core/adapters/vercel-plan';
 
 const pages = sortAndValidate(['index.page.ts', 'about.page.ts', 'products/[id].page.ts', '[...slug].page.ts'].map((file) => fileRoute(file, 'page')));
 const apis = sortAndValidate(['health.get.ts', 'products/[id].get.ts', 'products/[name].post.ts', 'products/[id].head.ts'].map((file) => fileRoute(file, 'api')));

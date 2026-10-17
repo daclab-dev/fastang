@@ -1,5 +1,5 @@
 import { Type } from '@sinclair/typebox';
-import { defineApiRoute } from '../../../framework/api';
+import { defineApiRoute } from '@fastang/core/api';
 
 export default defineApiRoute<{ Reply: { status: 'ok'; framework: string } }>({
   schema: {

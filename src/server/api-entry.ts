@@ -1,6 +1,7 @@
-import { createApiServer } from '../../framework/server';
-import { createNodeHandler } from '../../framework/node-handler';
+import { createApiServer } from '@fastang/core/server';
+import { createNodeHandler } from '@fastang/core/node-handler';
 import { configureServer } from './plugins';
+import { registerApi } from '../../.fastang/api';
 
 // This entry point deliberately has no Angular renderer dependency.
-export default createNodeHandler(() => createApiServer({ configure: configureServer }));
+export default createNodeHandler(() => createApiServer({ configure: configureServer, registerApi }));

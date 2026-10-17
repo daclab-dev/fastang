@@ -1,6 +1,6 @@
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { listen } from '../../framework/listen';
+import { listen } from '@fastang/core/listen';
 import { createProductionServer } from './index';
 
 export { createProductionServer };

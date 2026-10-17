@@ -2,9 +2,9 @@ import { copyFile, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises
 import { dirname, resolve } from 'node:path';
 import { createRequire } from 'node:module';
 import { nodeFileTrace } from '@vercel/nft';
-import { staticFile } from '../server';
-import { sortAndValidate } from '../routes';
-import { escapeRegex, routePattern, type VercelPlan } from './vercel-plan';
+import { staticFile } from '../server.ts';
+import { sortAndValidate } from '../routes.ts';
+import { escapeRegex, routePattern, type VercelPlan } from './vercel-plan.ts';
 
 /** Converts an existing Node build into Vercel Build Output API v3. */
 export async function buildVercelOutput(plan: VercelPlan, root = process.cwd()): Promise<void> {
