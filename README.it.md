@@ -343,3 +343,7 @@ La [guida del generatore](packages/create-fastang/README.md) descrive anche l'us
 Le guide in [italiano](docs/guide/it/getting-started.md) e [inglese](docs/guide/en/getting-started.md) sono pubblicate anche su `/docs` e `/en/docs`. Coprono avvio, routing, API, rendering, errori, plugin e deploy. Il sito legge gli stessi Markdown del repository.
 
 `npm run test:docs` applica i file TypeScript degli esempi a copie dello starter, compila i template ed esegue le verifiche HTTP descritte nelle guide. Gli esempi delle due lingue devono rimanere identici.
+
+## Esempio opzionale di autenticazione
+
+Da un checkout del repository, `npm run create:auth -- /percorso/nuova-app` genera un'app separata con login, pagina SSR protetta e logout tramite i plugin ufficiali Fastify per sessione e limitazione dei tentativi. Il comando crea segreti casuali in un `.env` locale escluso da Git. L'esempio usa un solo account dimostrativo: la [guida dedicata](examples/auth/README.md) spiega avvio, packaging Vercel e limiti delle sessioni stateless. `npm run test:auth` esegue i controlli browser e sulle funzioni impacchettate. Il core e lo starter minimo pubblicato restano indipendenti dall'autenticazione.

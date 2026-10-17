@@ -168,6 +168,10 @@ npm run dev
 
 See [create-fastang](packages/create-fastang/README.md) for naming, optional installation and packaged-generator usage. The destination must be a new directory. Use `npm create fastang@alpha` explicitly: this is an experimental prerelease.
 
+## Optional authentication example
+
+From a repository checkout, `npm run create:auth -- /path/to/new-app` creates a separate app with login, protected SSR and logout, using official Fastify session and rate-limit plugins. It generates private local secrets and keeps authentication out of the core and minimal npm starter. Read [the example guide](examples/auth/README.md) for startup, Vercel packaging and the limits of the single-account demonstration. Run `npm run test:auth` for browser and packaged-function checks.
+
 ## Alpha release preparation
 
 `npm run release:check` runs the release checks and prepares verified tarballs with SHA-512 integrity and source-commit metadata. See [the release guide](docs/releases.md) for publication order, the `alpha` distribution tag and registry smoke tests.

@@ -83,3 +83,7 @@ traces for seven days. Open a local report with `npx playwright show-report`.
 WebKit checks the engine used by Safari; Playwright does not run the branded
 Safari browser. Mobile projects emulate devices and do not replace checks on
 real iPhones or Android devices.
+
+## Authentication example
+
+`examples/auth` is an optional overlay for the generated starter. Run `npm run create:auth -- /path/to/new-app` to install it, or `npm run test:auth` to check the production example in all configured browser profiles and a packaged Vercel function. API, Origin, cookie and login-limit tests also run under `npm test`. The minimal published starter is unchanged. See [the example guide](examples/auth/README.md) for environment setup and the limits of this single-account demonstration.
