@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.1.0-alpha.1
 
 - Preserve separate Set-Cookie headers and allow explicit per-dispatch forwarding to HTML responses.
 - Keep inherited credentials out of Angular's default HTTP transfer cache.

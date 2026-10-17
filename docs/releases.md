@@ -1,7 +1,7 @@
 # Publishing FastAng alpha releases
 
-Core and generator are versioned together. The initial release is
-`0.1.0-alpha.0`, published publicly to npm with the `alpha` distribution tag.
+Core and generator are versioned together. The current release is
+`0.1.0-alpha.1`, published publicly to npm with the `alpha` distribution tag.
 The `latest` tag is reserved for a later release decision.
 
 ## Prerequisites
@@ -23,7 +23,7 @@ the installed generator and its generated app, and the dependency audit. It then
 packs both workspaces and validates package contents, versions, publication
 settings, template dependency and SHA-512 integrity.
 
-The files are written to `.fastang/releases/0.1.0-alpha.0/`. `release.json`
+The files are written to `.fastang/releases/0.1.0-alpha.1/`. `release.json`
 records the source commit, whether the worktree was clean, and each tarball's
 integrity. Build output is ignored by Git.
 
@@ -36,10 +36,10 @@ to regenerate the release metadata against that commit. Verify that
 Publish core first, then the generator that depends on it:
 
 ```sh
-npm publish .fastang/releases/0.1.0-alpha.0/fastang-core-0.1.0-alpha.0.tgz --access public --tag alpha
-npm view @fastang/core@0.1.0-alpha.0 version dist.integrity --json
-npm publish .fastang/releases/0.1.0-alpha.0/create-fastang-0.1.0-alpha.0.tgz --access public --tag alpha
-npm view create-fastang@0.1.0-alpha.0 version dist.integrity --json
+npm publish .fastang/releases/0.1.0-alpha.1/fastang-core-0.1.0-alpha.1.tgz --access public --tag alpha
+npm view @fastang/core@0.1.0-alpha.1 version dist.integrity --json
+npm publish .fastang/releases/0.1.0-alpha.1/create-fastang-0.1.0-alpha.1.tgz --access public --tag alpha
+npm view create-fastang@0.1.0-alpha.1 version dist.integrity --json
 ```
 
 Compare registry integrity with `release.json`. Check the distribution tags with
@@ -72,7 +72,7 @@ npm start
 Check the home page, `/greet/world`, `/api/health`, `/about` and an unknown URL.
 `npm run build:vercel` should also produce the deployable output.
 
-After registry verification, create Git tag `v0.1.0-alpha.0` pointing at the
+After registry verification, create Git tag `v0.1.0-alpha.1` pointing at the
 release commit and publish the release notes. The installation command for an
 alpha must include `@alpha`; do not imply that it is a stable release.
 

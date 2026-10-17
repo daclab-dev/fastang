@@ -15,7 +15,7 @@ Create a minimal Angular + Fastify project in a new directory.
   -h, --help             Show this help
   -v, --version          Show generator version
 
-Example: create-fastang my-app --core-package /tmp/fastang-core-0.1.0-alpha.0.tgz
+Example: create-fastang my-app --core-package /tmp/fastang-core-0.1.0-alpha.1.tgz
 `;
 const quote = (value: string) => /^[a-zA-Z0-9_./-]+$/.test(value) ? value : `'${value.replaceAll("'", "'\"'\"'")}'`;
 

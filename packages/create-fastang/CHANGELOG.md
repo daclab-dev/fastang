@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-alpha.1
+
+- Pin the generated starter to @fastang/core 0.1.0-alpha.1, with runtime configuration validation and the explicit SSR HTTP contract.
+
 ## 0.1.0-alpha.0
 
 Initial experimental release.

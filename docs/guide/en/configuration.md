@@ -3,7 +3,7 @@
 Extend the server with Fastify and keep public settings separate from backend secrets.
 
 
-The configuration validation below is available on the repository main branch and is planned for the next alpha; npm `0.1.0-alpha.0` does not include it yet.
+Configuration validation is available from `0.1.0-alpha.1`.
 
 `defineConfig()` validates configuration at runtime. The build also validates plain default exports before replacing `dist/`. Unknown options, invalid types, reserved prerender paths (`/`, `/api`, `/assets`, `/__fastang`) and conflicting destinations such as `/about` plus `/about/` fail with an explicit error. Prerender paths contain only ASCII letters, digits, underscores, hyphens and slashes; query strings and fragments are not supported.
 

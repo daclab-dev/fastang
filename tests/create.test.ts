@@ -61,7 +61,8 @@ test('generator CLI explains usage and rejects malformed commands without writin
   const cwd = await mkdtemp(join(tmpdir(), 'fastang-create-cli-'));
   try {
     assert.match((await run(process.execPath, [cli, '--help'], { cwd })).stdout, /--core-package/);
-    assert.match((await run(process.execPath, [cli, '--version'], { cwd })).stdout, /0\.1\.0-alpha\.0/);
+    const manifest = JSON.parse(await readFile(resolve('packages/create-fastang/package.json'), 'utf8'));
+    assert.equal((await run(process.execPath, [cli, '--version'], { cwd })).stdout.trim(), manifest.version);
     for (const args of [[], ['app', '--wat'], ['app', '--name'], ['app', 'other'], ['app', '--install', '--no-install']]) {
       await assert.rejects(run(process.execPath, [cli, ...args], { cwd }), (error: { code?: number; stderr?: string }) => error.code === 1 && Boolean(error.stderr?.includes('create-fastang:')));
     }

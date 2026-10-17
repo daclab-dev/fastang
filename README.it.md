@@ -324,7 +324,7 @@ Per provare modifiche locali prima di una nuova release:
 
 ```sh
 npm pack --workspace @fastang/core --pack-destination /tmp
-npm run create -- /tmp/my-fastang-app --core-package /tmp/fastang-core-0.1.0-alpha.0.tgz
+npm run create -- /tmp/my-fastang-app --core-package /tmp/fastang-core-0.1.0-alpha.1.tgz
 cd /tmp/my-fastang-app
 npm install
 npm run dev
@@ -336,7 +336,7 @@ La [guida del generatore](packages/create-fastang/README.md) descrive anche l'us
 
 ## Preparazione della release alpha
 
-`npm run release:check` esegue i controlli completi e prepara tarball verificati, con integrità SHA-512 e commit di origine. La [guida di pubblicazione](docs/releases.md) descrive ordine di pubblicazione, tag `alpha` e verifica dal registry. La versione iniziale è `0.1.0-alpha.0`.
+`npm run release:check` esegue i controlli completi e prepara tarball verificati, con integrità SHA-512 e commit di origine. La [guida di pubblicazione](docs/releases.md) descrive ordine di pubblicazione, tag `alpha` e verifica dal registry. La versione iniziale è `0.1.0-alpha.1`.
 
 ## Guide pratiche
 

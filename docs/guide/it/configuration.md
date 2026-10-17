@@ -3,7 +3,7 @@
 Estendi il server con Fastify e mantieni separate le impostazioni pubbliche dai segreti del backend.
 
 
-La validazione descritta qui è disponibile nel ramo main del repository ed è prevista per la prossima alpha; la versione npm `0.1.0-alpha.0` non la include ancora.
+La validazione della configurazione è disponibile da `0.1.0-alpha.1`.
 
 `defineConfig()` valida la configurazione a runtime. La build controlla anche gli export default semplici prima di sostituire `dist/`. Opzioni sconosciute, tipi non validi, percorsi riservati al runtime (`/`, `/api`, `/assets`, `/__fastang`) e destinazioni in conflitto come `/about` e `/about/` producono un errore esplicito. I percorsi di prerendering accettano solo lettere ASCII, cifre, underscore, trattini e slash; query string e frammenti non sono supportati.
 

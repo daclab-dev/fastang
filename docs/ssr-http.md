@@ -1,6 +1,6 @@
-# SSR HTTP contract (unreleased)
+# SSR HTTP contract
 
-Implemented on `main`; not yet available in npm `0.1.0-alpha.0`.
+Available from `@fastang/core@0.1.0-alpha.1`.
 
 ## Requests and sessions
 

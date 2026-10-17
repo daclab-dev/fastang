@@ -4,7 +4,7 @@ Crea un progetto, avvia il server e prova una pagina Angular che legge un'API Fa
 
 ## Requisiti
 
-Questa guida si riferisce a FastAng `0.1.0-alpha.0`. Usa Node `^22.22.3`, `^24.15.0` oppure `>=26.0.0`, con npm. Lo starter usa Angular `22.2.3`, Vite `8.3.4` e Fastify `^5.12.7`. Le API possono cambiare tra release alpha.
+Questa guida si riferisce a FastAng `0.1.0-alpha.1`. Usa Node `^22.22.3`, `^24.15.0` oppure `>=26.0.0`, con npm. Lo starter usa Angular `22.2.3`, Vite `8.3.4` e Fastify `^5.12.7`. Le API possono cambiare tra release alpha.
 
 ## Crea e avvia
 

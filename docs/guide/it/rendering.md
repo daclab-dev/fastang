@@ -23,7 +23,7 @@ export default class GreetingPage { readonly greeting = input.required<{ message
 Lo starter attiva `withComponentInputBinding()`, quindi il dato risolto con la chiave `greeting` arriva all'input omonimo.
 
 
-Nel ramo main del repository (prossima alpha), i cookie di risposta si possono inoltrare solo tramite dispatch server esplicito e le risposte API con credenziali sono escluse dalla cache di idratazione predefinita. I redirect API interni restano espliciti. Vedi il [contratto HTTP SSR](https://github.com/daclab-dev/fastang/blob/main/docs/ssr-http.md#requests-and-sessions).
+Da `0.1.0-alpha.1`, i cookie di risposta si possono inoltrare solo tramite dispatch server esplicito e le risposte API con credenziali sono escluse dalla cache di idratazione predefinita. I redirect API interni restano espliciti. Vedi il [contratto HTTP SSR](https://github.com/daclab-dev/fastang/blob/main/docs/ssr-http.md#requests-and-sessions).
 
 
 ## Cosa succede durante SSR
