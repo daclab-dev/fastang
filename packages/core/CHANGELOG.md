@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Preserve separate Set-Cookie headers and allow explicit per-dispatch forwarding to HTML responses.
+- Keep inherited credentials out of Angular's default HTTP transfer cache.
+- Treat internal API redirects as HttpClient errors and normalize local dispatch paths.
+- Reject Set-Cookie responses during public prerendering.
+
 - Validate prerender and Vercel configuration before changing build output, including plain config exports.
 - Reject unknown options, invalid types, reserved paths and conflicting prerender destinations.
 

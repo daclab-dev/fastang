@@ -17,7 +17,7 @@ promise. Track concrete work in repository issues once the project is public.
 - Configuration validation rejects invalid options and unsafe or conflicting prerender paths before replacing build output. More explicit rendering policies remain future work.
 - Typed API clients derived from route contracts.
 - Cookie/session and authentication integration with isolation tests.
-- A defined contract for API cookies and redirects during SSR.
+- An explicit SSR HTTP contract for credentials, response cookies, redirects and hydration cache is implemented on main; see [the contract](docs/ssr-http.md).
 - ISR and on-demand revalidation for adapters that support them.
 
 ## Measurement

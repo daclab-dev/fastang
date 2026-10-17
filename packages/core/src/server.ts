@@ -53,35 +53,45 @@ export async function createServer(options: ServerOptions): Promise<FastifyInsta
         const html = await readFile(resolve(options.clientDir, staticPath), 'utf8');
         return reply.header('x-fastang-render', 'prerender').header('cache-control', 'public, max-age=0, must-revalidate').type('text/html; charset=utf-8').send(html);
       }
+      const responseCookies: string[] = [];
       const context: RenderContext = {
         status: 200,
-        async dispatchApi(path, method, body, headers) {
+        async dispatchApi(path, method, body, headers, dispatchOptions = {}) {
+          path = normalizeRedirectLocation(path);
           if (!path.startsWith('/api/')) throw new Error('Solo API locali consentite');
           const forwarded: Record<string, string> = {};
           for (const name of ['cookie', 'authorization', 'x-request-label']) {
             const value = request.headers[name];
             if (typeof value === 'string') forwarded[name] = value;
           }
+          const outgoing: Record<string, string> = { ...forwarded, ...(body == null ? {} : { 'content-type': 'application/json' }), ...Object.fromEntries(Object.entries(headers).map(([key, value]) => [key.toLowerCase(), value])) };
           const response = await app.inject({
             method: method as HTTPMethods, url: path,
-            headers: { ...forwarded, ...(body == null ? {} : { 'content-type': 'application/json' }), ...headers },
+            headers: outgoing,
             ...(body == null ? {} : { payload: typeof body === 'string' ? body : JSON.stringify(body) }),
           });
-          const responseHeaders: Record<string, string> = {};
+          const responseHeaders: Record<string, string | string[]> = {};
           for (const [name, value] of Object.entries(response.headers)) {
-            if (value !== undefined) responseHeaders[name] = Array.isArray(value) ? value.join(', ') : String(value);
+            if (value !== undefined) responseHeaders[name] = Array.isArray(value) ? [...value] : String(value);
+          }
+          if (dispatchOptions.forwardSetCookie === true) {
+            const cookies = responseHeaders['set-cookie'];
+            if (cookies) responseCookies.push(...(Array.isArray(cookies) ? cookies : [cookies]));
           }
           const contentType = String(response.headers['content-type'] ?? '');
-          return { status: response.statusCode, body: contentType.includes('json') ? response.json() : response.body, headers: responseHeaders };
+          return { status: response.statusCode, body: contentType.includes('json') ? response.json() : response.body, headers: responseHeaders, credentialed: !!(outgoing['cookie'] || outgoing['authorization']) };
         },
       };
       const html = await options.render(`http://fastang.local${request.url}`, await options.template(request.url), context);
       if (context.redirect) {
         const status = context.redirect.status ?? 302;
         if (![301, 302, 303, 307, 308].includes(status)) throw new Error('Stato redirect non valido');
+        const location = normalizeRedirectLocation(context.redirect.location);
+        if (responseCookies.length) reply.header('set-cookie', responseCookies);
         return reply.header('x-fastang-render', 'redirect').header('cache-control', 'private, no-store')
-          .redirect(normalizeRedirectLocation(context.redirect.location), status);
+          .redirect(location, status);
       }
+      if (responseCookies.length) reply.header('set-cookie', responseCookies);
       return reply.code(context.status).header('x-fastang-render', 'ssr').header('cache-control', 'private, no-store').type('text/html; charset=utf-8').send(html);
     });
     return app;

@@ -21,8 +21,11 @@ function localApiBackend(): HttpBackend {
       if (contentType && !request.headers.has('content-type')) headers['content-type'] = contentType;
       return from(context.dispatchApi(target.pathname + target.search, request.method, request.body, headers)).pipe(
         map((response) => {
-          const responseHeaders = new HttpHeaders(response.headers);
-          if (response.status >= 400) throw new HttpErrorResponse({ status: response.status, error: response.body, headers: responseHeaders, url: request.url });
+          let responseHeaders = new HttpHeaders(response.headers);
+          // Inherited credentials were invisible to the transfer-cache request check.
+          // Mark the response private so Angular's native response check excludes it.
+          if (response.credentialed) responseHeaders = responseHeaders.set('cache-control', 'private, no-store');
+          if (response.status < 200 || response.status >= 300) throw new HttpErrorResponse({ status: response.status, error: response.body, headers: responseHeaders, url: request.url });
           return new HttpResponse({ status: response.status, body: response.body, headers: responseHeaders, url: request.url });
         }),
       );

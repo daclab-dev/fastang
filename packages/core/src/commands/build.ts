@@ -45,6 +45,7 @@ try {
   for (const path of paths) {
     const response = await app.inject({ url: path });
     if (response.statusCode !== 200) throw new Error(`Prerender ${path}: HTTP ${response.statusCode}`);
+    if (response.headers['set-cookie']) throw new Error(`Prerender ${path}: Set-Cookie is not allowed in public HTML`);
     const target = resolve('dist/client', staticFile(path));
     await mkdir(dirname(target), { recursive: true });
     await writeFile(target, response.body);

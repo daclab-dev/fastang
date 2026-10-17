@@ -22,6 +22,10 @@ export default class GreetingPage { readonly greeting = input.required<{ message
 
 The starter enables `withComponentInputBinding()`, so data resolved under `greeting` reaches the input with the same name.
 
+
+On the repository main branch (next alpha), response cookies can be forwarded only by explicit server dispatch, and credentialed API responses are excluded from the default hydration cache. Internal API redirects remain explicit. See the [SSR HTTP contract](https://github.com/daclab-dev/fastang/blob/main/docs/ssr-http.md#requests-and-sessions).
+
+
 ## What happens during SSR
 
 The renderer uses public Angular APIs. An HttpClient call to `/api/...` goes through `Fastify.inject()` in the same application, after interceptors. There is no need to start another server or call localhost from the renderer.

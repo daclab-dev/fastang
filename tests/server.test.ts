@@ -139,3 +139,78 @@ test('Location normalizza Unicode e rifiuta stati HTTP non appartenenti ai redir
     assert.equal(invalid.headers.location, undefined);
   } finally { await app.close(); }
 });
+
+test('SSR preserves separate cookies and forwards them only by explicit request', async () => {
+  const cookies = ['session=one; Path=/; HttpOnly; SameSite=Lax', 'theme=dark; Expires=Wed, 21 Oct 2037 07:28:00 GMT; Path=/'];
+  const app = await createServer({ ...options,
+    configure(server) { server.get('/api/cookies', (_request, reply) => reply.header('set-cookie', cookies).redirect('/about')); },
+    async render(url, _document, context) {
+      const flags = new URL(url).searchParams;
+      const result = await context.dispatchApi('/api/cookies', 'GET', null, {}, { forwardSetCookie: flags.has('forward') });
+      assert.deepEqual(result.headers['set-cookie'], cookies);
+      assert.equal(result.status, 302);
+      assert.equal(result.headers.location, '/about');
+      if (flags.has('redirect')) context.redirect = { location: '/about', status: 303 };
+      if (flags.has('invalid')) context.redirect = { location: '//external.example' };
+      if (flags.has('fail')) throw new Error('Rendering failed');
+      return '<h1>Cookies</h1>';
+    },
+  });
+  try {
+    const plain = await app.inject('/cookies');
+    assert.equal(plain.statusCode, 200);
+    assert.equal(plain.headers['set-cookie'], undefined);
+    assert.equal(plain.headers.location, undefined);
+    for (const path of ['/cookies?forward', '/cookies?forward&redirect']) {
+      const response = await app.inject(path);
+      assert.deepEqual(response.headers['set-cookie'], cookies);
+      assert.equal(response.headers['cache-control'], 'private, no-store');
+      assert.equal(response.statusCode, path.includes('redirect') ? 303 : 200);
+    }
+    for (const path of ['/cookies?forward&fail', '/cookies?forward&invalid']) {
+      const failed = await app.inject(path);
+      assert.equal(failed.statusCode, 500);
+      assert.equal(failed.headers['set-cookie'], undefined);
+    }
+  } finally { await app.close(); }
+});
+
+test('SSR credentials, explicit overrides and forwarded cookies stay request-local', async () => {
+  const app = await createServer({ ...options,
+    configure(server) {
+      server.get('/api/session', async (request, reply) => {
+        await new Promise(resolve => setTimeout(resolve, 5));
+        const cookie = request.headers.cookie ?? '';
+        reply.header('set-cookie', 'received=' + cookie.replace('sid=', '') + '; Path=/; HttpOnly');
+        return { cookie, authorization: request.headers.authorization ?? '' };
+      });
+    },
+    async render(url, _document, context) {
+      const override = new URL(url).searchParams.has('override');
+      const headers: Record<string, string> = override ? { Cookie: 'sid=override', Authorization: 'Bearer override' } : {};
+      const first = await context.dispatchApi('/api/session', 'GET', null, headers, { forwardSetCookie: true });
+      const second = await context.dispatchApi('/api/session', 'GET', null, {});
+      assert.equal(first.credentialed, true);
+      return JSON.stringify([first.body, second.body]);
+    },
+  });
+  try {
+    const users = ['Ada', 'Grace', 'Linus'];
+    const results = await Promise.all(users.map(user => app.inject({ url: '/session?override', headers: { cookie: 'sid=' + user, authorization: 'Bearer ' + user } })));
+    results.forEach((response, i) => {
+      assert.deepEqual(JSON.parse(response.body), [{ cookie: 'sid=override', authorization: 'Bearer override' }, { cookie: 'sid=' + users[i], authorization: 'Bearer ' + users[i] }]);
+      assert.deepEqual(response.headers['set-cookie'], ['received=override; Path=/; HttpOnly']);
+    });
+  } finally { await app.close(); }
+});
+
+test('internal dispatch rejects paths escaping the API namespace after URL normalization', async () => {
+  const app = await createServer({ ...options, async render(_url, _document, context) {
+    for (const path of ['/api/../private', '/api/%2e%2e/private', '//host/api/session', '/api/session\r\nX-Test: yes']) {
+      await assert.rejects(context.dispatchApi(path, 'GET', null, {}));
+    }
+    return 'safe';
+  } });
+  try { assert.equal((await app.inject('/')).body, 'safe'); }
+  finally { await app.close(); }
+});

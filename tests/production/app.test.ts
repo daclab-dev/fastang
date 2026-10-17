@@ -221,3 +221,39 @@ test('documentation is prerendered in both languages and unknown guides return H
     }
   } finally { await app.close(); }
 });
+
+test('inherited SSR credentials exclude API responses from native transfer cache', async () => {
+  const app: FastifyInstance = await createProductionServer();
+  try {
+    for (const headers of [{ cookie: 'sid=private-session' }, { authorization: 'Bearer private-token' }]) {
+      const response = await app.inject({ url: '/products/starter', headers });
+      assert.equal(response.statusCode, 200);
+      assert.match(response.body, /FastAng Starter/);
+      const state = JSON.parse(/<script[^>]*type="application\/json"[^>]*>(.*?)<\/script>/.exec(response.body)![1]);
+      assert.ok(!Object.values(state).some((entry: any) => entry?.b?.name === 'FastAng Starter'));
+      assert.ok(!response.body.includes('private-session'));
+      assert.ok(!response.body.includes('private-token'));
+    }
+  } finally { await app.close(); }
+});
+
+test('internal API redirects are HttpClient errors and Set-Cookie responses are not transferred', async () => {
+  const app: FastifyInstance = await createProductionServer();
+  app.get('/api/products/redirectcase', (_request, reply) => reply.redirect('/about'));
+  app.get('/api/products/cookiecase', (_request, reply) => reply.header('set-cookie', [
+    'session=server-only; Path=/; HttpOnly',
+    'theme=dark; Expires=Wed, 21 Oct 2037 07:28:00 GMT; Path=/',
+  ]).send({ id: 'cookiecase', name: 'Cookie case product', description: 'Test product', price: 1, features: [] }));
+  try {
+    const redirect = await app.inject('/products/redirectcase');
+    assert.equal(redirect.statusCode, 502);
+    assert.equal(redirect.headers.location, undefined);
+    const cookie = await app.inject('/products/cookiecase');
+    assert.equal(cookie.statusCode, 200);
+    assert.match(cookie.body, /Cookie case product/);
+    assert.equal(cookie.headers['set-cookie'], undefined);
+    const state = JSON.parse(/<script[^>]*type="application\/json"[^>]*>(.*?)<\/script>/.exec(cookie.body)![1]);
+    assert.ok(!Object.values(state).some((entry: any) => entry?.b?.name === 'Cookie case product'));
+    assert.ok(!cookie.body.includes('server-only'));
+  } finally { await app.close(); }
+});
