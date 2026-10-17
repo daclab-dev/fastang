@@ -82,7 +82,7 @@ jobs:
       - run: npm run test:docs
 
   browser:
-    name: Production starter in Chromium (desktop and mobile)
+    name: Production starter across browser engines
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -94,7 +94,7 @@ jobs:
           node-version: '24.15.0'
           cache: npm
       - run: npm ci
-      - run: npx playwright install --with-deps chromium
+      - run: npx playwright install --with-deps chromium firefox webkit
       - run: npm run test:e2e
       - uses: actions/upload-artifact@v5
         if: ${{ !cancelled() }}

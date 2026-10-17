@@ -65,13 +65,14 @@ The website supports headings, paragraphs, lists, tables, code fences and inline
 ## Browser tests
 
 ```bash
-npx playwright install --with-deps chromium
+npx playwright install --with-deps chromium firefox webkit
 npm run test:e2e
 ```
 
 This installs both packages from local tarballs into an independent generated app,
 adds test-only greeting links, a guard and an API error fallback, and builds it
-for production. Playwright checks desktop and mobile Chromium: SSR DOM reuse,
+for production. Playwright checks desktop Chromium, Firefox and WebKit, plus mobile Chromium
+and WebKit emulation: SSR DOM reuse,
 interactive hydration, HTTP transfer cache, client navigation and history,
 redirects, API failures and 404 recovery. Fixtures live in `tests/e2e/fixture`;
 they do not alter the published starter. The server uses a temporary port and
@@ -79,5 +80,6 @@ closes after the run. It does not reuse or stop a running development server.
 
 CI runs the same command and saves the HTML report, failure screenshots and
 traces for seven days. Open a local report with `npx playwright show-report`.
-These checks cover Chromium at two viewport sizes; they do not establish
-Firefox, Safari or real-device compatibility.
+WebKit checks the engine used by Safari; Playwright does not run the branded
+Safari browser. Mobile projects emulate devices and do not replace checks on
+real iPhones or Android devices.
