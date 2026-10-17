@@ -1,0 +1,25 @@
+node_modules/
+dist/
+.angular/
+.fastang/
+src/app/fastang.routes.ts
+.env
+.env.*
+!.env.example
+
+.vercel/
+
+# Local agent/cloud configuration, credentials and editor state
+.agents/
+.codex/
+.aws/
+.npmrc
+*.pem
+*.key
+*.p12
+*.pfx
+*.log
+.DS_Store
+.idea/
+.vscode/
+coverage/

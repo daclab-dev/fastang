@@ -1,0 +1,23 @@
+name: Bug report
+description: Report a reproducible FastAng problem.
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Expected and actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: Steps or a small public reproduction. Do not include secrets.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Commit/version, Node version, OS and deployment target.
+    validations:
+      required: true
