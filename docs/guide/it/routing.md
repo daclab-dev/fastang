@@ -45,9 +45,9 @@ Non conservare dati di richieste o utenti in variabili di modulo. Per i provider
 
 Continua con [caricamento dati e rendering](rendering.md). Per il comportamento standard consulta [il router Angular](https://angular.dev/guide/routing).
 
-## Ispezionare le rotte (prossima alpha)
+## Ispezionare le rotte
 
-Da un’app che usa il ramo main o la prossima alpha, esegui:
+Da un’app che usa `0.1.0-alpha.2` o successiva, esegui:
 
 ```sh
 npx fastang routes
@@ -64,5 +64,4 @@ L’ispezione legge i nomi dei file senza eseguire codice applicativo, generare 
 o avviare un server. Rotte ambigue e metadati senza pagina producono gli stessi
 errori della generazione. La mappa descrive le convenzioni dei file: non include
 prefissi aggiunti dal router Angular, rotte dei plugin o rotte HEAD implicite.
-Non deduce le regole di rendering o deploy. Il comando non è presente in npm
-`0.1.0-alpha.1`.
+Non deduce le regole di rendering o deploy. Il comando è disponibile da `0.1.0-alpha.2`.

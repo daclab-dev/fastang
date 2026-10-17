@@ -1,12 +1,10 @@
-# Typed API contracts (unreleased)
+# Typed API contracts
 
-Available on the repository main branch, planned for the next alpha. npm
-`0.1.0-alpha.1` does not include these exports yet. The minimal published starter
+Available from npm `0.1.0-alpha.2`. The minimal published starter
 continues to work without contracts or TypeBox.
 
 This overlay replaces the starter greeting endpoint and resolver and adds one
-shared contract. Copy its `src/` over a starter using a local tarball of the
-current core. Install `@sinclair/typebox@^0.34.41` in that app, then build it.
+shared contract. Copy its `src/` over a starter using `@fastang/core@0.1.0-alpha.2` or a local core tarball. Install `@sinclair/typebox@^0.34.41` in that app, then build it.
 Use `npm run test:e2e` from the repository to verify the same overlay as an
 independent packaged installation in Chromium, Firefox and WebKit and in a
 packaged Vercel SSR function. The browser test fixture additionally supplies its

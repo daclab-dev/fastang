@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.1.0-alpha.2
 
 - Accept native Fastify per-route options in API and contract helpers, including typed hooks, body limits, route config and HEAD behavior. File routing and shared contract schemas remain authoritative.
 

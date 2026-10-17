@@ -44,16 +44,15 @@ La risposta è HTTP 201 con `{"message":"Hello"}`. Un body senza `text`, una str
 
 L'handler riceve `request` e `reply` nativi: puoi leggere parametri e header o impostare lo stato. In `src/server/plugins.ts` registri plugin e hook condivisi. Il limite iniziale dei body è 1 MiB. Gli errori interni non espongono stack al client; le API inesistenti restituiscono JSON con HTTP 404.
 
-Non importare moduli di `src/server` nei componenti Angular. Per condividere tipi usa un modulo senza dipendenze dal server e import di tipo quando possibile. Questa alpha non genera ancora un client API tipizzato per percorso.
+Non importare moduli di `src/server` nei componenti Angular. Per condividere tipi usa un modulo senza dipendenze dal server e import di tipo quando possibile. Per schemi condivisi e richieste Angular inferite, vedi [i contratti API tipizzati](typed-api.md).
 
 Prosegui con [resolver e SSR](rendering.md). Approfondisci [validazione e serializzazione Fastify](https://fastify.dev/docs/latest/Reference/Validation-and-Serialization/).
 
-## Opzioni native della rotta (prossima alpha)
+## Opzioni native della rotta
 
-Nel ramo main, `defineApiRoute()` accetta opzioni native Fastify come `preHandler`,
+Dalla versione `0.1.0-alpha.2`, `defineApiRoute()` accetta opzioni native Fastify come `preHandler`,
 array di hook, `onSend`, `bodyLimit`, `config`, `exposeHeadRoute` e gestori di errore
-per rotta. Questo esempio richiede la prossima alpha; non è incluso in npm
-`0.1.0-alpha.1`.
+per rotta. L’esempio seguente usa queste opzioni.
 
 ```ts file=src/server/api/limited.post.ts
 import { defineApiRoute } from '@fastang/core';

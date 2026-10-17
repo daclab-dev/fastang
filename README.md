@@ -160,7 +160,7 @@ To test local package changes before another release:
 
 ```sh
 npm pack --workspace @fastang/core --pack-destination /tmp
-npm run create -- /tmp/my-fastang-app --core-package /tmp/fastang-core-0.1.0-alpha.1.tgz
+npm run create -- /tmp/my-fastang-app --core-package /tmp/fastang-core-0.1.0-alpha.2.tgz
 cd /tmp/my-fastang-app
 npm install
 npm run dev
@@ -168,9 +168,9 @@ npm run dev
 
 See [create-fastang](packages/create-fastang/README.md) for naming, optional installation and packaged-generator usage. The destination must be a new directory. Use `npm create fastang@alpha` explicitly: this is an experimental prerelease.
 
-## Typed API preview
+## Typed API contracts
 
-The main branch includes optional shared TypeBox contracts that infer Fastify handler inputs/status replies and Angular JSON requests/successful responses. This is planned for the next alpha and is not included in npm `0.1.0-alpha.1`. See [the typed greeting example](examples/typed-api/README.md). Existing endpoints and the minimal starter remain usable without this feature.
+Version `0.1.0-alpha.2` includes optional shared TypeBox contracts that infer Fastify handler inputs/status replies and Angular JSON requests/successful responses. See [the typed greeting example](examples/typed-api/README.md). Existing endpoints and the minimal starter remain usable without this feature.
 
 ## Optional authentication example
 

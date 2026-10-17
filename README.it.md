@@ -324,7 +324,7 @@ Per provare modifiche locali prima di una nuova release:
 
 ```sh
 npm pack --workspace @fastang/core --pack-destination /tmp
-npm run create -- /tmp/my-fastang-app --core-package /tmp/fastang-core-0.1.0-alpha.1.tgz
+npm run create -- /tmp/my-fastang-app --core-package /tmp/fastang-core-0.1.0-alpha.2.tgz
 cd /tmp/my-fastang-app
 npm install
 npm run dev
@@ -336,7 +336,7 @@ La [guida del generatore](packages/create-fastang/README.md) descrive anche l'us
 
 ## Preparazione della release alpha
 
-`npm run release:check` esegue i controlli completi e prepara tarball verificati, con integrità SHA-512 e commit di origine. La [guida di pubblicazione](docs/releases.md) descrive ordine di pubblicazione, tag `alpha` e verifica dal registry. La versione iniziale è `0.1.0-alpha.1`.
+`npm run release:check` esegue i controlli completi e prepara tarball verificati, con integrità SHA-512 e commit di origine. La [guida di pubblicazione](docs/releases.md) descrive ordine di pubblicazione, tag `alpha` e verifica dal registry. La versione corrente è `0.1.0-alpha.2`.
 
 ## Guide pratiche
 
@@ -348,9 +348,9 @@ Le guide in [italiano](docs/guide/it/getting-started.md) e [inglese](docs/guide/
 
 Da un checkout del repository, `npm run create:auth -- /percorso/nuova-app` genera un'app separata con login, pagina SSR protetta e logout tramite i plugin ufficiali Fastify per sessione e limitazione dei tentativi. Il comando crea segreti casuali in un `.env` locale escluso da Git. L'esempio usa un solo account dimostrativo: la [guida dedicata](examples/auth/README.md) spiega avvio, packaging Vercel e limiti delle sessioni stateless. `npm run test:auth` esegue i controlli browser e sulle funzioni impacchettate. Il core e lo starter minimo pubblicato restano indipendenti dall'autenticazione.
 
-## Anteprima dei contratti API tipizzati
+## Contratti API tipizzati
 
-Nel ramo main è disponibile l'integrazione opzionale con TypeBox: un contratto condiviso definisce gli schemi e permette di inferire parametri e risposte degli handler Fastify e delle chiamate Angular. È prevista per la prossima alpha e non è inclusa in npm `0.1.0-alpha.1`. L'[esempio greeting](examples/typed-api/README.md) descrive utilizzo e limiti. La validazione resta a Fastify, le richieste passano da HttpClient e il routing deriva ancora dai file.
+Dalla versione `0.1.0-alpha.2` è disponibile l'integrazione opzionale con TypeBox: un contratto condiviso definisce gli schemi e permette di inferire parametri e risposte degli handler Fastify e delle chiamate Angular. L'[esempio greeting](examples/typed-api/README.md) descrive utilizzo e limiti. La validazione resta a Fastify, le richieste passano da HttpClient e il routing deriva ancora dai file.
 
 ## Misure delle prestazioni
 

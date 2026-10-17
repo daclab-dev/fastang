@@ -8,7 +8,7 @@ La validazione della configurazione è disponibile da `0.1.0-alpha.1`.
 `defineConfig()` valida la configurazione a runtime. La build controlla anche gli export default semplici prima di sostituire `dist/`. Opzioni sconosciute, tipi non validi, percorsi riservati al runtime (`/`, `/api`, `/assets`, `/__fastang`) e destinazioni in conflitto come `/about` e `/about/` producono un errore esplicito. I percorsi di prerendering accettano solo lettere ASCII, cifre, underscore, trattini e slash; query string e frammenti non sono supportati.
 
 
-Nel ramo main (prossima alpha), anche `fastang dev` valida le configurazioni
+Dalla versione `0.1.0-alpha.2`, anche `fastang dev` valida le configurazioni
 esportate come semplici oggetti prima di caricare i plugin applicativi o aprire il
 server. Una configurazione non valida ferma il server corrente; il supervisore
 continua a osservare i file. Correggi e salva `fastang.config.ts` per riavviarlo

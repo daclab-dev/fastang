@@ -22,7 +22,7 @@ try {
     await symlink(resolve('node_modules'), join(app, 'node_modules'), process.platform === 'win32' ? 'junction' : 'dir');
     for (const block of parsed.blocks) {
       if (block.kind !== 'code' || !block.file) continue;
-      assert.ok(/^(src\/(app|server)\/[a-zA-Z0-9_./[\]-]+\.ts|fastang\.config\.ts)$/.test(block.file) && !block.file.split('/').includes('..'));
+      assert.ok(/^(src\/(app|server|shared)\/[a-zA-Z0-9_./[\]-]+\.ts|fastang\.config\.ts)$/.test(block.file) && !block.file.split('/').includes('..'));
       const file = join(app, block.file);
       await mkdir(dirname(file), { recursive: true });
       await writeFile(file, block.text + '\n');

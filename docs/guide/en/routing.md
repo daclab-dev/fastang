@@ -45,9 +45,9 @@ Do not keep request or user data in module variables. Use a factory for mutable 
 
 Continue with [data loading and rendering](rendering.md). See [Angular routing](https://angular.dev/guide/routing) for standard router behavior.
 
-## Inspect the route map (next alpha)
+## Inspect the route map
 
-From an application using the main branch or the next alpha, run:
+From an application using `0.1.0-alpha.2` or later, run:
 
 ```sh
 npx fastang routes
@@ -63,4 +63,4 @@ Inspection reads file names without executing application code, generating files
 or starting a server. Ambiguous routes and orphan metadata fail with the same
 errors as generation. This is the file-based map: prefixes added by your Angular
 router, plugin routes and implicit HEAD routes are not shown. It does not infer
-rendering or deployment rules. This command is not in npm `0.1.0-alpha.1`.
+rendering or deployment rules. The command is available from `0.1.0-alpha.2`.
