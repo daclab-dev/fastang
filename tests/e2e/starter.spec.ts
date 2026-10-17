@@ -1,4 +1,5 @@
 import { test as base, expect } from '@playwright/test';
+import { hydrated } from '../browser-ready';
 
 // Every test fails on an uncaught browser error, including hydration failures.
 const test = base.extend<{ browserErrors: void }>({
@@ -16,6 +17,7 @@ const test = base.extend<{ browserErrors: void }>({
 async function ready(page: import('@playwright/test').Page) {
   // The counter is present in SSR too; a click proves that Angular is interactive.
   await page.goto('/');
+  await hydrated(page);
   await page.getByRole('button', { name: 'Clicked 0 times', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Clicked 1 time', exact: true })).toBeVisible();
 }
@@ -29,8 +31,9 @@ test('hydrates the existing SSR button and handles clicks', async ({ page }) => 
     const button = page.getByRole('button', { name: 'Clicked 0 times', exact: true });
     await expect(button).toBeVisible();
     const element = await button.elementHandle();
+    await expect(page.locator('html')).not.toHaveAttribute('data-fastang-test-ready', 'true');
     release();
-    // Auto-waiting assertions below allow hydration to finish without a fixed delay.
+    await hydrated(page);
     await button.click();
     await expect(page.getByRole('button', { name: 'Clicked 1 time', exact: true })).toBeVisible();
     expect(await element!.evaluate(node => node.isConnected)).toBe(true);
@@ -59,7 +62,8 @@ test('reuses SSR API data during hydration', async ({ page }) => {
   const response = await page.goto('/greet/Ada');
   expect(response?.status()).toBe(200);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Hello, Ada!');
-  // A subsequent client navigation proves bootstrap has finished.
+  await hydrated(page);
+  // Client navigation must request only the new API data.
   await page.getByRole('link', { name: 'Grace', exact: true }).click();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Hello, Grace!');
   expect(apiRequests.map(url => new URL(url).pathname)).toEqual(['/api/greet/Grace']);
@@ -83,6 +87,7 @@ test('renders API failures and can navigate away again', async ({ page }) => {
   const response = await page.goto('/greet/' + 'a'.repeat(81));
   expect(response?.status()).toBe(502);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Greeting unavailable.');
+  await hydrated(page);
   await page.getByRole('link', { name: 'Ada', exact: true }).click();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Hello, Ada!');
   await page.getByRole('link', { name: 'API failure', exact: true }).click();
@@ -92,6 +97,7 @@ test('renders API failures and can navigate away again', async ({ page }) => {
 test('returns a real 404 and recovers after client-side missing routes', async ({ page }) => {
   const response = await page.goto('/missing');
   expect(response?.status()).toBe(404);
+  await hydrated(page);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Page not found');
   await page.getByRole('link', { name: 'Back home', exact: true }).click();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Your next idea starts here.');

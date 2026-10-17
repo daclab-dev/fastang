@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { hydrated } from '../browser-ready';
 
 test('login, SSR session, request isolation and logout', async ({ page, browser, baseURL }) => {
   const errors: string[] = [];
@@ -7,6 +8,7 @@ test('login, SSR session, request isolation and logout', async ({ page, browser,
   expect(unauthorized.status()).toBe(302);
   expect(unauthorized.headers()['location']).toBe('/login');
   await page.goto('/login');
+  await hydrated(page);
   await page.getByLabel('Password', { exact: true }).fill(process.env['AUTH_DEMO_PASSWORD']!);
   await page.getByRole('button', { name: 'Sign in', exact: true }).click();
   await expect(page).toHaveURL(/\/account$/);
@@ -18,6 +20,7 @@ test('login, SSR session, request isolation and logout', async ({ page, browser,
   expect(session?.value).not.toContain('Demo user');
   const response = await page.reload();
   expect(response?.status()).toBe(200);
+  await hydrated(page);
   await expect(page.getByText('Welcome, Demo user.', { exact: true })).toBeVisible();
   const html = await (await page.request.get('/account')).text();
   expect(html).not.toContain(process.env['AUTH_DEMO_PASSWORD']!);

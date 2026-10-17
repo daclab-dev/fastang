@@ -5,6 +5,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { promisify } from 'node:util';
+import { addBrowserProbe } from './browser-probe';
 
 const browser = process.argv.includes('--browser');
 const repository = process.cwd();
@@ -36,6 +37,7 @@ try {
     catch (error) { console.error((error as { stdout?: string; stderr?: string }).stdout, (error as { stderr?: string }).stderr); throw error; }
   };
   if (browser) {
+    await addBrowserProbe(app);
     await cp(resolve('tests/e2e/fixture'), join(app, 'src/app/pages/greet'), { recursive: true });
   }
   // A plain config export must fail before removing a previous successful build.
@@ -72,7 +74,7 @@ try {
     const baseURL = await server.listen({ port: 0, host: '127.0.0.1' });
     console.log(`e2e: generated production starter at ${baseURL}`);
     try {
-      const child = spawn(process.execPath, [resolve(repository, 'node_modules/@playwright/test/cli.js'), 'test', '--config', 'playwright.config.ts'], {
+      const child = spawn(process.execPath, [resolve(repository, 'node_modules/@playwright/test/cli.js'), 'test', '--config', 'playwright.config.ts', ...process.argv.slice(2).filter(argument => argument !== '--browser')], {
         cwd: repository, env: { ...process.env, FASTANG_E2E_BASE_URL: baseURL }, stdio: 'inherit',
       });
       const code = await new Promise<number | null>((resolve, reject) => { child.once('error', reject); child.once('exit', resolve); });

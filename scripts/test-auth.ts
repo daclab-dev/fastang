@@ -8,6 +8,7 @@ import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { promisify } from 'node:util';
 import { createProject } from 'create-fastang';
+import { addBrowserProbe } from './browser-probe';
 const run = promisify(execFile);
 const temporary = await mkdtemp(join(tmpdir(), 'fastang-auth-'));
 const environment = { ...process.env, AUTH_SESSION_KEY: randomBytes(32).toString('hex'), AUTH_DEMO_PASSWORD: randomBytes(24).toString('hex'), AUTH_ORIGIN: 'http://127.0.0.1' };
@@ -17,6 +18,7 @@ try {
   const core = Array.isArray(packed) ? packed[0] : packed['@fastang/core'];
   await createProject({ directory: 'app', cwd: temporary, corePackage: join(temporary, core.filename) });
   await cp(resolve('examples/auth/src'), join(app, 'src'), { recursive: true });
+  await addBrowserProbe(app);
   await cp(resolve('examples/auth/scripts'), join(app, 'scripts'), { recursive: true });
   const manifest = JSON.parse(await readFile(join(app, 'package.json'), 'utf8'));
   manifest.dependencies['@fastify/secure-session'] = '8.4.1';
