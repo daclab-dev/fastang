@@ -183,3 +183,7 @@ From a repository checkout, `npm run create:auth -- /path/to/new-app` creates a 
 ## Performance measurements
 
 `npm run benchmark` builds an isolated production starter and records output sizes, fresh-process startup and HTTP latency for SSR, prerender and API routes. JSON reports include samples and environment metadata. Read [the measurement guide](docs/benchmarks.md) before comparing results; `-- --smoke` checks the harness with fewer samples.
+
+## Public API and supported environments
+
+The [reference](docs/guide/en/reference.md) lists public npm entry points, browser/server import boundaries, declared dependency ranges, automated test coverage and current deployment limits.

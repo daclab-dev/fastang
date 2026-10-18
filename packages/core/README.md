@@ -17,7 +17,7 @@ cd my-app
 npm run dev
 ```
 
-Registry installation is available once both alpha packages have been published. The local tarball workflow below also works before publication.
+Both alpha packages are published on npm. The local tarball workflow below can test unpublished changes.
 
 ## Public entry points
 
@@ -76,3 +76,5 @@ remain controlled by file routing. Hooks preserve the request/reply generic type
 a second generic describes custom route config. Schemas are optional, as in
 Fastify. `defineContractRoute()` from `/contract-route` accepts the same options,
 except that its schema comes from the shared contract.
+
+See the [public API and support reference](https://fastang.dev/en/docs/reference) for import boundaries, accepted dependency versions and environments covered by tests.

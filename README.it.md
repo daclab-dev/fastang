@@ -355,3 +355,7 @@ Dalla versione `0.1.0-alpha.2` è disponibile l'integrazione opzionale con TypeB
 ## Misure delle prestazioni
 
 `npm run benchmark` compila una copia isolata dello starter in produzione e misura dimensioni della build, avvio in processi nuovi e latenza HTTP per SSR, prerender e API. I report JSON conservano campioni e informazioni sull’ambiente. La [guida alle misure](docs/benchmarks.md) spiega condizioni e limiti; `-- --smoke` verifica il funzionamento con pochi campioni.
+
+## API pubbliche e ambienti supportati
+
+Il [riferimento](docs/guide/it/reference.md) elenca gli entry point npm pubblici, i confini degli import browser/server, le versioni dichiarate delle dipendenze, la copertura automatizzata e i limiti attuali del deploy.

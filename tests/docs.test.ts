@@ -31,3 +31,20 @@ test('guide rendering preserves code as text and rejects unsafe link targets', (
   assert.ok(!inline('[bad](javascript:alert) [bad](//example.com)').some(token => token.kind === 'link'));
   assert.throws(() => parseMarkdown('# Guide\n```ts\nconst missing = true;'), /Unclosed/);
 });
+
+test('public reference tables match package exports, Node engines and peer ranges in both languages', async () => {
+  const manifest = JSON.parse(await readFile('packages/core/package.json', 'utf8'));
+  const expectedImports = Object.keys(manifest.exports).map(key => '@fastang/core' + (key === '.' ? '' : key.slice(1))).sort();
+  const expectedVersions = { 'Node.js': manifest.engines.node.replaceAll(' || ', ' / '), ...manifest.peerDependencies };
+  const plain = (value: string) => value.replaceAll('`', '');
+  for (const language of ['it', 'en']) {
+    const article = parseMarkdown(await readFile(`docs/guide/${language}/reference.md`, 'utf8'));
+    const tables = article.blocks.filter(block => block.kind === 'table');
+    const imports = tables.find(table => table.rows.some(row => plain(row[0]) === '@fastang/core'));
+    assert.ok(imports, `${language}: missing public entry point table`);
+    assert.deepEqual(imports.rows.map(row => plain(row[0])).sort(), expectedImports, `${language}: undocumented or obsolete npm exports`);
+    const versions = tables.find(table => table.rows.some(row => row[0] === 'Node.js'));
+    assert.ok(versions, `${language}: missing dependency matrix`);
+    assert.deepEqual(Object.fromEntries(versions.rows.map(row => [plain(row[0]), plain(row[1])])), expectedVersions, `${language}: environment matrix differs from package declarations`);
+  }
+});
