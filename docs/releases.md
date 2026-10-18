@@ -1,7 +1,7 @@
 # Publishing FastAng alpha releases
 
 Core, generator and standalone CLI are versioned together during alpha. The current release is
-`0.1.0-alpha.4`, published publicly to npm with the `alpha` distribution tag.
+`0.1.0-alpha.5`, published publicly to npm with the `alpha` distribution tag.
 The `latest` tag is reserved for a later release decision.
 
 ## Prerequisites
@@ -19,11 +19,13 @@ npm run release:check
 ```
 
 This checks types, routing/runtime tests, production rendering, Vercel output,
-the installed generator and its generated app, and the dependency audit. It then
+the installed generator and its generated app, and the dependency audit. The CI
+pnpm matrix also checks pnpm 10/11 installation, development, updates and isolated
+Vercel functions. It then
 packs all three workspaces and validates package contents, versions, publication
 settings, template dependency and SHA-512 integrity.
 
-The files are written to `.fastang/releases/0.1.0-alpha.4/`. `release.json`
+The files are written to `.fastang/releases/0.1.0-alpha.5/`. `release.json`
 records the source commit, whether the worktree was clean, and each tarball's
 integrity. Build output is ignored by Git.
 
@@ -36,12 +38,12 @@ to regenerate the release metadata against that commit. Verify that
 Publish core first, then the generator, then the standalone CLI:
 
 ```sh
-npm publish .fastang/releases/0.1.0-alpha.4/fastang-core-0.1.0-alpha.4.tgz --access public --tag alpha
-npm view @fastang/core@0.1.0-alpha.4 version dist.integrity --json
-npm publish .fastang/releases/0.1.0-alpha.4/create-fastang-0.1.0-alpha.4.tgz --access public --tag alpha
-npm view create-fastang@0.1.0-alpha.4 version dist.integrity --json
-npm publish .fastang/releases/0.1.0-alpha.4/fastang-cli-0.1.0-alpha.4.tgz --access public --tag alpha
-npm view @fastang/cli@0.1.0-alpha.4 version dist.integrity --json
+npm publish .fastang/releases/0.1.0-alpha.5/fastang-core-0.1.0-alpha.5.tgz --access public --tag alpha
+npm view @fastang/core@0.1.0-alpha.5 version dist.integrity --json
+npm publish .fastang/releases/0.1.0-alpha.5/create-fastang-0.1.0-alpha.5.tgz --access public --tag alpha
+npm view create-fastang@0.1.0-alpha.5 version dist.integrity --json
+npm publish .fastang/releases/0.1.0-alpha.5/fastang-cli-0.1.0-alpha.5.tgz --access public --tag alpha
+npm view @fastang/cli@0.1.0-alpha.5 version dist.integrity --json
 ```
 
 Compare registry integrity with `release.json`. Check the distribution tags with
@@ -74,7 +76,7 @@ npm start
 Check the home page, `/greet/world`, `/api/health`, `/about` and an unknown URL.
 `npm run build:vercel` should also produce the deployable output.
 
-After registry verification, create Git tag `v0.1.0-alpha.4` pointing at the
+After registry verification, create Git tag `v0.1.0-alpha.5` pointing at the
 release commit and publish the release notes. The installation command for an
 alpha must include `@alpha`; do not imply that it is a stable release.
 

@@ -112,6 +112,7 @@ try {
     try {
       const base = await address();
       assert.match(await (await fetch(base + '/greet/Grace')).text(), /Hello, Grace!/);
+      assert.doesNotMatch(logs, /incoming request|request completed|FastAng routes:/, 'Default development logging should omit successful checks and routine requests');
       // A plain config export must fail in dev too, then recover in the same CLI.
       const configOffset = logs.length;
       await writeFile(configFile, "export default { prerender: ['/about'], vercel: { prunePages: 'false' } };\n");

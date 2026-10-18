@@ -36,7 +36,8 @@
     "test:upgrade": "node --import tsx scripts/test-upgrade.ts",
     "test:docs:browser": "node --import tsx scripts/test-docs-browser.ts",
     "cli:build": "npm run build --workspace @fastang/cli",
-    "test:cli": "node --import tsx scripts/test-cli.ts"
+    "test:cli": "node --import tsx scripts/test-cli.ts",
+    "test:pnpm": "node --import tsx scripts/test-pnpm.ts"
   },
   "dependencies": {
     "@angular/common": "22.2.3",
@@ -45,7 +46,7 @@
     "@angular/platform-browser": "22.2.3",
     "@angular/platform-server": "22.2.3",
     "@angular/router": "22.2.3",
-    "@fastang/core": "0.1.0-alpha.4",
+    "@fastang/core": "0.1.0-alpha.5",
     "@fastify/middie": "^9.0.3",
     "@fastify/static": "^10.1.6",
     "@sinclair/typebox": "^0.34.41",
@@ -65,7 +66,7 @@
     "@types/node": "^22.19.0",
     "@types/semver": "^7.8.0",
     "@vercel/nft": "^1.11.0",
-    "create-fastang": "0.1.0-alpha.4",
+    "create-fastang": "0.1.0-alpha.5",
     "light-my-request": "^6.8.0",
     "sharp": "^0.35.5",
     "tsx": "^4.20.6",

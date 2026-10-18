@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.0-alpha.5
+
+- Default development Fastify/Vite logging to warn, retain the startup address and allow FASTANG_LOG_LEVEL overrides. Suppress successful dev check summaries with check --quiet.
+
+- Preserve relative dependency symlinks in Vercel functions for pnpm installations.
+
 ## 0.1.0-alpha.4
 
 - Add source-only `fastang check` diagnostics for API route/contract correspondence, with tsconfig resolution, JSON and strict mode.

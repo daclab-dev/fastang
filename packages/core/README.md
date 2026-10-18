@@ -1,7 +1,7 @@
 # @fastang/core
 
 Experimental FastAng runtime and tooling for Angular + Fastify applications.
-Version 0.1.0-alpha.4 is an experimental alpha. Public APIs may change between alpha releases.
+Version 0.1.0-alpha.5 is an experimental alpha. Public APIs may change between alpha releases.
 
 The package contains compiled JavaScript and TypeScript declarations. Angular,
 Fastify, Vite and the Angular compiler are explicit peer dependencies so the app
@@ -124,3 +124,20 @@ overlay on route/contract edits; fixing them triggers a full reload. `fastang de
 checks before restarting the backend and keeps an existing server during an invalid
 edit. The standalone CLI delegates `check` to the app's installed core: both need
 a release containing this command. Use `0.1.0-alpha.4` or later for both packages.
+
+## Development logging
+
+From `0.1.0-alpha.5`, development defaults to `warn` for both Fastify and Vite during `fastang dev`.
+The listening address remains visible. Routine HTTP request/completion logs and
+successful route-check summaries are omitted; warnings, errors and failed checks
+remain visible. Production logger configuration is unchanged.
+
+Set `FASTANG_LOG_LEVEL=info` or `FASTANG_LOG_LEVEL=debug` in the process environment
+when investigating requests. Accepted values are `trace`, `debug`, `info`, `warn`,
+`error`, `fatal` and `silent`. Vite maps trace/debug to info and fatal to error.
+This controls framework loggers, not application `console.log` calls or package
+manager output. The startup address is retained even with `silent`.
+
+`fastang check --quiet` suppresses only a successful text summary; diagnostics
+still print, and `--json` always returns the JSON report. The dev supervisor uses
+this option for checks before backend restarts. These options are available from `0.1.0-alpha.5`.

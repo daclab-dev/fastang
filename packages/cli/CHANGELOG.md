@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-alpha.5
+
+- Support pnpm 10/11 updates with YAML lockfile validation and manager-aware new commands; reject conflicting lockfiles.
+
 ## 0.1.0-alpha.4
 
 - Forward `fastang check` and its options to the installed application core.

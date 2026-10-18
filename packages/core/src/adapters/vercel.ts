@@ -1,5 +1,5 @@
-import { copyFile, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
-import { dirname, resolve } from 'node:path';
+import { copyFile, mkdir, readFile, rm, stat, lstat, readlink, symlink, writeFile } from 'node:fs/promises';
+import { dirname, resolve, relative, isAbsolute } from 'node:path';
 import { createRequire } from 'node:module';
 import { nodeFileTrace } from '@vercel/nft';
 import { staticFile } from '../server.ts';
@@ -15,7 +15,17 @@ export async function buildVercelOutput(plan: VercelPlan, root = process.cwd()):
   await rm(output, { recursive: true, force: true });
   const copy = async (file: string, destination: string) => {
     await mkdir(dirname(destination), { recursive: true });
-    await copyFile(resolve(root, file), destination);
+    const source = resolve(root, file);
+    const info = await lstat(source);
+    if (info.isSymbolicLink()) {
+      const target = await readlink(source);
+      const sourceTarget = relative(root, resolve(dirname(source), target));
+      if (isAbsolute(target) || sourceTarget === '..' || sourceTarget.startsWith('../') || sourceTarget.startsWith('..\\')) throw new Error(`Dependency symlink outside project: ${file}`);
+      const directory = (await stat(source)).isDirectory();
+      if (directory) await mkdir(resolve(dirname(destination), target), { recursive: true });
+      await symlink(target, destination, directory ? 'dir' : 'file');
+    } else if (info.isDirectory()) await mkdir(destination, { recursive: true });
+    else await copyFile(source, destination);
   };
   const { cp } = await import('node:fs/promises');
   await cp(resolve(root, 'dist/client/assets'), resolve(output, 'static/assets'), { recursive: true });
@@ -39,10 +49,14 @@ export async function buildVercelOutput(plan: VercelPlan, root = process.cwd()):
     });
     traces.set(entryFile, trace);
     for (const warning of trace.warnings) console.warn(`[vercel:${name}] ${warning.message}`);
-    for (const file of trace.fileList) {
+    const files = await Promise.all([...trace.fileList].map(async file => {
       if (file.startsWith('../') || file.startsWith('/')) throw new Error(`Dependency outside project: ${file}`);
-      await copy(file, resolve(directory, file));
-    }
+      return { file, link: (await lstat(resolve(root, file))).isSymbolicLink() };
+    }));
+    // pnpm exposes dependencies through relative directory symlinks. Keep that
+    // topology in the function, creating links before copying traced files.
+    files.sort((a, b) => Number(b.link) - Number(a.link) || a.file.length - b.file.length);
+    for (const { file } of files) await copy(file, resolve(directory, file));
     if (kind === 'ssr') await copy('dist/client/index.html', resolve(directory, dirname(entryFile), '../client/index.html'));
     await mkdir(directory, { recursive: true });
     await writeFile(resolve(directory, '.vc-config.json'), JSON.stringify({

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, mkdir, writeFile, rm } from 'node:fs/promises';
+import { mkdtemp, mkdir, writeFile, rm, readFile, appendFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { cliVersion, newProject, runNpm, updateProject, type NpmRunner } from '../packages/cli/src/commands/project.ts';
@@ -103,4 +103,41 @@ test('update refuses inconsistent manifest, lockfile and installed state even at
     assert.ok(logs.some(line => line.includes('declared 1.2.0; locked 1.2.0; installed 1.2.0')));
     assert.ok(!logs.includes('Already installed. No changes.'));
   } finally { await rm(directory, { recursive: true, force: true }); }
+});
+
+async function pnpmState(directory: string, declared='1.2.0', version='1.2.0(@angular/core@22.2.3)') {
+  await mkdir(join(directory,'node_modules/@fastang/core'),{recursive:true});
+  await writeFile(join(directory,'node_modules/@fastang/core/package.json'),JSON.stringify({name:'@fastang/core',version:'1.2.0'}));
+  await writeFile(join(directory,'package.json'),JSON.stringify({packageManager:'pnpm@11.25.0',dependencies:{'@fastang/core':declared}}));
+  await writeFile(join(directory,'pnpm-lock.yaml'),`lockfileVersion: '9.0'\nimporters:\n  .:\n    dependencies:\n      '@fastang/core':\n        specifier: '${declared}'\n        version: '${version}'\n`);
+}
+test('pnpm update resolves peer-suffixed versions, preserves plans and applies exact dependencies with strict checks',async()=>{
+ const directory=await mkdtemp(join(tmpdir(),'fastang-pnpm-update-'));const previous=process.cwd();
+ try{
+  await pnpmState(directory);const calls:string[][]=[];const run:NpmRunner=async args=>{calls.push(args);return args[0]==='--version'?'11.25.0':args[0]==='view'?JSON.stringify({version:'1.3.0'}):'';};
+  const original=await readFile(join(directory,'pnpm-lock.yaml'),'utf8');const logs:string[]=[];
+  await updateProject(['--to','alpha'],run,directory,message=>logs.push(message));assert.ok(logs.includes('Package manager: pnpm'));assert.match(logs.join('\n'),/locked 1.2.0; installed 1.2.0/);assert.equal(await readFile(join(directory,'pnpm-lock.yaml'),'utf8'),original);assert.equal(calls.length,2);
+  process.chdir(directory);await updateProject(['--to','latest','--yes'],run,directory,()=>{});assert.deepEqual(calls.at(-1),['add','--save-prod','--save-exact','--config.engine-strict=true','--strict-peer-dependencies','@fastang/core@1.3.0']);
+ }finally{process.chdir(previous);await rm(directory,{recursive:true,force:true});}
+});
+test('pnpm updates reject conflicting managers, malformed locks, workspace locks and stale installed state',async()=>{
+ const directory=await mkdtemp(join(tmpdir(),'fastang-pnpm-policy-'));
+ const run:NpmRunner=async args=>{assert.ok(['--version','view'].includes(args[0]));return args[0]==='--version'?'10.32.0':JSON.stringify({version:'1.3.0'});};
+ try{
+  await pnpmState(directory);await lockfile(directory,'1.2.0');await assert.rejects(updateProject(['--to','alpha','--yes'],run,directory,()=>{}),/Multiple.*lockfiles/);await rm(join(directory,'package-lock.json'));
+  await writeFile(join(directory,'package.json'),JSON.stringify({packageManager:'npm@11.0.0',dependencies:{'@fastang/core':'1.2.0'}}));await assert.rejects(updateProject(['--to','alpha'],run,directory,()=>{}),/disagree/);
+  await pnpmState(directory,'1.2.0','1.1.0');await assert.rejects(updateProject(['--to','alpha','--yes'],run,directory,()=>{}),/Lockfile and installed core differ/);
+  await pnpmState(directory,'catalog:');await assert.rejects(updateProject(['--to','alpha','--yes'],run,directory,()=>{}),/registry semver declaration/);
+  await pnpmState(directory);await writeFile(join(directory,'pnpm-lock.yaml'),'lockfileVersion: [');await assert.rejects(updateProject(['--to','alpha'],run,directory,()=>{}),/Invalid pnpm-lock/);
+  await pnpmState(directory);await writeFile(join(directory,'pnpm-workspace.yaml'),"packages:\n  - apps/*\n");await assert.rejects(updateProject(['--to','alpha'],run,directory,()=>{}),/workspace root/);await rm(join(directory,'pnpm-workspace.yaml'));
+  await pnpmState(directory);await appendFile(join(directory,'pnpm-lock.yaml'),'  apps/web: {}\n');await assert.rejects(updateProject(['--to','alpha'],run,directory,()=>{}),/Shared pnpm workspace/);
+  await pnpmState(directory);await writeFile(join(directory,'pnpm-lock.yaml'),"lockfileVersion: '6.0'\n");await assert.rejects(updateProject(['--to','alpha','--yes'],run,directory,()=>{}),/Unsupported pnpm lockfile/);
+ }finally{await rm(directory,{recursive:true,force:true});}
+});
+test('manager selection uses explicit choices for new, project metadata and lockfiles for updates',async()=>{
+ const {projectManager,fromUserAgent}=await import('../packages/cli/src/package-manager.ts');
+ assert.equal(fromUserAgent('pnpm/11.25.0 npm/? node/v26'),'pnpm');assert.equal(fromUserAgent('npm/11.0.0'),'npm');assert.throws(()=>fromUserAgent('yarn/4.0.0'),/Unsupported/);
+ const calls:string[][]=[];await newProject(['my app','--package-manager','pnpm','--no-install'],async args=>{calls.push(args);return '';});assert.deepEqual(calls[0],['dlx',`create-fastang@${await cliVersion()}`,'my app','--package-manager','pnpm','--no-install']);
+ await assert.rejects(newProject(['app','--package-manager','yarn'],async()=>''),/npm\|pnpm/);
+ const directory=await mkdtemp(join(tmpdir(),'fastang-pnpm-detect-'));try{await pnpmState(directory);assert.equal(await projectManager({},directory),'pnpm');await assert.rejects(projectManager({packageManager:'pnpm@9.15.0'},directory),/Supported pnpm versions/);await assert.rejects(projectManager({packageManager:'yarn@4.0.0'},directory),/Unsupported packageManager/);}finally{await rm(directory,{recursive:true,force:true});}
 });

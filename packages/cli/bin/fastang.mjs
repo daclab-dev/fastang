@@ -9,7 +9,7 @@ try {
   else if (command === 'update') await updateProject(args);
   else if (command === '--version' || command === '-v') console.log(await cliVersion());
   else if (!command || command === '--help' || command === '-h') {
-    console.log('Usage: fastang <new|update|dev|build|generate|routes|check>\n  new <directory> [--install]\n  update --to <version|tag> [--dry-run | --yes] [--allow-downgrade]\n  dev, build, generate, routes, check: use the core installed in your app');
+    console.log('Usage: fastang <new|update|dev|build|generate|routes|check>\n  new <directory> [--install] [--package-manager npm|pnpm]\n  update --to <version|tag> [--dry-run | --yes] [--allow-downgrade]\n  dev, build, generate, routes, check: use the core installed in your app');
   } else if (['dev', 'build', 'generate', 'routes', 'check'].includes(command)) {
     const pkg = await installedPackage('@fastang/core', process.cwd());
     if (!pkg) throw new Error('No local @fastang/core found. Run this command inside an installed FastAng app.');

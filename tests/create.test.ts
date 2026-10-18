@@ -70,3 +70,16 @@ test('generator CLI explains usage and rejects malformed commands without writin
     assert.deepEqual(await readdir(cwd), []);
   } finally { await rm(cwd, { recursive: true, force: true }); }
 });
+
+test('pnpm generator produces matching scripts, explicit toolchain policy and manager metadata',async()=>{
+ const cwd=await mkdtemp(join(tmpdir(),'fastang-create-pnpm-'));
+ try{
+  for(const version of ['10.32.0','11.25.0']){
+   const project=await createProject({directory:'app-'+version,cwd,packageManager:'pnpm',packageManagerVersion:version});
+   const manifest=JSON.parse(await readFile(join(project.directory,'package.json'),'utf8'));assert.equal(manifest.packageManager,'pnpm@'+version);assert.match(manifest.scripts.build,/^pnpm run check/);assert.doesNotMatch(Object.values(manifest.scripts).join('\n'),/\bnpm run /);
+   const policy=await readFile(join(project.directory,'pnpm-workspace.yaml'),'utf8');assert.match(policy,version.startsWith('10')?/onlyBuiltDependencies:/ : /allowBuilds:/);assert.match(policy,/esbuild/);assert.doesNotMatch(policy,/dangerouslyAllowAllBuilds/);
+  }
+  const result=await run(process.execPath,[cli,'autodetected','--no-install'],{cwd,env:{...process.env,npm_config_user_agent:'pnpm/11.25.0 npm/? node/v26'}});assert.match(result.stdout,/pnpm install/);assert.match(result.stdout,/pnpm run dev/);assert.equal(JSON.parse(await readFile(join(cwd,'autodetected/package.json'),'utf8')).packageManager,'pnpm@11.25.0');
+  for(const args of [['bad','--package-manager','yarn'],['bad','--package-manager'],['bad','--package-manager','pnpm','--package-manager','npm']])await assert.rejects(run(process.execPath,[cli,...args],{cwd}));
+ }finally{await rm(cwd,{recursive:true,force:true});}
+});

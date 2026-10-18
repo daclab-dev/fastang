@@ -55,8 +55,8 @@ Starting with `0.1.0-alpha.3`, the separate `@fastang/cli` package owns
 project creation and upgrades. It also works with older installed cores:
 
 ```sh
-npx --package=@fastang/cli@0.1.0-alpha.4 fastang-cli update --to alpha
-npx --package=@fastang/cli@0.1.0-alpha.4 fastang-cli update --to alpha --yes
+npx --package=@fastang/cli@0.1.0-alpha.5 fastang-cli update --to alpha
+npx --package=@fastang/cli@0.1.0-alpha.5 fastang-cli update --to alpha --yes
 ```
 
 The first command shows a plan; the second applies the npm installation.
@@ -96,3 +96,18 @@ will start with stable v1 releases. `/docs` opens the current guides.
 To roll back, restore the previous application commit and lockfile, run `npm ci`
 and redeploy that checked state. Simply downgrading the package does not undo
 manual source changes or external database/service migrations.
+
+## pnpm updates
+
+From `0.1.0-alpha.5`, the CLI supports standalone pnpm 10/11 projects and version-9 lockfiles.
+It selects the app's manager from `packageManager` and its lockfile, even when
+launched through npm. Preview and apply with:
+
+```sh
+pnpm --package=@fastang/cli@alpha dlx fastang-cli update --to alpha
+pnpm --package=@fastang/cli@alpha dlx fastang-cli update --to alpha --yes
+```
+
+The first command only plans. Engine, peer, lockfile and downgrade checks remain
+active. Mixed lockfiles, manager conflicts and shared workspace lockfiles are
+rejected; no manager conversion or source migration is performed. See [pnpm setup](getting-started.md#pnpm-support).

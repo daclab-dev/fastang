@@ -262,7 +262,7 @@ test('current versioned documentation is served and retired alpha versions retur
   const app: FastifyInstance = await createProductionServer();
   try {
     for (const prefix of ['', '/en']) {
-      const current = await app.inject(prefix + '/docs/v/0-1-0-alpha-4/api');
+      const current = await app.inject(prefix + '/docs/v/0-1-0-alpha-5/api');
       assert.equal(current.statusCode, 200);
       assert.match(current.body, /id="docs-version"/);
       assert.match(current.body, prefix ? /Native route options/ : /Opzioni native della rotta/);

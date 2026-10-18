@@ -57,8 +57,8 @@ Dalla release `0.1.0-alpha.3`, il pacchetto separato `@fastang/cli` gestisce
 creazione e aggiornamenti. Puoi usarlo anche con un core precedente:
 
 ```sh
-npx --package=@fastang/cli@0.1.0-alpha.4 fastang-cli update --to alpha
-npx --package=@fastang/cli@0.1.0-alpha.4 fastang-cli update --to alpha --yes
+npx --package=@fastang/cli@0.1.0-alpha.5 fastang-cli update --to alpha
+npx --package=@fastang/cli@0.1.0-alpha.5 fastang-cli update --to alpha --yes
 ```
 
 Il primo comando mostra un piano; il secondo applica l’installazione npm.
@@ -101,3 +101,19 @@ apre le guide correnti.
 Per tornare indietro ripristina il commit precedente dell’app e il suo lockfile,
 esegui `npm ci` e ripubblica quello stato verificato. Il solo downgrade del pacchetto
 non annulla modifiche manuali ai sorgenti o migrazioni di database e servizi esterni.
+
+## Aggiornamenti pnpm
+
+Dalla versione `0.1.0-alpha.5` la CLI supporta app indipendenti pnpm 10/11 e lockfile versione 9.
+Rileva il gestore da `packageManager` e lockfile dell’app, anche se avviata con npm.
+Anteprima e applicazione:
+
+```sh
+pnpm --package=@fastang/cli@alpha dlx fastang-cli update --to alpha
+pnpm --package=@fastang/cli@alpha dlx fastang-cli update --to alpha --yes
+```
+
+Il primo comando mostra solo il piano. Restano i controlli su Node, peer, lockfile
+e downgrade. Lockfile misti, gestori in conflitto e lockfile workspace condivisi
+bloccano l’operazione; non si converte il gestore e non si migrano i sorgenti.
+Vedi [configurazione pnpm](getting-started.md#supporto-pnpm).

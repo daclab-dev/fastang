@@ -27,7 +27,7 @@ const route=routing.defineContractRoute(hello,{handler:async()=>({})}); export {
   } finally { await rm(root,{recursive:true,force:true}); }
 }
 test('static checks follow tsconfig extends, paths, namespace imports, re-exports, const aliases and spreads without execution',async()=>{
-  await fixture(async root=>{const report=await checkRoutes({root});assert.equal(report.verified,1);assert.deepEqual(report.diagnostics,[]);assert.equal(report.project,'tsconfig.node.json');});
+  await fixture(async root=>{const report=await checkRoutes({root});assert.equal(report.verified,1);assert.deepEqual(report.diagnostics,[]);assert.equal(report.project,'tsconfig.node.json');assert.equal((await run(process.execPath,[bin,'check','--quiet'],{cwd:root})).stdout,'');assert.equal(JSON.parse((await run(process.execPath,[bin,'check','--quiet','--json'],{cwd:root})).stdout).verified,1);});
 });
 test('method and parameter-name mismatch includes route and contract locations; unused contracts are ignored',async()=>{
  await fixture(async(root,put)=>{

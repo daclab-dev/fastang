@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-alpha.5
+
+- Detect npm/pnpm, accept --package-manager and generate matching scripts, metadata and explicit Angular toolchain build policies.
+
 ## 0.1.0-alpha.4
 
 - Pin the new core release and include static route checks in the generated app check script.

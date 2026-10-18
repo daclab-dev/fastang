@@ -48,3 +48,22 @@ Le variabili `VITE_` di Vite sono destinate al client e possono finire nel bundl
 Non importare codice di `src/server`, file `.server.ts` o API runtime del server nei componenti del browser. Il controllo del bundle rifiuta questi import anche quando sono transitivi. I tipi condivisi devono vivere in moduli che non caricano dipendenze server.
 
 Consulta [gli hook Fastify](https://fastify.dev/docs/latest/Reference/Hooks/) e [le variabili Vite](https://vite.dev/guide/env-and-mode). Continua con [il deploy](deployment.md).
+
+## Log di sviluppo
+
+Dalla versione `0.1.0-alpha.5` si usa `warn` come livello predefinito di Fastify e Vite
+durante `fastang dev`. L’indirizzo del server resta visibile. I log delle normali
+richieste HTTP e i riepiloghi dei controlli riusciti vengono omessi; restano
+avvisi, errori e controlli falliti. La configurazione dei log in produzione
+resta invariata.
+
+Imposta `FASTANG_LOG_LEVEL=info` o `FASTANG_LOG_LEVEL=debug` nell’ambiente del
+processo per analizzare le richieste. I valori ammessi sono `trace`, `debug`,
+`info`, `warn`, `error`, `fatal` e `silent`. Per Vite trace/debug diventano info
+e fatal diventa error. L’impostazione riguarda i logger del framework, non
+`console.log` dell’applicazione o messaggi del package manager. L’indirizzo del
+server resta visibile anche con `silent`.
+
+`fastang check --quiet` omette soltanto il riepilogo testuale di un controllo
+riuscito: le diagnostiche restano e `--json` restituisce sempre il report JSON.
+Il supervisore dev lo usa prima dei riavvii backend. Queste opzioni sono disponibili dalla versione `0.1.0-alpha.5`.

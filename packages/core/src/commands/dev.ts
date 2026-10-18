@@ -13,7 +13,7 @@ let queue = Promise.resolve();
 async function restart() {
   if (stopping) return;
   // Keep the previous server available for Vite diagnostics while an edit is invalid.
-  const checker = spawn(process.execPath, [fileURLToPath(new URL('../cli.js', import.meta.url)), 'check'], { stdio: 'inherit', env: process.env });
+  const checker = spawn(process.execPath, [fileURLToPath(new URL('../cli.js', import.meta.url)), 'check', '--quiet'], { stdio: 'inherit', env: process.env });
   const [checked] = await once(checker, 'exit');
   if (checked !== 0 || stopping) return;
   await stopChild(child);

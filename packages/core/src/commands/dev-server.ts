@@ -6,8 +6,10 @@ import { listen } from '../listen.ts';
 import { tsImport } from 'tsx/esm/api';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { developmentLogging } from './dev-logging.ts';
 import { loadFastangConfig } from './load-config.ts';
 
+const logging = developmentLogging();
 await loadFastangConfig('serve');
 
 const { configureServer } = await tsImport(pathToFileURL(resolve('src/server/plugins.ts')).href, import.meta.url);
@@ -16,9 +18,9 @@ const { registerApi } = await tsImport(pathToFileURL(resolve('.fastang/api.ts'))
 let vite: ViteDevServer | undefined;
 try {
   const app = await createServer({
-    logger: true, registerApi,
+    logger: { level: logging.level }, registerApi,
     async configure(server) {
-      vite = await createViteServer({ server: { middlewareMode: true, hmr: { server: server.server } }, appType: 'custom' });
+      vite = await createViteServer({ logLevel: logging.vite, server: { middlewareMode: true, hmr: { server: server.server } }, appType: 'custom' });
       server.addHook('onClose', async () => { await vite?.close(); });
       await server.register(middie);
       // Middie gestisce next(), risposte completate ed errori del middleware Connect.
@@ -37,4 +39,11 @@ try {
     },
   });
   await listen(app);
+  if (logging.banner) {
+    const address = app.server.address();
+    if (address && typeof address !== 'string') {
+      const host = address.family === 'IPv6' ? `[${address.address}]` : address.address;
+      console.log(`Server listening at http://${host}:${address.port}`);
+    }
+  }
 } catch (error) { await vite?.close(); throw error; }
