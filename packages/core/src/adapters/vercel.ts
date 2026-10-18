@@ -28,7 +28,13 @@ export async function buildVercelOutput(plan: VercelPlan, root = process.cwd()):
     else await copyFile(source, destination);
   };
   const { cp } = await import('node:fs/promises');
-  await cp(resolve(root, 'dist/client/assets'), resolve(output, 'static/assets'), { recursive: true });
+  // Publish Vite's public files as well as bundled assets. The root HTML is
+  // the private SSR template and must never be served directly by the CDN.
+  const client = resolve(root, 'dist/client');
+  await cp(client, resolve(output, 'static'), {
+    recursive: true,
+    filter: source => source !== resolve(client, 'index.html'),
+  });
   for (const path of prerendered) {
     const file = staticFile(path);
     await copy(`dist/client/${file}`, resolve(output, 'static', file));

@@ -44,6 +44,11 @@ test('Vercel output keeps the SSR template private and routes public HTML to CDN
   assert.equal(config.routes.at(-1).dest, '/__fastang/ssr');
   const staticFiles = await readdir(join(output, 'static'));
   assert.ok(!staticFiles.includes('index.html'), 'The root template must never bypass SSR');
+  for (const file of ['llms.txt', 'llms-full.txt', 'docs/getting-started.md', 'en/docs/getting-started.md']) {
+    const source = await readFile(resolve('dist/client', file), 'utf8');
+    assert.equal(await readFile(join(output, 'static', file), 'utf8'), source,
+      `Public file ${file} must be preserved in the CDN output`);
+  }
   for (const path of ['/about', '/en/about']) {
     const route = config.routes.find((route: any) => route.src && new RegExp(route.src).test(path) && route.dest?.endsWith('/index.html'));
     assert.ok(route);
