@@ -14,7 +14,57 @@ cd my-app
 npm run dev
 ```
 
-Apri `http://localhost:3278`. La porta 3278 corrisponde a FAST sulla tastiera telefonica. Il generatore crea una nuova cartella; rifiuta destinazioni già esistenti. `--install` esegue npm install. Senza questo flag devi eseguirlo nel progetto prima di avviarlo.
+Apri `http://localhost:3278`. La porta 3278 corrisponde a FAST sulla tastiera telefonica. Il generatore crea una nuova cartella; rifiuta destinazioni già esistenti. `--install` installa le dipendenze con npm. Senza questo flag devi eseguirlo nel progetto prima di avviarlo.
+
+## Supporto pnpm
+
+Con pnpm 10 o 11 puoi creare il progetto e installare le dipendenze con un solo comando:
+
+```sh
+pnpm create fastang@alpha my-app --install
+cd my-app
+pnpm run dev
+```
+
+Apri `http://localhost:3278`. FastAng riconosce pnpm e lo usa per installare le
+dipendenze e preparare gli script del progetto. L’installazione crea
+`pnpm-lock.yaml`: aggiungilo al repository insieme a `package.json` per mantenere
+le stesse versioni delle dipendenze sui diversi computer.
+
+Se preferisci installare le dipendenze in un secondo momento, usa
+`--no-install` al posto di `--install`, poi esegui `pnpm install` nella cartella
+del progetto.
+
+Quando avvii il generatore tramite un altro gestore, puoi scegliere pnpm
+esplicitamente aggiungendo `--package-manager pnpm`.
+
+### Comandi del progetto
+
+Esegui questi comandi dalla cartella dell’app:
+
+| Comando | A cosa serve |
+| --- | --- |
+| `pnpm run dev` | Avvia il server di sviluppo con aggiornamento delle pagine. |
+| `pnpm run check` | Controlla route, tipi TypeScript e template Angular. |
+| `pnpm run build` | Crea la build di produzione dopo i controlli. |
+| `pnpm start` | Avvia il server dalla build di produzione. |
+| `pnpm run build:vercel` | Prepara la build da pubblicare su Vercel. |
+
+Per aggiornare un’app già esistente, segui [la procedura per pnpm](upgrading.md#aggiornamenti-pnpm).
+
+### Script di installazione bloccati
+
+Se pnpm segnala script bloccati, ad esempio con il messaggio
+`Ignored build scripts`, esegui:
+
+```sh
+pnpm approve-builds
+pnpm install
+```
+
+Nel primo comando seleziona le dipendenze di cui vuoi autorizzare gli script.
+Poi ripeti l’installazione. Le autorizzazioni del progetto sono conservate in
+`pnpm-workspace.yaml`.
 
 ## CLI dedicata
 
@@ -24,6 +74,9 @@ Per usare direttamente `fastang new`, installa globalmente la CLI leggera:
 npm install -g @fastang/cli@alpha
 fastang new another-app --install
 ```
+
+Per creare un progetto con pnpm dalla CLI globale, usa
+`fastang new another-app --package-manager pnpm --install`.
 
 Senza installazione globale puoi eseguire
 `npx --package=@fastang/cli@alpha fastang-cli new another-app --install`.
@@ -57,45 +110,6 @@ npm run build
 npm start
 ```
 
-Ferma il server di sviluppo prima di avviare la produzione sulla stessa porta. `npm run check` verifica i tipi e i template; non avvia un server.
+Ferma il server di sviluppo prima di avviare la produzione sulla stessa porta. `npm run check` verifica route, tipi e template; non avvia un server.
 
 Prosegui con [pagine e layout](routing.md), poi con [le API](api.md).
-
-## Supporto pnpm
-
-Dalla versione `0.1.0-alpha.5` sono supportati npm e pnpm 10/11 per applicazioni indipendenti:
-
-```sh
-pnpm create fastang@alpha my-app --package-manager pnpm --install
-cd my-app
-pnpm run dev
-```
-
-Il generatore rileva il gestore che lo avvia dal suo user agent.
-`--package-manager npm|pnpm` ha precedenza; senza indicazioni usa npm. Gli script
-generati usano pnpm e `packageManager` registra la versione rilevata.
-`--no-install` genera soltanto i file. `pnpm-workspace.yaml` elenca esplicitamente
-i permessi degli script di build della toolchain Angular: `onlyBuiltDependencies`
-con pnpm 10, `allowBuilds` con pnpm 11. Rivedi la policy quando cambi dipendenze.
-Se la versione pnpm non è disponibile durante la generazione, autorizza gli
-script necessari con `pnpm approve-builds` prima della build. Non vengono cambiate
-le impostazioni globali di pnpm.
-
-Usa `pnpm run check`, `pnpm run build`, `pnpm start` e `pnpm run build:vercel`.
-L’output Vercel conserva i link relativi delle dipendenze ed è verificato fuori
-dal progetto sorgente. La CI prova pnpm 10 e 11 su Linux con Node 24.
-
-Per gli aggiornamenti la CLI usa `packageManager` e lockfile dell’applicazione,
-anche quando viene avviata con un gestore diverso:
-
-```sh
-pnpm --package=@fastang/cli@alpha dlx fastang-cli update --to alpha
-pnpm --package=@fastang/cli@alpha dlx fastang-cli update --to alpha --yes
-```
-
-Il primo comando mostra solo il piano. Servono lockfile pnpm versione 9 per
-un’app indipendente, core dal registry e installazione coerente con manifest
-e lockfile. Restano i controlli su Node, peer dependency e downgrade. Lockfile
-misti, dichiarazioni in conflitto e lockfile workspace condivisi bloccano
-l’aggiornamento. Non si converte automaticamente il gestore; nei monorepo
-l’aggiornamento delle dipendenze resta manuale.

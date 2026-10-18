@@ -84,6 +84,55 @@ generati: non è uno strumento generale di migrazione. Il passaggio ad `alpha.2`
 aggiunge funzionalità opzionali: gli endpoint esistenti non devono diventare
 contratti e TypeBox non serve se non adotti gli schemi condivisi.
 
+## Aggiornamenti pnpm
+
+Esegui l’aggiornamento dalla cartella dell’app, con pnpm 10 o 11. Prima salva
+il lavoro corrente in un commit, includendo `package.json` e `pnpm-lock.yaml`.
+
+Per vedere cosa cambierebbe passando alla release alpha più recente:
+
+```sh
+pnpm --package=@fastang/cli@alpha dlx fastang-cli update --to alpha
+```
+
+Il comando scarica ed esegue la CLI senza installarla globalmente. Mostra la
+versione attuale, quella di destinazione e le eventuali incompatibilità con Node
+o con le dipendenze dell’app. In questa fase i file del progetto restano invariati.
+
+Dopo aver letto il piano e le [note di rilascio](https://github.com/daclab-dev/fastang/releases),
+applica l’aggiornamento:
+
+```sh
+pnpm --package=@fastang/cli@alpha dlx fastang-cli update --to alpha --yes
+```
+
+FastAng usa pnpm per aggiornare `@fastang/core` e il lockfile. Pagine, endpoint,
+stili e configurazioni dell’app restano tuoi: applica a mano le eventuali
+migrazioni indicate nelle note della release.
+
+Verifica il risultato con la build e con i test della tua applicazione:
+
+```sh
+pnpm run build
+```
+
+Se pubblichi su Vercel, esegui anche `pnpm run build:vercel`. Rivedi le modifiche
+e committa insieme `package.json`, `pnpm-lock.yaml` e gli eventuali interventi sui sorgenti.
+
+Per scegliere una release precisa, sostituisci `alpha` dopo `--to` con il suo
+numero, ad esempio `--to 0.1.0-alpha.5`.
+
+### Se l’aggiornamento si interrompe
+
+La CLI segnala il controllo che non è passato. Se l’installazione non corrisponde
+al lockfile, ripristinala con `pnpm install --frozen-lockfile`. Se hai appena
+modificato le dipendenze in `package.json`, esegui invece `pnpm install` e rivedi
+il lockfile aggiornato prima di riprovare.
+
+Mantieni un solo lockfile e una dichiarazione `packageManager` coerente con pnpm.
+L’aggiornamento automatico riguarda app indipendenti; nei monorepo con lockfile
+condiviso aggiorna le dipendenze attraverso gli strumenti del workspace.
+
 ## Versioni della documentazione e rollback
 
 Usa il selettore sopra le guide. Gli URL versionati conservano la versione scelta;
@@ -99,21 +148,6 @@ Gli archivi della documentazione partiranno dalle release stabili v1. `/docs`
 apre le guide correnti.
 
 Per tornare indietro ripristina il commit precedente dell’app e il suo lockfile,
-esegui `npm ci` e ripubblica quello stato verificato. Il solo downgrade del pacchetto
+esegui `npm ci` oppure `pnpm install --frozen-lockfile`, secondo il gestore del
+progetto, e ripubblica quello stato verificato. Il solo downgrade del pacchetto
 non annulla modifiche manuali ai sorgenti o migrazioni di database e servizi esterni.
-
-## Aggiornamenti pnpm
-
-Dalla versione `0.1.0-alpha.5` la CLI supporta app indipendenti pnpm 10/11 e lockfile versione 9.
-Rileva il gestore da `packageManager` e lockfile dell’app, anche se avviata con npm.
-Anteprima e applicazione:
-
-```sh
-pnpm --package=@fastang/cli@alpha dlx fastang-cli update --to alpha
-pnpm --package=@fastang/cli@alpha dlx fastang-cli update --to alpha --yes
-```
-
-Il primo comando mostra solo il piano. Restano i controlli su Node, peer, lockfile
-e downgrade. Lockfile misti, gestori in conflitto e lockfile workspace condivisi
-bloccano l’operazione; non si converte il gestore e non si migrano i sorgenti.
-Vedi [configurazione pnpm](getting-started.md#supporto-pnpm).

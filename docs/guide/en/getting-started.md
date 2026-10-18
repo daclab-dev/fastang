@@ -16,6 +16,54 @@ npm run dev
 
 Open `http://localhost:3278`. Port 3278 spells FAST on a telephone keypad. The generator creates a new directory and rejects existing destinations. `--install` runs npm install. Without it, run npm install in the project before starting the server.
 
+## pnpm support
+
+With pnpm 10 or 11, you can create the project and install its dependencies in one command:
+
+```sh
+pnpm create fastang@alpha my-app --install
+cd my-app
+pnpm run dev
+```
+
+Open `http://localhost:3278`. FastAng recognizes pnpm and uses it to install
+dependencies and set up the project's scripts. Installation creates
+`pnpm-lock.yaml`: commit it alongside `package.json` to keep dependency versions
+consistent across computers.
+
+To install dependencies later, replace `--install` with `--no-install`, then run
+`pnpm install` in the project directory.
+
+When running the generator through another package manager, add
+`--package-manager pnpm` to select pnpm explicitly.
+
+### Project commands
+
+Run these commands from the application directory:
+
+| Command | Purpose |
+| --- | --- |
+| `pnpm run dev` | Start the development server with page updates. |
+| `pnpm run check` | Check routes, TypeScript types and Angular templates. |
+| `pnpm run build` | Check the project and create a production build. |
+| `pnpm start` | Start the server from the production build. |
+| `pnpm run build:vercel` | Prepare the build for deployment on Vercel. |
+
+To update an existing application, follow [the pnpm upgrade steps](upgrading.md#pnpm-updates).
+
+### Blocked installation scripts
+
+If pnpm reports blocked scripts, for example with `Ignored build scripts`, run:
+
+```sh
+pnpm approve-builds
+pnpm install
+```
+
+In the first command, select the dependencies whose scripts you want to allow.
+Then repeat the installation. Project permissions are stored in
+`pnpm-workspace.yaml`.
+
 ## Standalone CLI
 
 To use `fastang new` directly, install the lightweight CLI globally:
@@ -24,6 +72,9 @@ To use `fastang new` directly, install the lightweight CLI globally:
 npm install -g @fastang/cli@alpha
 fastang new another-app --install
 ```
+
+To create a pnpm project with the global CLI, use
+`fastang new another-app --package-manager pnpm --install`.
 
 Without a global installation, run
 `npx --package=@fastang/cli@alpha fastang-cli new another-app --install`.
@@ -57,45 +108,6 @@ npm run build
 npm start
 ```
 
-Stop the development server before starting production on the same port. `npm run check` validates types and templates without starting a server.
+Stop the development server before starting production on the same port. `npm run check` validates routes, types and templates without starting a server.
 
 Continue with [pages and layouts](routing.md), then [APIs](api.md).
-
-## pnpm support
-
-From `0.1.0-alpha.5`, npm and pnpm 10/11 are supported for standalone applications:
-
-```sh
-pnpm create fastang@alpha my-app --package-manager pnpm --install
-cd my-app
-pnpm run dev
-```
-
-The generator detects the invoking manager through its user agent; an explicit
-`--package-manager npm|pnpm` overrides detection. Without either it defaults to
-npm. Generated pnpm projects use pnpm scripts and record the detected pnpm
-version in `packageManager`. `--no-install` preserves generation-only behavior.
-The generated `pnpm-workspace.yaml` lists build-script permissions for the Angular
-toolchain explicitly: pnpm 10 uses `onlyBuiltDependencies`, pnpm 11 uses
-`allowBuilds`. Review that policy when adding/updating dependencies. If the pnpm
-version is unavailable during generation, approve required scripts with
-`pnpm approve-builds` before building. No global pnpm settings are changed.
-
-Use `pnpm run check`, `pnpm run build`, `pnpm start` and `pnpm run build:vercel`.
-Vercel output preserves relative dependency links and is tested outside the
-source project. The CI matrix tests pnpm 10 and 11 on Linux with Node 24.
-
-For updates, the standalone CLI uses the app's `packageManager` and lockfile,
-regardless of whether the CLI itself was launched by npm or pnpm:
-
-```sh
-pnpm --package=@fastang/cli@alpha dlx fastang-cli update --to alpha
-pnpm --package=@fastang/cli@alpha dlx fastang-cli update --to alpha --yes
-```
-
-The first command only plans. pnpm updates require a standalone version-9
-lockfile, a registry core version and an installation matching the manifest and
-lockfile. Engine/peer compatibility and downgrade protections remain enabled.
-Mixed lockfiles, conflicting manager declarations and shared workspace lockfiles
-are rejected. There is no automatic conversion between package managers. Monorepo
-dependency updates remain manual.

@@ -80,6 +80,55 @@ it is not a general migration tool. Moving to `alpha.2` adds optional features:
 existing endpoints do not need to become contracts and TypeBox is not required
 unless you adopt shared schemas.
 
+## pnpm updates
+
+Run the update from your application directory with pnpm 10 or 11. First commit
+your current work, including `package.json` and `pnpm-lock.yaml`.
+
+To preview an update to the newest alpha release:
+
+```sh
+pnpm --package=@fastang/cli@alpha dlx fastang-cli update --to alpha
+```
+
+This downloads and runs the CLI without installing it globally. It shows the
+installed version, the target version and any incompatible Node or application
+dependencies. Your project files remain unchanged at this stage.
+
+After reviewing the plan and the [release notes](https://github.com/daclab-dev/fastang/releases),
+apply the update:
+
+```sh
+pnpm --package=@fastang/cli@alpha dlx fastang-cli update --to alpha --yes
+```
+
+FastAng uses pnpm to update `@fastang/core` and the lockfile. Your pages,
+endpoints, styles and configuration remain application files: apply any source
+migrations described in the release notes yourself.
+
+Check the result with a build and your application's tests:
+
+```sh
+pnpm run build
+```
+
+For Vercel deployments, also run `pnpm run build:vercel`. Review the changes and
+commit `package.json`, `pnpm-lock.yaml` and any source migrations together.
+
+To choose a specific release, replace `alpha` after `--to` with its version,
+for example `--to 0.1.0-alpha.5`.
+
+### If the update stops
+
+The CLI identifies the check that failed. If the installation differs from the
+lockfile, restore it with `pnpm install --frozen-lockfile`. If you have just
+changed dependencies in `package.json`, run `pnpm install` instead and review
+the updated lockfile before trying again.
+
+Keep one lockfile and a `packageManager` declaration that matches pnpm.
+Automatic updates cover standalone applications; for monorepos with a shared
+lockfile, update dependencies through the workspace's tools.
+
 ## Documentation versions and rollback
 
 Use the version selector above the guides. Versioned URLs retain the selected
@@ -93,21 +142,7 @@ Older alpha guides are not retained on the site; their sources remain in Git tag
 Versioned URLs for retired alpha guides return 404. Documentation snapshots
 will start with stable v1 releases. `/docs` opens the current guides.
 
-To roll back, restore the previous application commit and lockfile, run `npm ci`
+To roll back, restore the previous application commit and lockfile, run `npm ci` or
+`pnpm install --frozen-lockfile`, depending on the project’s package manager,
 and redeploy that checked state. Simply downgrading the package does not undo
 manual source changes or external database/service migrations.
-
-## pnpm updates
-
-From `0.1.0-alpha.5`, the CLI supports standalone pnpm 10/11 projects and version-9 lockfiles.
-It selects the app's manager from `packageManager` and its lockfile, even when
-launched through npm. Preview and apply with:
-
-```sh
-pnpm --package=@fastang/cli@alpha dlx fastang-cli update --to alpha
-pnpm --package=@fastang/cli@alpha dlx fastang-cli update --to alpha --yes
-```
-
-The first command only plans. Engine, peer, lockfile and downgrade checks remain
-active. Mixed lockfiles, manager conflicts and shared workspace lockfiles are
-rejected; no manager conversion or source migration is performed. See [pnpm setup](getting-started.md#pnpm-support).
