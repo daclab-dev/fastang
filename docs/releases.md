@@ -83,3 +83,28 @@ OIDC provenance should identify the commit and workflow that produced a release.
 Official references: [public scoped packages](https://docs.npmjs.com/creating-and-publishing-scoped-public-packages/),
 [distribution tags](https://docs.npmjs.com/adding-dist-tags-to-packages/),
 [trusted publishing](https://docs.npmjs.com/trusted-publishers/).
+
+## Preserve the previous documentation before changing releases
+
+Before updating the current version and guide sources for a new release, archive
+those guides from a committed Git ref that still contains that core version:
+
+```sh
+npm run docs:archive -- 0.1.0-alpha.2 HEAD
+```
+
+Use the actual previous version/ref. The command checks the core version at that
+ref, copies both languages and their navigation, records source hashes/commit,
+and updates the archive catalogue. It refuses to replace an existing archive.
+Then update `CURRENT_DOCS_VERSION` in `src/app/docs/versions.ts` along with the
+package versions, current guides and migration instructions. Commit archive and
+new release sources together. The URL slug uses hyphens instead of version dots;
+the selector displays the original npm version. `/docs` remains the current alias.
+Archived versions have their own URLs and never fall back to current content.
+
+`npm run test:docs:browser` checks version navigation against an existing production
+build. `npm run test:upgrade` checks the published alpha.1 → alpha.2 upgrade in an
+independent app with custom source, production rendering and Vercel output.
+Update/add a registry upgrade scenario after publishing later releases. Migration
+instructions must identify application bindings that changed; the generator must
+not overwrite an existing application as an update mechanism.

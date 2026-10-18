@@ -1,5 +1,11 @@
 // English copy for the public demo site. Italian source strings are the keys.
 export const english: Readonly<Record<string, string>> = {
+  "Versione della documentazione": "Documentation version",
+  "Versione non trovata": "Version not found",
+  "Versione archiviata": "Archived version",
+  "corrente": "current",
+  "Documentazione per": "Documentation for",
+  "Le API possono cambiare tra release alpha.": "APIs may change between alpha releases.",
   "Pagina statica": "Static page",
   "Prodotto SSR": "SSR product",
   "Client connesso": "Client connected",

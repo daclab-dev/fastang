@@ -6,6 +6,7 @@ export const guideNavigation = [
   { slug: 'rendering', it: 'Dati e rendering', en: 'Data and rendering' },
   { slug: 'errors', it: 'Errori e redirect', en: 'Errors and redirects' },
   { slug: 'configuration', it: 'Configurazione e plugin', en: 'Configuration and plugins' },
+  { slug: 'upgrading', it: 'Aggiornare il progetto', en: 'Upgrade a project' },
   { slug: 'reference', it: 'API pubbliche e supporto', en: 'Public API and support' },
   { slug: 'deployment', it: 'Deploy', en: 'Deployment' },
 ] as const;

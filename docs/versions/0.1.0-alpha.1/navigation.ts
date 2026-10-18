@@ -1,0 +1,10 @@
+export const guideNavigation = [
+  { slug: 'getting-started', it: 'Inizia qui', en: 'Get started' },
+  { slug: 'routing', it: 'Pagine e layout', en: 'Pages and layouts' },
+  { slug: 'api', it: 'API e validazione', en: 'APIs and validation' },
+  { slug: 'rendering', it: 'Dati e rendering', en: 'Data and rendering' },
+  { slug: 'errors', it: 'Errori e redirect', en: 'Errors and redirects' },
+  { slug: 'configuration', it: 'Configurazione e plugin', en: 'Configuration and plugins' },
+  { slug: 'deployment', it: 'Deploy', en: 'Deployment' },
+] as const;
+export type GuideSlug = typeof guideNavigation[number]['slug'];

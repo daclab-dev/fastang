@@ -15,7 +15,8 @@
     "fastang.config.ts",
     "vite.config.ts",
     "playwright.config.ts",
-    "playwright.auth.config.ts"
+    "playwright.auth.config.ts",
+    "playwright.docs.config.ts"
   ],
   "exclude": [
     "tests/e2e/fixture/**/*.ts"

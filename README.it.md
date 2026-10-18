@@ -359,3 +359,7 @@ Dalla versione `0.1.0-alpha.2` è disponibile l'integrazione opzionale con TypeB
 ## API pubbliche e ambienti supportati
 
 Il [riferimento](docs/guide/it/reference.md) elenca gli entry point npm pubblici, i confini degli import browser/server, le versioni dichiarate delle dipendenze, la copertura automatizzata e i limiti attuali del deploy.
+
+## Aggiornamenti e documentazione versionata
+
+Aggiorna la dipendenza `@fastang/core` nell’app esistente e allinea i peer richiesti; non ricreare il progetto con il generatore. La [guida agli aggiornamenti](docs/guide/it/upgrading.md) descrive verifiche e migrazioni manuali. Il selettore delle guide mantiene URL e navigazione della versione scelta. `npm run docs:archive -- VERSIONE REF_GIT` conserva le guide di una release committata prima di preparare la successiva.

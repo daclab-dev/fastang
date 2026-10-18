@@ -135,3 +135,28 @@ jobs:
             playwright-report/
             test-results/
           retention-days: 7
+
+  documentation-browser:
+    name: Versioned documentation navigation
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24.15.0'
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:docs:browser -- --project=chromium --project=mobile-chromium
+      - uses: actions/upload-artifact@v5
+        if: ${{ !cancelled() }}
+        with:
+          name: documentation-browser-results
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7

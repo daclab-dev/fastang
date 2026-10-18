@@ -187,3 +187,7 @@ From a repository checkout, `npm run create:auth -- /path/to/new-app` creates a 
 ## Public API and supported environments
 
 The [reference](docs/guide/en/reference.md) lists public npm entry points, browser/server import boundaries, declared dependency ranges, automated test coverage and current deployment limits.
+
+## Updating an app and documentation versions
+
+Update the existing app’s `@fastang/core` dependency and align required peers; do not recreate it with the generator. Follow [the upgrade guide](docs/guide/en/upgrading.md). The documentation selector keeps version-specific URLs, navigation and released archives. `npm run docs:archive -- VERSION GIT_REF` preserves a committed release’s guides before the next version is prepared.

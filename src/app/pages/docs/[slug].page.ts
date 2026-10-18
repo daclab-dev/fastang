@@ -2,7 +2,9 @@ import { Component, computed, effect, input, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe, LocalePathPipe } from '../../i18n/i18n';
 import { DocInline } from '../../docs/inline';
-import { guideNavigation } from '../../docs/navigation';
+import { documentationVersions } from '../../docs/versions';
+import { inject } from '@angular/core';
+import { DocumentationContext } from '../../docs/context';
 import type { GuideData } from '../../docs/resolver';
 
 @Component({
@@ -23,14 +25,14 @@ import type { GuideData } from '../../docs/resolver';
           }
           <p class="docs-copy-status" aria-live="polite">{{ copyFailed() ? ('Copia non disponibile: seleziona il codice e copialo manualmente.' | t) : '' }}</p>
           <nav class="docs-pagination" [aria-label]="'Navigazione delle guide' | t">
-            @if (previous(); as previous) {<a [routerLink]="'/docs/' + previous.slug | localePath"><span>← {{ 'Precedente' | t }}</span>{{ previous[guide().language] }}</a>}
-            @if (next(); as next) {<a [routerLink]="'/docs/' + next.slug | localePath"><span>{{ 'Successiva' | t }} →</span>{{ next[guide().language] }}</a>}
+            @if (previous(); as previous) {<a [routerLink]="docs.path(previous.slug) | localePath"><span>← {{ 'Precedente' | t }}</span>{{ previous[guide().language] }}</a>}
+            @if (next(); as next) {<a [routerLink]="docs.path(next.slug) | localePath"><span>{{ 'Successiva' | t }} →</span>{{ next[guide().language] }}</a>}
           </nav>
         </article>
-        <aside class="docs-toc"><h2>{{ 'In questa pagina' | t }}</h2>@for (section of article.sections; track section.id) {<a [href]="('/docs/' + guide().slug | localePath) + '#' + section.id">{{ section.text }}</a>}</aside>
+        <aside class="docs-toc"><h2>{{ 'In questa pagina' | t }}</h2>@for (section of article.sections; track section.id) {<a [href]="(docs.path(guide().slug) | localePath) + '#' + section.id">{{ section.text }}</a>}</aside>
       </div>
     } @else {
-      <article class="docs-article"><h1>{{ 'Guida non trovata' | t }}</h1><p>{{ 'Scegli una delle guide disponibili per continuare.' | t }}</p><a [routerLink]="'/docs' | localePath">{{ 'Torna alla documentazione →' | t }}</a></article>
+      <article class="docs-article"><h1>{{ 'Guida non trovata' | t }}</h1><p>{{ 'Scegli una delle guide disponibili per continuare.' | t }}</p><a [routerLink]="docs.path() | localePath">{{ 'Torna alla documentazione →' | t }}</a></article>
     }
   `,
 })
@@ -38,11 +40,13 @@ export default class DocumentationArticle {
   readonly guide = input.required<GuideData>();
   readonly copied = signal(-1);
   readonly copyFailed = signal(false);
-  private readonly position = computed(() => guideNavigation.findIndex(guide => guide.slug === this.guide().slug));
-  readonly previous = computed(() => guideNavigation[this.position() - 1]);
-  readonly next = computed(() => guideNavigation[this.position() + 1]);
+  readonly docs = inject(DocumentationContext);
+  private readonly guides = computed(() => documentationVersions.find(version => version.version === this.guide().version)?.guides ?? []);
+  private readonly position = computed(() => this.guides().findIndex(guide => guide.slug === this.guide().slug));
+  readonly previous = computed(() => this.guides()[this.position() - 1]);
+  readonly next = computed(() => this.guides()[this.position() + 1]);
   constructor() {
-    effect(() => { this.guide().slug; this.copied.set(-1); this.copyFailed.set(false); });
+    effect(() => { this.guide().slug; this.guide().version; this.copied.set(-1); this.copyFailed.set(false); });
   }
   async copy(text: string, index: number) {
     try { await navigator.clipboard.writeText(text); this.copied.set(index); this.copyFailed.set(false); }
