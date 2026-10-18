@@ -47,7 +47,7 @@ Continue with [data loading and rendering](rendering.md). See [Angular routing](
 
 ## Inspect the route map
 
-From an application using `0.1.0-alpha.2` or later, run:
+From an application using `0.1.0-alpha.3` or later, run:
 
 ```sh
 npx fastang routes
@@ -63,4 +63,4 @@ Inspection reads file names without executing application code, generating files
 or starting a server. Ambiguous routes and orphan metadata fail with the same
 errors as generation. This is the file-based map: prefixes added by your Angular
 router, plugin routes and implicit HEAD routes are not shown. It does not infer
-rendering or deployment rules. The command is available from `0.1.0-alpha.2`.
+rendering or deployment rules. The command is available from `0.1.0-alpha.3`.

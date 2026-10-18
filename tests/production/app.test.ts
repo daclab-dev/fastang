@@ -262,7 +262,7 @@ test('versioned documentation serves actual archives and rejects unavailable ver
   const app: FastifyInstance = await createProductionServer();
   try {
     for (const prefix of ['', '/en']) {
-      const current = await app.inject(prefix + '/docs/v/0-1-0-alpha-2/api');
+      const current = await app.inject(prefix + '/docs/v/0-1-0-alpha-3/api');
       const archived = await app.inject(prefix + '/docs/v/0-1-0-alpha-1/api');
       assert.equal(current.statusCode, 200);
       assert.equal(archived.statusCode, 200);

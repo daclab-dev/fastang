@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-alpha.3
+
+- Pin generated applications to core alpha.3; support creation through the standalone CLI.
+
 ## 0.1.0-alpha.2
 
 - Pin the starter to @fastang/core 0.1.0-alpha.2 with typed contracts, native route options, route inspection and development configuration validation.

@@ -133,7 +133,7 @@ test('route functions dispatch specific URLs, group languages and isolate API re
           assert.equal((await inject(handler, '/api/products/missing')).statusCode, 404);
         }
       } else {
-        const url = fn.paths.find((path: string) => path.startsWith('/en'))!.replace(':id', 'starter').replace(':slug', 'getting-started').replace(':version', '0-1-0-alpha-2');
+        const url = fn.paths.find((path: string) => path.startsWith('/en'))!.replace(':id', 'starter').replace(':slug', 'getting-started').replace(':version', '0-1-0-alpha-3');
         const response = await inject(handler, url);
         assert.equal(response.statusCode, 200, url);
         assert.match(response.body, /<html lang="en"/);

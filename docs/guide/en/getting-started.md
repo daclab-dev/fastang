@@ -4,7 +4,7 @@ Create a project, start the server and try an Angular page that reads a Fastify 
 
 ## Requirements
 
-This guide targets FastAng `0.1.0-alpha.2`. Use Node `^22.22.3`, `^24.15.0` or `>=26.0.0`, with npm. The starter uses Angular `22.2.3`, Vite `8.3.4` and Fastify `^5.12.7`. APIs may change between alpha releases.
+This guide targets FastAng `0.1.0-alpha.3`. Use Node `^22.22.3`, `^24.15.0` or `>=26.0.0`, with npm. The starter uses Angular `22.2.3`, Vite `8.3.4` and Fastify `^5.12.7`. APIs may change between alpha releases.
 
 ## Create and run
 
@@ -15,6 +15,20 @@ npm run dev
 ```
 
 Open `http://localhost:3278`. Port 3278 spells FAST on a telephone keypad. The generator creates a new directory and rejects existing destinations. `--install` runs npm install. Without it, run npm install in the project before starting the server.
+
+## Standalone CLI
+
+To use `fastang new` directly, install the lightweight CLI globally:
+
+```sh
+npm install -g @fastang/cli@alpha
+fastang new another-app --install
+```
+
+Without a global installation, run
+`npx --package=@fastang/cli@alpha fastang-cli new another-app --install`.
+The CLI uses the matching generator release. Development and build use the core
+installed in the app. See [upgrading](./upgrading.md) for existing projects.
 
 ## Try the project
 

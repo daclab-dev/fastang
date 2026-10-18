@@ -59,7 +59,8 @@ This repository is the runnable prototype: clone or download it, install its dep
 ## Repository structure
 
 ```text
-packages/core/         Packaged runtime, Angular renderer, CLI and adapters
+packages/core/         Packaged runtime, Angular renderer, project commands and adapters
+packages/cli/          Standalone creation/update CLI
 packages/create-fastang/ Project generator with a packaged starter template
 examples/starter/      Minimal app, usable outside this repository
 scripts/               Asset and integration-test tools
@@ -160,7 +161,7 @@ To test local package changes before another release:
 
 ```sh
 npm pack --workspace @fastang/core --pack-destination /tmp
-npm run create -- /tmp/my-fastang-app --core-package /tmp/fastang-core-0.1.0-alpha.2.tgz
+npm run create -- /tmp/my-fastang-app --core-package /tmp/fastang-core-0.1.0-alpha.3.tgz
 cd /tmp/my-fastang-app
 npm install
 npm run dev
@@ -170,7 +171,7 @@ See [create-fastang](packages/create-fastang/README.md) for naming, optional ins
 
 ## Typed API contracts
 
-Version `0.1.0-alpha.2` includes optional shared TypeBox contracts that infer Fastify handler inputs/status replies and Angular JSON requests/successful responses. See [the typed greeting example](examples/typed-api/README.md). Existing endpoints and the minimal starter remain usable without this feature.
+Version `0.1.0-alpha.3` includes optional shared TypeBox contracts that infer Fastify handler inputs/status replies and Angular JSON requests/successful responses. See [the typed greeting example](examples/typed-api/README.md). Existing endpoints and the minimal starter remain usable without this feature.
 
 ## Optional authentication example
 

@@ -51,8 +51,22 @@ your project. In particular, `src/server/index.ts`, `start.ts`, `api-entry.ts`,
 to the app. If a release changes those bindings, apply its documented migration
 and keep your custom behavior.
 
-There is currently no `fastang update` command or automatic migration/codemod
-engine. Do not replace the entire `src/` directory with a new template. To compare
+Starting with `0.1.0-alpha.3`, the separate `@fastang/cli` package owns
+project creation and upgrades. It also works with older installed cores:
+
+```sh
+npx --package=@fastang/cli@0.1.0-alpha.3 fastang-cli update --to alpha
+npx --package=@fastang/cli@0.1.0-alpha.3 fastang-cli update --to alpha --yes
+```
+
+The first command shows a plan; the second applies the npm installation.
+`--to latest` follows npm's `latest` tag, which may differ from `alpha`.
+The plan compares Node, installed peers and the target release. The manifest,
+lockfile and installed core must agree: reconcile differences using `npm install`
+or `npm ci` as instructed and review the diff. Incompatibilities block applying;
+downgrades require `--allow-downgrade`. An identical installed version with
+consistent state does not trigger installation. Source migrations remain manual.
+npm installation can execute scripts and failures are not automatically rolled back. Do not replace the entire `src/` directory with a new template. To compare
 a target starter, generate a separate app outside the existing project:
 
 ```sh

@@ -1,6 +1,6 @@
 # FastAng guides
 
-These tutorials target `0.1.0-alpha.2`. The website renders the same Markdown files at `/docs` and `/en/docs`.
+These tutorials target `0.1.0-alpha.3`. The website renders the same Markdown files at `/docs` and `/en/docs`.
 
 | Topic | Italiano | English |
 | --- | --- | --- |

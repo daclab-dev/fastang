@@ -6,7 +6,7 @@ export interface DocumentationVersion {
   ref: string;
   guides: readonly { slug: string; it: string; en: string }[];
 }
-export const CURRENT_DOCS_VERSION = '0.1.0-alpha.2';
+export const CURRENT_DOCS_VERSION = '0.1.0-alpha.3';
 export const documentationVersions: readonly DocumentationVersion[] = [
   { version: CURRENT_DOCS_VERSION, slug: CURRENT_DOCS_VERSION.replaceAll('.', '-'), ref: 'main', guides: guideNavigation },
   ...archivedDocumentation,

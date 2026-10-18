@@ -50,7 +50,7 @@ Continue with [resolvers and SSR](rendering.md). Read more about [Fastify valida
 
 ## Native route options
 
-From `0.1.0-alpha.2`, `defineApiRoute()` accepts native Fastify route options such as
+From `0.1.0-alpha.3`, `defineApiRoute()` accepts native Fastify route options such as
 `preHandler`, hook arrays, `onSend`, `bodyLimit`, `config`, `exposeHeadRoute` and
 route error handlers. The following example uses these options.
 

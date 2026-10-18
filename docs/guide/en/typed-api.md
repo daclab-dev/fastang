@@ -1,6 +1,6 @@
 # Shared typed API contracts
 
-From `0.1.0-alpha.2`, a shared TypeBox contract can infer Fastify handler types
+From `0.1.0-alpha.3`, a shared TypeBox contract can infer Fastify handler types
 and Angular JSON request/response types from the same runtime schemas. This is
 optional: the minimal starter and `defineApiRoute()` work without TypeBox.
 

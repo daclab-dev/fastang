@@ -12,7 +12,7 @@ test('version selection keeps page, language, history and archive-specific conte
   await expect(page.getByLabel('Documentation version', { exact: true })).toBeEnabled();
   await expect(page.locator('[data-hydrated]')).toHaveAttribute('data-hydrated', 'true');
   const selector = page.getByLabel('Documentation version', { exact: true });
-  await expect(selector).toHaveValue('0-1-0-alpha-2');
+  await expect(selector).toHaveValue('0-1-0-alpha-3');
   await expect(page.getByRole('heading', { name: 'Native route options', exact: true })).toBeVisible();
   await selector.scrollIntoViewIfNeeded();
   await page.screenshot({ path: test.info().outputPath('version-selector.png') });
@@ -27,10 +27,10 @@ test('version selection keeps page, language, history and archive-specific conte
   await expect(page).toHaveURL(/\/docs\/v\/0-1-0-alpha-1\/rendering$/);
   await page.goBack();
   await expect(page).toHaveURL(/\/docs\/v\/0-1-0-alpha-1\/api$/);
-  await page.getByLabel('Versione della documentazione').selectOption('0-1-0-alpha-2');
-  await expect(page).toHaveURL(/\/docs\/v\/0-1-0-alpha-2\/api$/);
+  await page.getByLabel('Versione della documentazione').selectOption('0-1-0-alpha-3');
+  await expect(page).toHaveURL(/\/docs\/v\/0-1-0-alpha-3\/api$/);
   await page.getByRole('link', { name: 'Contratti API tipizzati', exact: true }).first().click();
-  await expect(page).toHaveURL(/\/docs\/v\/0-1-0-alpha-2\/typed-api$/);
+  await expect(page).toHaveURL(/\/docs\/v\/0-1-0-alpha-3\/typed-api$/);
   await page.getByLabel('Versione della documentazione').selectOption('0-1-0-alpha-1');
   await expect(page).toHaveURL(/\/docs\/v\/0-1-0-alpha-1$/);
   await expect(page.getByRole('heading', { name: 'Contratti API tipizzati', exact: true })).toHaveCount(0);

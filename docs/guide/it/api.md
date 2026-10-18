@@ -50,7 +50,7 @@ Prosegui con [resolver e SSR](rendering.md). Approfondisci [validazione e serial
 
 ## Opzioni native della rotta
 
-Dalla versione `0.1.0-alpha.2`, `defineApiRoute()` accetta opzioni native Fastify come `preHandler`,
+Dalla versione `0.1.0-alpha.3`, `defineApiRoute()` accetta opzioni native Fastify come `preHandler`,
 array di hook, `onSend`, `bodyLimit`, `config`, `exposeHeadRoute` e gestori di errore
 per rotta. L’esempio seguente usa queste opzioni.
 

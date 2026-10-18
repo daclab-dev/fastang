@@ -78,3 +78,11 @@ Fastify. `defineContractRoute()` from `/contract-route` accepts the same options
 except that its schema comes from the shared contract.
 
 See the [public API and support reference](https://fastang.dev/en/docs/reference) for import boundaries, accepted dependency versions and environments covered by tests.
+
+## Standalone CLI
+
+Project creation and upgrades belong to the separate lightweight `@fastang/cli`
+package introduced in alpha.3. Core provides `dev`, `build`, `generate` and `routes`.
+The global CLI forwards these commands to the app's installed core.
+
+See [CLI behavior and limitations](../../docs/cli.md).

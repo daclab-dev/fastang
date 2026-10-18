@@ -1,6 +1,6 @@
 # Contratti API tipizzati e condivisi
 
-Dalla versione `0.1.0-alpha.2`, un contratto TypeBox condiviso permette di inferire
+Dalla versione `0.1.0-alpha.3`, un contratto TypeBox condiviso permette di inferire
 i tipi degli handler Fastify e delle richieste e risposte JSON Angular dagli
 stessi schemi runtime. È opzionale: lo starter minimo e `defineApiRoute()`
 funzionano senza TypeBox.

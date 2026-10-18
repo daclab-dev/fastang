@@ -8,7 +8,7 @@ Configuration validation is available from `0.1.0-alpha.1`.
 `defineConfig()` validates configuration at runtime. The build also validates plain default exports before replacing `dist/`. Unknown options, invalid types, reserved prerender paths (`/`, `/api`, `/assets`, `/__fastang`) and conflicting destinations such as `/about` plus `/about/` fail with an explicit error. Prerender paths contain only ASCII letters, digits, underscores, hyphens and slashes; query strings and fragments are not supported.
 
 
-From `0.1.0-alpha.2`, `fastang dev` also validates plain configuration
+From `0.1.0-alpha.3`, `fastang dev` also validates plain configuration
 exports before loading application plugins or opening the server. Invalid settings
 stop the current server; the development supervisor keeps watching. Correct and
 save `fastang.config.ts` to restart automatically. Development still renders

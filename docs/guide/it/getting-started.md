@@ -4,7 +4,7 @@ Crea un progetto, avvia il server e prova una pagina Angular che legge un'API Fa
 
 ## Requisiti
 
-Questa guida si riferisce a FastAng `0.1.0-alpha.2`. Usa Node `^22.22.3`, `^24.15.0` oppure `>=26.0.0`, con npm. Lo starter usa Angular `22.2.3`, Vite `8.3.4` e Fastify `^5.12.7`. Le API possono cambiare tra release alpha.
+Questa guida si riferisce a FastAng `0.1.0-alpha.3`. Usa Node `^22.22.3`, `^24.15.0` oppure `>=26.0.0`, con npm. Lo starter usa Angular `22.2.3`, Vite `8.3.4` e Fastify `^5.12.7`. Le API possono cambiare tra release alpha.
 
 ## Crea e avvia
 
@@ -15,6 +15,20 @@ npm run dev
 ```
 
 Apri `http://localhost:3278`. La porta 3278 corrisponde a FAST sulla tastiera telefonica. Il generatore crea una nuova cartella; rifiuta destinazioni già esistenti. `--install` esegue npm install. Senza questo flag devi eseguirlo nel progetto prima di avviarlo.
+
+## CLI dedicata
+
+Per usare direttamente `fastang new`, installa globalmente la CLI leggera:
+
+```sh
+npm install -g @fastang/cli@alpha
+fastang new another-app --install
+```
+
+Senza installazione globale puoi eseguire
+`npx --package=@fastang/cli@alpha fastang-cli new another-app --install`.
+La CLI usa il generatore della stessa release. Sviluppo e build usano il core
+installato nell’app. Per i progetti esistenti leggi [aggiornamento](./upgrading.md).
 
 ## Prova il progetto
 

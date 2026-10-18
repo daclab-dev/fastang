@@ -324,7 +324,7 @@ Per provare modifiche locali prima di una nuova release:
 
 ```sh
 npm pack --workspace @fastang/core --pack-destination /tmp
-npm run create -- /tmp/my-fastang-app --core-package /tmp/fastang-core-0.1.0-alpha.2.tgz
+npm run create -- /tmp/my-fastang-app --core-package /tmp/fastang-core-0.1.0-alpha.3.tgz
 cd /tmp/my-fastang-app
 npm install
 npm run dev
@@ -336,7 +336,7 @@ La [guida del generatore](packages/create-fastang/README.md) descrive anche l'us
 
 ## Preparazione della release alpha
 
-`npm run release:check` esegue i controlli completi e prepara tarball verificati, con integrità SHA-512 e commit di origine. La [guida di pubblicazione](docs/releases.md) descrive ordine di pubblicazione, tag `alpha` e verifica dal registry. La versione corrente è `0.1.0-alpha.2`.
+`npm run release:check` esegue i controlli completi e prepara tarball verificati, con integrità SHA-512 e commit di origine. La [guida di pubblicazione](docs/releases.md) descrive ordine di pubblicazione, tag `alpha` e verifica dal registry. La versione corrente è `0.1.0-alpha.3`.
 
 ## Guide pratiche
 
@@ -350,7 +350,7 @@ Da un checkout del repository, `npm run create:auth -- /percorso/nuova-app` gene
 
 ## Contratti API tipizzati
 
-Dalla versione `0.1.0-alpha.2` è disponibile l'integrazione opzionale con TypeBox: un contratto condiviso definisce gli schemi e permette di inferire parametri e risposte degli handler Fastify e delle chiamate Angular. L'[esempio greeting](examples/typed-api/README.md) descrive utilizzo e limiti. La validazione resta a Fastify, le richieste passano da HttpClient e il routing deriva ancora dai file.
+Dalla versione `0.1.0-alpha.3` è disponibile l'integrazione opzionale con TypeBox: un contratto condiviso definisce gli schemi e permette di inferire parametri e risposte degli handler Fastify e delle chiamate Angular. L'[esempio greeting](examples/typed-api/README.md) descrive utilizzo e limiti. La validazione resta a Fastify, le richieste passano da HttpClient e il routing deriva ancora dai file.
 
 ## Misure delle prestazioni
 

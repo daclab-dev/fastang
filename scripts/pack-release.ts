@@ -6,7 +6,7 @@ import { resolve, relative } from 'node:path';
 import { promisify } from 'node:util';
 
 const run = promisify(execFile);
-const manifests = await Promise.all(['core', 'create-fastang'].map(async directory => ({
+const manifests = await Promise.all(['core', 'create-fastang', 'cli'].map(async directory => ({
   directory, ...JSON.parse(await readFile(`packages/${directory}/package.json`, 'utf8')),
 })));
 const version = manifests[0].version;
@@ -15,7 +15,7 @@ const output = resolve('.fastang/releases', version);
 await mkdir(output, { recursive: true });
 const packages = [];
 for (const manifest of manifests) {
-  assert.equal(manifest.version, version, 'Core and generator versions must match');
+  assert.equal(manifest.version, version, 'Core, generator and CLI versions must match');
   assert.equal(manifest.publishConfig.access, 'public');
   assert.equal(manifest.publishConfig.tag, 'alpha');
   assert.equal(manifest.publishConfig.registry, 'https://registry.npmjs.org/');

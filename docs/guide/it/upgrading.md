@@ -53,8 +53,23 @@ nel progetto. In particolare `src/server/index.ts`, `start.ts`, `api-entry.ts`,
 appartengono all’app. Se una release cambia questi collegamenti, applica la
 migrazione documentata mantenendo il comportamento personalizzato.
 
-Oggi non esistono un comando `fastang update` o un motore automatico di migrazioni
-e codemod. Non sostituire l’intera cartella `src/` con un nuovo template. Per
+Dalla release `0.1.0-alpha.3`, il pacchetto separato `@fastang/cli` gestisce
+creazione e aggiornamenti. Puoi usarlo anche con un core precedente:
+
+```sh
+npx --package=@fastang/cli@0.1.0-alpha.3 fastang-cli update --to alpha
+npx --package=@fastang/cli@0.1.0-alpha.3 fastang-cli update --to alpha --yes
+```
+
+Il primo comando mostra un piano; il secondo applica l’installazione npm.
+`--to latest` segue il tag npm `latest`, che può differire da `alpha`.
+Il piano confronta Node, peer installati e versione di destinazione. Manifest,
+lockfile e core installato devono essere coerenti: correggi le differenze con
+`npm install` o `npm ci` secondo il messaggio, poi rivedi il diff. La CLI blocca
+incompatibilità e richiede `--allow-downgrade` per tornare a una versione precedente.
+Se la versione è già presente e lo stato è coerente non installa nulla.
+Le migrazioni dei sorgenti restano manuali. L’installazione npm può eseguire script
+e non viene annullata automaticamente in caso di errore. Non sostituire l’intera cartella `src/` con un nuovo template. Per
 confrontare lo starter della versione di destinazione, genera un’app separata
 fuori dal progetto esistente:
 

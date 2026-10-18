@@ -4,7 +4,8 @@ import assert from 'node:assert/strict';
 import { readFile, readdir } from 'node:fs/promises';
 import { CURRENT_DOCS_VERSION, documentationLocation, documentationPath, documentationVersions, switchDocumentation } from '../src/app/docs/versions';
 test('documentation navigation keeps release identity and falls back only on an explicit version switch', () => {
-  const [current, previous] = documentationVersions;
+  const current = documentationVersions[0];
+  const previous = documentationVersions.find(version => version.version === '0.1.0-alpha.1')!;
   assert.equal(current.version, CURRENT_DOCS_VERSION);
   assert.equal(documentationLocation('/en/docs/api').version, current);
   const old = documentationLocation('/en' + documentationPath(previous, 'api') + '?x=1#hooks');

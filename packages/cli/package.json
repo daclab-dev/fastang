@@ -1,0 +1,43 @@
+{
+  "name": "@fastang/cli",
+  "version": "0.1.0-alpha.3",
+  "type": "module",
+  "description": "Lightweight FastAng project CLI.",
+  "license": "MIT",
+  "author": "Dario Chiapperini",
+  "engines": {
+    "node": "^22.22.3 || ^24.15.0 || >=26.0.0"
+  },
+  "bin": {
+    "fastang": "./bin/fastang.mjs",
+    "fastang-cli": "./bin/fastang.mjs"
+  },
+  "files": [
+    "bin",
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "prepack": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daclab-dev/fastang.git",
+    "directory": "packages/cli"
+  },
+  "publishConfig": {
+    "access": "public",
+    "tag": "alpha",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "homepage": "https://fastang.dev",
+  "bugs": {
+    "url": "https://github.com/daclab-dev/fastang/issues"
+  },
+  "dependencies": {
+    "semver": "^7.7.2"
+  }
+}
