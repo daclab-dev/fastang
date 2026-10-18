@@ -22,3 +22,20 @@ Before v1, only current guides are published. The version selector and versioned
 URLs remain, but previous alpha snapshots are not kept on the site. Git tags
 preserve their sources. Stable documentation archives start with v1; the archive
 command rejects pre-v1 versions. See the release guide for the workflow.
+
+## AI-readable documentation
+
+The website publishes `/llms.txt` as a concise documentation index and
+`/llms-full.txt` with the complete English guides. Every guide is also available
+as Markdown at `/docs/<slug>.md` (Italian) and `/en/docs/<slug>.md` (English).
+These URLs track the current release.
+
+`scripts/generate-ai-docs.ts` generates these assets from the same sources as the
+website whenever Vite starts for development or a build. Edit the guide sources,
+not the generated files in `public/`. Relative guide links become absolute links
+to their Markdown counterparts.
+
+To give a coding assistant context, ask it to read
+`https://fastang.dev/llms.txt` and follow the relevant guides. Assistants must
+explicitly fetch these resources; publishing the files does not guarantee that
+every AI tool discovers them automatically.

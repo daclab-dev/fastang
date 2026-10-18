@@ -30,3 +30,9 @@ packages/create-fastang/template/
 # Browser test artifacts
 playwright-report/
 test-results/
+
+# Generated AI documentation (from docs/guide during Vite startup/build)
+public/llms.txt
+public/llms-full.txt
+public/docs/
+public/en/docs/
