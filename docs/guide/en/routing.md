@@ -26,7 +26,12 @@ import { RouterOutlet } from '@angular/router';
 
 @Component({
   imports: [RouterOutlet],
-  template: '<section aria-label="Greetings"><h2>Greetings</h2><router-outlet /></section>',
+  template: `
+    <section aria-label="Greetings">
+      <h2>Greetings</h2>
+      <router-outlet />
+    </section>
+  `,
 })
 export default class GreetingLayout {}
 ```

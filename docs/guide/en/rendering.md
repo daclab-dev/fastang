@@ -10,14 +10,34 @@ In the starter, the resolver reads the `name` parameter and calls the local API.
 import { inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import type { ResolveFn } from '@angular/router';
-const greeting: ResolveFn<{ message: string }> = route => inject(HttpClient).get<{ message: string }>('/api/greet/' + encodeURIComponent(route.paramMap.get('name')!));
-export default { title: 'Greeting · FastAng', resolve: { greeting } };
+
+const greeting: ResolveFn<{ message: string }> = route =>
+  inject(HttpClient).get<{ message: string }>(
+    '/api/greet/' + encodeURIComponent(route.paramMap.get('name')!),
+  );
+
+export default {
+  title: 'Greeting · FastAng',
+  resolve: { greeting },
+};
 ```
 
 ```ts file=src/app/pages/greet/[name].page.ts
 import { Component, input } from '@angular/core';
-@Component({ template: `<p class="eyebrow">SERVER RENDERED</p><h1>{{ greeting().message }}</h1><p>The Angular resolver calls a validated Fastify endpoint. Hydration reuses its response.</p>` })
-export default class GreetingPage { readonly greeting = input.required<{ message: string }>(); }
+
+@Component({
+  template: `
+    <p class="eyebrow">SERVER RENDERED</p>
+    <h1>{{ greeting().message }}</h1>
+    <p>
+      The Angular resolver calls a validated Fastify endpoint.
+      Hydration reuses its response.
+    </p>
+  `,
+})
+export default class GreetingPage {
+  readonly greeting = input.required<{ message: string }>();
+}
 ```
 
 The starter enables `withComponentInputBinding()`, so data resolved under `greeting` reaches the input with the same name.

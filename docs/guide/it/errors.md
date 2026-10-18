@@ -19,12 +19,16 @@ const previewGuard: CanActivateFn = route => route.queryParamMap.get('preview') 
 
 const greeting: ResolveFn<{ message: string }> = route => {
   const context = inject(REQUEST_CONTEXT) as RenderContext | null;
-  return inject(HttpClient).get<{ message: string }>('/api/greet/' + encodeURIComponent(route.paramMap.get('name')!)).pipe(
-    catchError((error: HttpErrorResponse) => {
-      if (context) context.status = error.status === 404 ? 404 : 502;
-      return of({ message: 'Greeting unavailable.' });
-    }),
-  );
+  return inject(HttpClient)
+    .get<{ message: string }>(
+      '/api/greet/' + encodeURIComponent(route.paramMap.get('name')!),
+    )
+    .pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (context) context.status = error.status === 404 ? 404 : 502;
+        return of({ message: 'Greeting unavailable.' });
+      }),
+    );
 };
 
 export default {
@@ -47,9 +51,21 @@ Lo starter include già questo catch-all terminale.
 import { Component, REQUEST_CONTEXT, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import type { RenderContext } from '@fastang/core';
-@Component({ imports: [RouterLink], template: `<h1>Page not found</h1><a routerLink="/">Back home</a>` })
+
+@Component({
+  imports: [RouterLink],
+  template: `
+    <h1>Page not found</h1>
+    <a routerLink="/">Back home</a>
+  `,
+})
 export default class NotFoundPage {
-  constructor() { const context = inject(REQUEST_CONTEXT) as RenderContext | null; if (context) context.status = 404; }
+  constructor() {
+    const context = inject(REQUEST_CONTEXT) as RenderContext | null;
+    if (context) {
+      context.status = 404;
+    }
+  }
 }
 ```
 
