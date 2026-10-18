@@ -48,3 +48,15 @@ test('public reference tables match package exports, Node engines and peer range
     assert.deepEqual(Object.fromEntries(versions.rows.map(row => [plain(row[0]), plain(row[1])])), expectedVersions, `${language}: environment matrix differs from package declarations`);
   }
 });
+
+test('current release declarations and generator tarball examples match the manifests', async () => {
+  const core = JSON.parse(await readFile('packages/core/package.json', 'utf8'));
+  const readme = await readFile('packages/core/README.md', 'utf8');
+  assert.ok(readme.includes(`Version ${core.version} is`));
+  const generator = JSON.parse(await readFile('packages/create-fastang/package.json', 'utf8'));
+  const examples = await readFile('packages/create-fastang/README.md', 'utf8');
+  for (const match of examples.matchAll(/(?:fastang-core|create-fastang)-(\d+\.\d+\.\d+-alpha\.\d+)\.tgz/g)) {
+    assert.equal(match[1], generator.version);
+  }
+  assert.ok((await readFile('ROADMAP.md', 'utf8')).includes(`Version \`${core.version}\` is available`));
+});

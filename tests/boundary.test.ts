@@ -19,7 +19,7 @@ test('il build browser blocca un import transitivo dal backend', async () => {
     await assert.rejects(build({
       root, configFile: false, logLevel: 'silent', plugins: [plugin],
       build: { write: false, lib: { entry: join(root, 'entry.ts'), formats: ['es'] } },
-    }), /Modulo server importato nel client/);
+    }), /Server module imported into the client/);
   } finally { await rm(root, { recursive: true, force: true }); }
 });
 

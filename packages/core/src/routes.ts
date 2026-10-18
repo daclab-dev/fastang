@@ -11,13 +11,13 @@ const METHODS = new Set(['get', 'post', 'put', 'patch', 'delete', 'head', 'optio
 
 export function fileRoute(file: string, kind: 'page' | 'api'): FileRoute {
   const suffix = kind === 'page' ? '.page.ts' : '.ts';
-  if (!file.endsWith(suffix)) throw new Error(`Estensione non valida: ${file}`);
+  if (!file.endsWith(suffix)) throw new Error(`Invalid extension: ${file}`);
   let stem = file.slice(0, -suffix.length);
   let method: string | undefined;
   if (kind === 'api') {
     const parts = stem.split('.');
     const candidate = parts.pop()!;
-    if (!METHODS.has(candidate)) throw new Error(`L'API ${file} deve specificare il metodo, es. health.get.ts`);
+    if (!METHODS.has(candidate)) throw new Error(`API ${file} must specify a method, e.g. health.get.ts`);
     method = candidate.toUpperCase();
     stem = parts.join('.');
   }
@@ -30,18 +30,18 @@ export function fileRoute(file: string, kind: 'page' | 'api'): FileRoute {
     if (/^\([\w-]+\)$/.test(segment)) continue;
     const wildcard = /^\[([A-Za-z_][\w]*)\*\]$/.exec(segment);
     if (wildcard) {
-      if (index !== normalized.length - 1) throw new Error(`Catch-all non terminale: ${file}`);
+      if (index !== normalized.length - 1) throw new Error(`Catch-all must be the final segment: ${file}`);
       paths.push(kind === 'page' ? '**' : '*');
       continue;
     }
     const parameter = /^\[([A-Za-z_][\w]*)\]$/.exec(segment);
     if (parameter) paths.push(`:${parameter[1]}`);
     else if (/^[\w-]+$/.test(segment)) paths.push(segment);
-    else throw new Error(`Segmento non supportato in ${file}: ${segment}`);
+    else throw new Error(`Unsupported segment in ${file}: ${segment}`);
   }
-  if (!segments.length) throw new Error(`Rotta vuota: ${file}`);
+  if (!segments.length) throw new Error(`Empty route: ${file}`);
   const params = paths.filter((part) => part.startsWith(':'));
-  if (new Set(params).size !== params.length) throw new Error(`Parametro duplicato: ${file}`);
+  if (new Set(params).size !== params.length) throw new Error(`Duplicate parameter: ${file}`);
   return { file, path: paths.join('/'), ...(method ? { method } : {}) };
 }
 
@@ -49,7 +49,7 @@ export function sortAndValidate(routes: FileRoute[]): FileRoute[] {
   const seen = new Map<string, string>();
   for (const route of routes) {
     const key = `${route.method ?? 'PAGE'} ${route.path.replace(/:[^/]+/g, ':')}`;
-    if (seen.has(key)) throw new Error(`Collisione tra ${seen.get(key)} e ${route.file}`);
+    if (seen.has(key)) throw new Error(`Route collision between ${seen.get(key)} and ${route.file}`);
     seen.set(key, route.file);
   }
   const weight = (segment: string) => segment.startsWith('*') ? 0 : segment.startsWith(':') ? 1 : 2;
@@ -117,7 +117,7 @@ function leaves(nodes: PageRouteNode[]): PageRouteNode[] {
 export function buildPageTree(files: string[]): PageRouteNode[] {
   const pages = sortAndValidate(files.filter((file) => file.endsWith('.page.ts')).map((file) => fileRoute(file, 'page')));
   if (pages.some((page) => /(^|\/)layout\.page\.ts$/.test(page.file))) {
-    throw new Error('layout.page.ts è riservato: usa layout.ts per un layout o un altro nome per la pagina');
+    throw new Error('layout.page.ts is reserved: use layout.ts for a layout or another page name');
   }
   const layouts = files.filter((file) => /(^|\/)layout\.ts$/.test(file))
     .sort((a, b) => segments(a).length - segments(b).length || a.localeCompare(b));
@@ -140,9 +140,9 @@ export function buildPageTree(files: string[]): PageRouteNode[] {
     const directory = directoryOf(file);
     // Non includere se stesso nella ricerca del layout genitore.
     const parent = parentFor(file);
-    if (/\[\.\.\./.test(directory)) throw new Error(`Layout sotto catch-all non supportato: ${file}`);
+    if (/\[\.\.\./.test(directory)) throw new Error(`Layouts below catch-all routes are not supported: ${file}`);
     const fullPath = fileRoute((directory ? directory + '/' : '') + 'index.page.ts', 'page').path;
-    if (fullPath.includes('**')) throw new Error(`Layout sotto catch-all non supportato: ${file}`);
+    if (fullPath.includes('**')) throw new Error(`Layouts below catch-all routes are not supported: ${file}`);
     const node = makeNode(file, fullPath, 'layout', parent?.node);
     (parent?.node.children ?? roots).push(node);
     parents.push({ directory, node });
@@ -155,7 +155,7 @@ export function buildPageTree(files: string[]): PageRouteNode[] {
     (parent?.node.children ?? roots).push(node);
   }
   for (const file of files.filter((file) => file.endsWith('.route.ts'))) {
-    if (!usedMetadata.has(file)) throw new Error(`Metadati senza pagina o layout: ${file}`);
+    if (!usedMetadata.has(file)) throw new Error(`Metadata has no matching page or layout: ${file}`);
   }
   const ranks = new Map(pages.map((page, index) => [page.file, index]));
   const rank = (node: PageRouteNode) => Math.min(...leaves([node]).map((page) => ranks.get(page.file)!));
@@ -171,7 +171,7 @@ export function buildPageTree(files: string[]): PageRouteNode[] {
   for (let i = 0; i < ordered.length; i++) {
     for (let j = i + 1; j < ordered.length; j++) {
       if (ranks.get(ordered[i].file)! > ranks.get(ordered[j].file)! && overlaps(ordered[i].fullPath, ordered[j].fullPath)) {
-        throw new Error(`Ordine ambiguo tra ${ordered[i].file} e ${ordered[j].file}: sposta il layout su un antenato comune o separa i percorsi`);
+        throw new Error(`Ambiguous order between ${ordered[i].file} and ${ordered[j].file}: move the layout to a shared ancestor or separate the paths`);
       }
     }
   }

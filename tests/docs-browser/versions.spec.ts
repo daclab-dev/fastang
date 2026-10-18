@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-test('version selection keeps page, language, history and archive-specific content', async ({ page }) => {
+test('current-only selector preserves language, guide links and history', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
   let release!: () => void;
@@ -16,25 +16,16 @@ test('version selection keeps page, language, history and archive-specific conte
   await expect(page.getByRole('heading', { name: 'Native route options', exact: true })).toBeVisible();
   await selector.scrollIntoViewIfNeeded();
   await page.screenshot({ path: test.info().outputPath('version-selector.png') });
-  await selector.selectOption('0-1-0-alpha-1');
-  await expect(page).toHaveURL(/\/en\/docs\/v\/0-1-0-alpha-1\/api$/);
-  await expect(page.getByRole('heading', { name: 'Native route options', exact: true })).toHaveCount(0);
-  await expect(page.getByText('Archived version', { exact: true })).toBeVisible();
+  await expect(selector.locator('option')).toHaveCount(1);
+  await selector.selectOption('0-1-0-alpha-3');
+  await expect(page).toHaveURL(/\/en\/docs\/v\/0-1-0-alpha-3\/api$/);
   await page.getByRole('link', { name: 'Italiano', exact: true }).click();
-  await expect(page).toHaveURL(/\/docs\/v\/0-1-0-alpha-1\/api$/);
-  await expect(page.getByLabel('Versione della documentazione')).toHaveValue('0-1-0-alpha-1');
-  await page.locator('.docs-article').getByRole('link', { name: 'resolver e SSR', exact: true }).click();
-  await expect(page).toHaveURL(/\/docs\/v\/0-1-0-alpha-1\/rendering$/);
-  await page.goBack();
-  await expect(page).toHaveURL(/\/docs\/v\/0-1-0-alpha-1\/api$/);
-  await page.getByLabel('Versione della documentazione').selectOption('0-1-0-alpha-3');
   await expect(page).toHaveURL(/\/docs\/v\/0-1-0-alpha-3\/api$/);
-  await page.getByRole('link', { name: 'Contratti API tipizzati', exact: true }).first().click();
-  await expect(page).toHaveURL(/\/docs\/v\/0-1-0-alpha-3\/typed-api$/);
-  await page.getByLabel('Versione della documentazione').selectOption('0-1-0-alpha-1');
-  await expect(page).toHaveURL(/\/docs\/v\/0-1-0-alpha-1$/);
-  await expect(page.getByRole('heading', { name: 'Contratti API tipizzati', exact: true })).toHaveCount(0);
+  await page.locator('.docs-article').getByRole('link', { name: 'resolver e SSR', exact: true }).click();
+  await expect(page).toHaveURL(/\/docs\/v\/0-1-0-alpha-3\/rendering$/);
+  await page.goBack();
+  await expect(page).toHaveURL(/\/docs\/v\/0-1-0-alpha-3\/api$/);
   await page.reload();
-  await expect(page.getByLabel('Versione della documentazione')).toHaveValue('0-1-0-alpha-1');
+  await expect(page.getByLabel('Versione della documentazione')).toHaveValue('0-1-0-alpha-3');
   expect(errors).toEqual([]);
 });

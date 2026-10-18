@@ -12,15 +12,15 @@ test('converte index, parametri, gruppi e catch-all', () => {
   assert.equal(fileRoute('docs/[...slug].page.ts', 'page').path, 'docs/**');
   assert.deepEqual(fileRoute('products/[id].get.ts', 'api'), { file: 'products/[id].get.ts', path: 'products/:id', method: 'GET' });
   assert.throws(() => fileRoute('[...slug]/edit.page.ts', 'page'), /Catch-all/);
-  assert.throws(() => fileRoute('[id]/[id].page.ts', 'page'), /duplicato/);
-  assert.throws(() => fileRoute('users.ts', 'api'), /metodo/);
+  assert.throws(() => fileRoute('[id]/[id].page.ts', 'page'), /Duplicate parameter/);
+  assert.throws(() => fileRoute('users.ts', 'api'), /method/);
 });
 
 test('le rotte statiche precedono parametri e catch-all, le collisioni falliscono', () => {
   const files = ['[...slug].page.ts', 'products/[id].page.ts', 'products/new.page.ts'];
   assert.deepEqual(sortAndValidate(files.map((file) => fileRoute(file, 'page'))).map((route) => route.path), ['products/new', 'products/:id', '**']);
-  assert.throws(() => sortAndValidate(['users/[id].page.ts', 'users/[name].page.ts'].map((file) => fileRoute(file, 'page'))), /Collisione/);
-  assert.throws(() => sortAndValidate(['about.page.ts', '(public)/about.page.ts'].map((file) => fileRoute(file, 'page'))), /Collisione/);
+  assert.throws(() => sortAndValidate(['users/[id].page.ts', 'users/[name].page.ts'].map((file) => fileRoute(file, 'page'))), /Route collision/);
+  assert.throws(() => sortAndValidate(['about.page.ts', '(public)/about.page.ts'].map((file) => fileRoute(file, 'page'))), /Route collision/);
   assert.doesNotThrow(() => sortAndValidate(['users.get.ts', 'users.post.ts'].map((file) => fileRoute(file, 'api'))));
 });
 
@@ -75,14 +75,14 @@ test('un ramo layout non nasconde le rotte statiche più specifiche', () => {
   assert.deepEqual(tree.map((node) => node.path), ['products/new', 'products']);
   assert.throws(() => buildPageTree([
     '(group)/layout.ts', '(group)/about.page.ts', '(group)/[...slug].page.ts', 'contact.page.ts',
-  ]), /Ordine ambiguo/);
+  ]), /Ambiguous order/);
 });
 
 test('la generazione rifiuta metadati orfani, collisioni e layout catch-all', () => {
-  assert.throws(() => buildPageTree(['missing.route.ts']), /Metadati senza/);
-  assert.throws(() => buildPageTree(['layout.page.ts']), /riservato/);
-  assert.throws(() => buildPageTree(['[...slug]/layout.ts']), /Layout sotto catch-all/);
-  assert.throws(() => buildPageTree(['(one)/layout.ts', '(one)/about.page.ts', '(two)/about.page.ts']), /Collisione/);
+  assert.throws(() => buildPageTree(['missing.route.ts']), /Metadata has no/);
+  assert.throws(() => buildPageTree(['layout.page.ts']), /reserved/);
+  assert.throws(() => buildPageTree(['[...slug]/layout.ts']), /Layouts below catch-all/);
+  assert.throws(() => buildPageTree(['(one)/layout.ts', '(one)/about.page.ts', '(two)/about.page.ts']), /Route collision/);
   assert.deepEqual(buildPageTree(['empty/layout.ts', 'index.page.ts']).map((node) => node.path), ['']);
 });
 
@@ -136,6 +136,6 @@ test('route inspection preserves layout ancestry and metadata without evaluating
     await assert.rejects(readFile(join(root, 'src/app/fastang.routes.ts')), { code: 'ENOENT' });
     await assert.rejects(readFile(join(root, '.fastang/api.ts')), { code: 'ENOENT' });
     await writeFile(join(root, 'src/app/pages/(shop)/products/[name].page.ts'), '');
-    await assert.rejects(inspectRoutes(root), /Collisione/);
+    await assert.rejects(inspectRoutes(root), /Route collision/);
   } finally { await rm(root, { recursive: true, force: true }); }
 });

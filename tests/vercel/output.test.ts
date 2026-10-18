@@ -72,7 +72,7 @@ test('packaged functions run outside the project with only their traced dependen
         assert.ok(!files.some((file) => file.startsWith('i18n-')), 'API function does not include the Angular renderer');
       } else {
         const archive = await inject(handler, '/en/docs/v/0-1-0-alpha-1/api');
-        assert.equal(archive.statusCode, 200);
+        assert.equal(archive.statusCode, 404);
         assert.doesNotMatch(archive.body, /Native route options/);
         assert.equal((await inject(handler, '/en/docs/v/unknown/api')).statusCode, 404);
         const home = await inject(handler, '/en');
@@ -112,7 +112,7 @@ test('route functions dispatch specific URLs, group languages and isolate API re
   assert.equal(destination('/api/unknown'), '/__fastang/api');
   assert.equal(destination('/en/about'), '/en/about/index.html');
   assert.equal(destination('/en/docs/getting-started'), '/en/docs/getting-started/index.html');
-  assert.equal(destination('/en/docs/v/0-1-0-alpha-1/api'), '/en/docs/v/0-1-0-alpha-1/api/index.html');
+  assert.notEqual(destination('/en/docs/v/0-1-0-alpha-1/api'), '/en/docs/v/0-1-0-alpha-1/api/index.html');
   assert.equal(destination('/en/docs/v/unknown/api'), '/__fastang/ssr');
   const isolated = await mkdtemp(join(tmpdir(), 'fastang-route-functions-'));
   try {

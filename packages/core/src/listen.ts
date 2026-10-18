@@ -6,7 +6,7 @@ export const DEFAULT_PORT = 3278;
 export async function listen(app: FastifyInstance): Promise<void> {
   const port = Number(process.env['PORT'] ?? DEFAULT_PORT);
   const host = process.env['HOST'] ?? '127.0.0.1';
-  if (!Number.isInteger(port) || port < 0 || port > 65535) throw new Error('PORT deve essere una porta valida');
+  if (!Number.isInteger(port) || port < 0 || port > 65535) throw new Error('PORT must be a valid port');
   const shutdown = async () => {
     try { await app.close(); }
     catch (error) { app.log.error(error); process.exitCode = 1; }

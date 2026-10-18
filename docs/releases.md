@@ -86,23 +86,13 @@ Official references: [public scoped packages](https://docs.npmjs.com/creating-an
 [distribution tags](https://docs.npmjs.com/adding-dist-tags-to-packages/),
 [trusted publishing](https://docs.npmjs.com/trusted-publishers/).
 
-## Preserve the previous documentation before changing releases
+## Documentation policy
 
-Before updating the current version and guide sources for a new release, archive
-those guides from a committed Git ref that still contains that core version:
-
-```sh
-npm run docs:archive -- 0.1.0-alpha.3 HEAD
-```
-
-Use the actual previous version/ref. The command checks the core version at that
-ref, copies both languages and their navigation, records source hashes/commit,
-and updates the archive catalogue. It refuses to replace an existing archive.
-Then update `CURRENT_DOCS_VERSION` in `src/app/docs/versions.ts` along with the
-package versions, current guides and migration instructions. Commit archive and
-new release sources together. The URL slug uses hyphens instead of version dots;
-the selector displays the original npm version. `/docs` remains the current alias.
-Archived versions have their own URLs and never fall back to current content.
+Before v1, keep only current guides and the version selector. Do not archive alpha
+releases; their sources remain in Git tags. Retired alpha URLs return 404.
+Update CURRENT_DOCS_VERSION and the guides with each release. Starting with stable
+v1, `docs:archive` can preserve guides from a committed Git ref; it rejects 0.x
+versions. The current `/docs` alias and versioned routes remain available.
 
 `npm run test:docs:browser` checks version navigation against an existing production
 build. `npm run test:upgrade` checks the published alpha.1 → alpha.2 upgrade in an

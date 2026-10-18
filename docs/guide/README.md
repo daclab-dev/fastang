@@ -18,4 +18,7 @@ Each code fence marked `file=...` contains a complete application file. The exec
 npm run test:docs
 ```
 
-The current guides live here; released snapshots and their source metadata live in `docs/versions/`. The website version selector keeps version-specific URLs and navigation. Before moving to a new current release, use `npm run docs:archive -- VERSION GIT_REF` and follow the release guide.
+Before v1, only current guides are published. The version selector and versioned
+URLs remain, but previous alpha snapshots are not kept on the site. Git tags
+preserve their sources. Stable documentation archives start with v1; the archive
+command rejects pre-v1 versions. See the release guide for the workflow.

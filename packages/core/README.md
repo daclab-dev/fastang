@@ -1,7 +1,7 @@
 # @fastang/core
 
 Experimental FastAng runtime and tooling for Angular + Fastify applications.
-Version 0.1.0-alpha.2 is an experimental alpha. Public APIs may change between alpha releases.
+Version 0.1.0-alpha.3 is an experimental alpha. Public APIs may change between alpha releases.
 
 The package contains compiled JavaScript and TypeScript declarations. Angular,
 Fastify, Vite and the Angular compiler are explicit peer dependencies so the app

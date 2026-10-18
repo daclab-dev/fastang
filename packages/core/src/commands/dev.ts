@@ -3,26 +3,20 @@ import { fileURLToPath } from 'node:url';
 import { watch } from 'node:fs';
 import { spawn, type ChildProcess } from 'node:child_process';
 import { once } from 'node:events';
+import { stopChild } from './stop-child.ts';
 
 let child: ChildProcess | undefined;
 let stopping = false;
 let timer: ReturnType<typeof setTimeout>;
 let queue = Promise.resolve();
 
-async function stopChild() {
-  if (child && child.exitCode === null && child.signalCode === null) {
-    const exited = once(child, 'exit');
-    child.kill('SIGTERM');
-    await exited;
-  }
-}
 async function restart() {
-  await stopChild();
+  await stopChild(child);
   if (stopping) return;
   // Processo nuovo: anche le modifiche al generatore sono applicate al riavvio.
   const generator = spawn(process.execPath, [fileURLToPath(new URL('../cli.js', import.meta.url)), 'generate'], { stdio: 'inherit', env: process.env });
   const [code] = await once(generator, 'exit');
-  if (code !== 0) throw new Error('Generazione route fallita');
+  if (code !== 0) throw new Error('Route generation failed');
   child = spawn(process.execPath, [fileURLToPath(new URL('./dev-server.js', import.meta.url))], { stdio: 'inherit', env: process.env });
   child.on('error', (error) => { console.error(error); process.exitCode = 1; });
 }
@@ -40,8 +34,9 @@ async function shutdown() {
   clearTimeout(timer);
   watchers.forEach((watcher) => watcher.close());
   await queue;
-  await stopChild();
+  await stopChild(child);
 }
 process.once('SIGINT', shutdown);
 process.once('SIGTERM', shutdown);
-await restart();
+queue = restart();
+await queue;

@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Bound development server shutdown to three seconds before forced termination.
+- Use English for framework diagnostics.
+
 ## 0.1.0-alpha.3
 
 - Coordinate the standalone CLI release and starter while preserving runtime APIs.

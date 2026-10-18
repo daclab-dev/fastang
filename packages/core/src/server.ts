@@ -58,7 +58,7 @@ export async function createServer(options: ServerOptions): Promise<FastifyInsta
         status: 200,
         async dispatchApi(path, method, body, headers, dispatchOptions = {}) {
           path = normalizeRedirectLocation(path);
-          if (!path.startsWith('/api/')) throw new Error('Solo API locali consentite');
+          if (!path.startsWith('/api/')) throw new Error('Only local API paths are allowed');
           const forwarded: Record<string, string> = {};
           for (const name of ['cookie', 'authorization', 'x-request-label']) {
             const value = request.headers[name];
@@ -85,7 +85,7 @@ export async function createServer(options: ServerOptions): Promise<FastifyInsta
       const html = await options.render(`http://fastang.local${request.url}`, await options.template(request.url), context);
       if (context.redirect) {
         const status = context.redirect.status ?? 302;
-        if (![301, 302, 303, 307, 308].includes(status)) throw new Error('Stato redirect non valido');
+        if (![301, 302, 303, 307, 308].includes(status)) throw new Error('Invalid redirect status');
         const location = normalizeRedirectLocation(context.redirect.location);
         if (responseCookies.length) reply.header('set-cookie', responseCookies);
         return reply.header('x-fastang-render', 'redirect').header('cache-control', 'private, no-store')

@@ -5,11 +5,11 @@ promise. Track concrete work in repository issues once the project is public.
 
 ## Alpha foundation
 
-- Versioned bilingual documentation preserves released guides, and the existing-app upgrade workflow is verified against the npm alpha.1 → alpha.2 upgrade. Automated source migrations remain future work.
+- The bilingual documentation selector exposes only current guides before v1, and the existing-app upgrade workflow is verified against the npm alpha.1 → alpha.2 upgrade. Automated source migrations remain future work.
 
 - Framework extraction and a tarball-tested starter are implemented in `packages/core` and `examples/starter`.
 - Public package entry points, browser/server boundaries and the accepted/tested environment matrix are documented in [the reference](docs/guide/en/reference.md). Tests compare the bilingual tables with npm exports and dependency declarations.
-- The `create-fastang` scaffolding command and its packaged template are implemented and tested outside the workspace. Version `0.1.0-alpha.2` is available on npm under the `alpha` tag.
+- The `create-fastang` scaffolding command and its packaged template are implemented and tested outside the workspace. Version `0.1.0-alpha.3` is available on npm under the `alpha` tag.
 - Browser automation covers hydration, client routing, data, redirects and failures on Chromium, Firefox and WebKit, including mobile emulation.
 - Validate the Vercel adapter on a real Preview deployment.
 - Versioning, changelogs and verified npm tarball tooling are implemented.

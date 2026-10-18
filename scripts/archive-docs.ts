@@ -7,6 +7,7 @@ import { promisify } from 'node:util';
 const run = promisify(execFile);
 const [version, ref, ...extra] = process.argv.slice(2);
 assert.ok(version && /^\d+\.\d+\.\d+(?:-[\w.-]+)?$/.test(version) && ref && !extra.length, 'Usage: npm run docs:archive -- VERSION GIT_REF');
+assert.ok(!version.startsWith('0.'), 'Documentation snapshots start with v1; pre-v1 docs stay current-only');
 const commit = (await run('git', ['rev-parse', '--verify', '--end-of-options', ref + '^{commit}'])).stdout.trim();
 const show = async (file: string) => (await run('git', ['show', `${commit}:${file}`], { maxBuffer: 4 * 1024 * 1024 })).stdout;
 assert.equal(JSON.parse(await show('packages/core/package.json')).version, version, 'Git ref must contain the requested core version');

@@ -194,7 +194,7 @@ test('the executable entry starts listen() even when the build has multiple entr
   await assert.rejects(promisify(execFile)(process.execPath, [resolve('dist/server/index.js')], {
     env: { ...process.env, PORT: 'invalid' },
   }), (error: any) => {
-    assert.match(error.stderr, /PORT deve essere una porta valida/);
+    assert.match(error.stderr, /PORT must be a valid port/);
     return true;
   });
 });
@@ -258,22 +258,17 @@ test('internal API redirects are HttpClient errors and Set-Cookie responses are 
   } finally { await app.close(); }
 });
 
-test('versioned documentation serves actual archives and rejects unavailable versions/guides', async () => {
+test('current versioned documentation is served and retired alpha versions return 404', async () => {
   const app: FastifyInstance = await createProductionServer();
   try {
     for (const prefix of ['', '/en']) {
       const current = await app.inject(prefix + '/docs/v/0-1-0-alpha-3/api');
-      const archived = await app.inject(prefix + '/docs/v/0-1-0-alpha-1/api');
       assert.equal(current.statusCode, 200);
-      assert.equal(archived.statusCode, 200);
-      assert.equal(archived.headers['x-fastang-render'], 'prerender');
       assert.match(current.body, /id="docs-version"/);
       assert.match(current.body, prefix ? /Native route options/ : /Opzioni native della rotta/);
-      assert.doesNotMatch(archived.body, prefix ? /Native route options/ : /Opzioni native della rotta/);
-      assert.match(archived.body, /0-1-0-alpha-1\/rendering/);
-      assert.equal((await app.inject(prefix + '/docs/v/0-1-0-alpha-1/typed-api')).statusCode, 404);
-      assert.equal((await app.inject(prefix + '/docs/v/unknown/api')).statusCode, 404);
-      assert.equal((await app.inject(prefix + '/docs/v/unknown')).statusCode, 404);
+      for (const path of ['/docs/v/0-1-0-alpha-1/api', '/docs/v/0-1-0-alpha-2/api', '/docs/v/unknown/api', '/docs/v/unknown']) {
+        assert.equal((await app.inject(prefix + path)).statusCode, 404);
+      }
     }
   } finally { await app.close(); }
 });

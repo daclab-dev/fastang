@@ -10,6 +10,8 @@ FastAng is an experimental full-stack framework that brings Angular interfaces, 
 
 [English tutorials](docs/guide/en/getting-started.md) · [Guide pratiche in italiano](docs/guide/it/getting-started.md) · [Riferimento completo in italiano](README.it.md) · [Contributing](CONTRIBUTING.md) · [License and assets](NOTICE.md)
 
+Project creation and upgrades use the standalone `@fastang/cli` package. Install it with `npm install -g @fastang/cli@alpha`; local core commands handle development and build. See [the CLI guide](docs/cli.md).
+
 ## Why FastAng?
 
 After five years working with Angular and Fastify, Dario Chiapperini wanted a full-stack foundation that kept both technologies recognizable. The straightforward experience of Next.js's Pages Router was an influence; Analog was a starting point for exploring an Angular alternative.
@@ -191,4 +193,4 @@ The [reference](docs/guide/en/reference.md) lists public npm entry points, brows
 
 ## Updating an app and documentation versions
 
-Update the existing app’s `@fastang/core` dependency and align required peers; do not recreate it with the generator. Follow [the upgrade guide](docs/guide/en/upgrading.md). The documentation selector keeps version-specific URLs, navigation and released archives. `npm run docs:archive -- VERSION GIT_REF` preserves a committed release’s guides before the next version is prepared.
+Update the existing app’s `@fastang/core` dependency and align required peers; do not recreate it with the generator. Follow [the upgrade guide](docs/guide/en/upgrading.md). Before v1, the documentation selector exposes only current guides; older alpha sources remain in Git tags. Stable documentation archives start with v1.

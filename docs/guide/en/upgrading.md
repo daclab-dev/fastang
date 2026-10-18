@@ -88,10 +88,10 @@ stay in it. If a guide is absent in the selected release, changing version opens
 that release's index. An unknown version or guide returns HTTP 404 instead of
 silently showing the newest instructions.
 
-Unversioned `/docs` links open the current documentation. Archived guides are
-snapshots of the repository at the recorded Git commit for that version. The archive currently
-starts with `0.1.0-alpha.1`; it does not invent guides for releases that had none.
-The current version's docs can receive corrections before they are archived.
+Before v1, the selector exposes only the current documentation, updated in place.
+Older alpha guides are not retained on the site; their sources remain in Git tags.
+Versioned URLs for retired alpha guides return 404. Documentation snapshots
+will start with stable v1 releases. `/docs` opens the current guides.
 
 To roll back, restore the previous application commit and lockfile, run `npm ci`
 and redeploy that checked state. Simply downgrading the package does not undo

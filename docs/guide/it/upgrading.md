@@ -92,10 +92,11 @@ restano nella stessa versione. Se una guida manca nella release selezionata, il
 cambio versione apre il suo indice. Versioni o guide inesistenti restituiscono
 HTTP 404, senza mostrare silenziosamente le istruzioni più recenti.
 
-I link `/docs` senza versione aprono la documentazione corrente. Le guide
-archiviate sono copie del repository al commit Git registrato per quella versione. L’archivio
-parte da `0.1.0-alpha.1`: non inventa guide per release che non le avevano. Le
-guide della versione corrente possono ricevere correzioni prima dell’archiviazione.
+Prima della v1 il selettore espone solo la documentazione corrente, aggiornata
+in modo continuo. Le guide delle alpha precedenti non restano sul sito; i sorgenti
+restano nei tag Git. Gli URL versionati delle alpha ritirate restituiscono 404.
+Gli archivi della documentazione partiranno dalle release stabili v1. `/docs`
+apre le guide correnti.
 
 Per tornare indietro ripristina il commit precedente dell’app e il suo lockfile,
 esegui `npm ci` e ripubblica quello stato verificato. Il solo downgrade del pacchetto

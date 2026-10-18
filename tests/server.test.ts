@@ -54,7 +54,7 @@ test('il prerendering rifiuta percorsi ambigui e traversal', () => {
   assert.equal(staticFile('/about'), 'about/index.html');
   assert.equal(staticFile('/products/starter'), 'products/starter/index.html');
   for (const path of ['/../secret', '/about?x=1', '//host/path', '/%2e%2e', 'relative']) {
-    assert.throws(() => staticFile(path), /non supportato/);
+    assert.throws(() => staticFile(path), /Unsupported prerender path/);
   }
 });
 

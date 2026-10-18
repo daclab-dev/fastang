@@ -8,6 +8,8 @@ Angular nativo, Fastify completo. Una prima base funzionante per un meta-framewo
 
 **Stato: prototipo 0.1.** Il workspace include il pacchetto `@fastang/core`, uno starter minimo indipendente e il sito dimostrativo. Il pacchetto espone la CLI `fastang`, ed è disponibile su npm insieme a `create-fastang`, con il tag `alpha`. Non sono dichiarati vantaggi prestazionali rispetto ad Analog senza benchmark comparabili.
 
+Creazione e aggiornamenti usano il pacchetto separato `@fastang/cli`: installalo con `npm install -g @fastang/cli@alpha`. I comandi del core locale gestiscono sviluppo e build. Vedi la [guida CLI](docs/cli.md).
+
 ## Avvio
 
 Richiede una versione Node supportata da Angular 22: **22.22.3+ nella linea 22, 24.15+ nella linea 24, oppure 26+**. Le dipendenze sono bloccate nel `package-lock.json`.
@@ -362,4 +364,4 @@ Il [riferimento](docs/guide/it/reference.md) elenca gli entry point npm pubblici
 
 ## Aggiornamenti e documentazione versionata
 
-Aggiorna la dipendenza `@fastang/core` nell’app esistente e allinea i peer richiesti; non ricreare il progetto con il generatore. La [guida agli aggiornamenti](docs/guide/it/upgrading.md) descrive verifiche e migrazioni manuali. Il selettore delle guide mantiene URL e navigazione della versione scelta. `npm run docs:archive -- VERSIONE REF_GIT` conserva le guide di una release committata prima di preparare la successiva.
+Aggiorna la dipendenza `@fastang/core` nell’app esistente e allinea i peer richiesti; non ricreare il progetto con il generatore. La [guida agli aggiornamenti](docs/guide/it/upgrading.md) descrive verifiche e migrazioni manuali. Prima della v1 il selettore espone solo le guide correnti; i sorgenti delle alpha precedenti restano nei tag Git. Gli archivi della documentazione partiranno dalla v1.

@@ -13,7 +13,7 @@ export function fastang(): Plugin {
     name: 'fastang',
     enforce: 'pre',
     transform(_code, id, options) {
-      if (!options?.ssr && isServerModule(id)) this.error(`Modulo server importato nel client: ${id}`);
+      if (!options?.ssr && isServerModule(id)) this.error(`Server module imported into the client: ${id}`);
     },
     async buildStart() { await generate(); },
     configureServer(server) {
