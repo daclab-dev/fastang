@@ -17,3 +17,5 @@ Each code fence marked `file=...` contains a complete application file. The exec
 ```sh
 npm run test:docs
 ```
+
+The current guides live here; released snapshots and their source metadata live in `docs/versions/`. The website version selector keeps version-specific URLs and navigation. Before moving to a new current release, use `npm run docs:archive -- VERSION GIT_REF` and follow the release guide.

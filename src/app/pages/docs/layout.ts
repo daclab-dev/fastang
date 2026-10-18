@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, afterNextRender, signal } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { TranslatePipe, LocalePathPipe, SiteLanguage } from '../../i18n/i18n';
 import { inject } from '@angular/core';
@@ -23,7 +23,7 @@ import { Router } from '@angular/router';
       <div class="docs-main">
         <div class="docs-toolbar">
           <label for="docs-version">{{ 'Versione della documentazione' | t }}</label>
-          <select id="docs-version" [value]="docs.version()?.slug ?? ''" (change)="changeVersion($event)">
+          <select id="docs-version" [disabled]="!ready()" [attr.aria-busy]="!ready()" [value]="docs.version()?.slug ?? ''" (change)="changeVersion($event)">
             @if (!docs.version()) {<option value="" disabled>{{ 'Versione non trovata' | t }}</option>}
             @for (version of versions; track version.version) {
               <option [value]="version.slug" [attr.selected]="docs.version()?.slug === version.slug ? '' : null">{{ version.version }}{{ version.version === current ? ' · ' + ('corrente' | t) : '' }}</option>
@@ -38,6 +38,8 @@ import { Router } from '@angular/router';
   `,
 })
 export default class DocumentationLayout {
+  readonly ready = signal(false);
+  constructor() { afterNextRender(() => this.ready.set(true)); }
   readonly docs = inject(DocumentationContext);
   readonly versions = documentationVersions;
   readonly current = CURRENT_DOCS_VERSION;
