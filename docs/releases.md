@@ -108,3 +108,5 @@ independent app with custom source, production rendering and Vercel output.
 Update/add a registry upgrade scenario after publishing later releases. Migration
 instructions must identify application bindings that changed; the generator must
 not overwrite an existing application as an update mechanism.
+
+The documentation site currently has a deployment budget of 12 Vercel functions. Known documentation versions are prerendered; versioned URLs use a catch-all through the existing SSR fallback, rather than adding a function for every documentation route. The Vercel output test enforces this site-specific budget.

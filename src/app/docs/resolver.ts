@@ -8,9 +8,10 @@ import type { Article } from './markdown';
 export interface GuideData { slug: string; version: string; language: Language; article: Article | null }
 export const guideResolver: ResolveFn<GuideData> = async (route, state) => {
   const context = inject(REQUEST_CONTEXT) as RenderContext | null;
-  const slug = route.paramMap.get('slug') ?? '';
+  const slug = documentationLocation(state.url).slug ?? '';
   const language = languageOf(state.url);
   const version = documentationLocation(state.url).version;
+  if (!slug && version) return { slug, version: version.version, language, article: null };
   if (!version?.guides.some(guide => guide.slug === slug)) {
     if (context) context.status = 404;
     return { slug, version: version?.version ?? '', language, article: null };
@@ -20,9 +21,9 @@ export const guideResolver: ResolveFn<GuideData> = async (route, state) => {
 };
 export const guideTitle: ResolveFn<string> = (route, state) => {
   const version = documentationLocation(state.url).version;
-  const guide = version?.guides.find(guide => guide.slug === route.paramMap.get('slug'));
+  const guide = version?.guides.find(guide => guide.slug === documentationLocation(state.url).slug);
   const language = languageOf(state.url);
-  return `${guide?.[language] ?? (language === 'it' ? 'Guida non trovata' : 'Guide not found')} | FastAng`;
+  return `${(!documentationLocation(state.url).slug && version ? (language === 'it' ? 'Documentazione' : 'Documentation') : guide?.[language]) ?? (language === 'it' ? 'Guida non trovata' : 'Guide not found')} | FastAng`;
 };
 
 export const docsIndexResolver: ResolveFn<boolean> = (_route, state) => {

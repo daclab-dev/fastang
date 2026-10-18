@@ -14,7 +14,7 @@ export const documentationVersions: readonly DocumentationVersion[] = [
 export function documentationLocation(url: string): { version?: DocumentationVersion; slug?: string; requested?: string } {
   const path = url.split(/[?#]/)[0].replace(/^\/en(?=\/|$)/, '');
   const parts = path.split('/').filter(Boolean);
-  if (parts[1] === 'v') return { requested: parts[2], version: documentationVersions.find(version => version.slug === parts[2]), slug: parts[3] };
+  if (parts[1] === 'v') return { requested: parts[2], version: parts.length <= 4 ? documentationVersions.find(version => version.slug === parts[2]) : undefined, slug: parts[3] };
   return { version: documentationVersions[0], slug: parts[1] };
 }
 export function documentationPath(version: DocumentationVersion, slug?: string): string {

@@ -4,6 +4,7 @@ import { TranslatePipe, LocalePathPipe, SiteLanguage } from '../../i18n/i18n';
 import { DocumentationContext } from '../../docs/context';
 
 @Component({
+  selector: 'fastang-doc-index',
   imports: [RouterLink, TranslatePipe, LocalePathPipe],
   template: `
     @if (docs.version()) {<div class="docs-intro"><div class="eyebrow">FASTANG / DOCS</div>

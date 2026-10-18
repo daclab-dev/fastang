@@ -7,6 +7,7 @@ import { CURRENT_DOCS_VERSION, documentationVersions, switchDocumentation } from
 import { Router } from '@angular/router';
 
 @Component({
+  selector: 'fastang-doc-layout',
   imports: [RouterLink, RouterOutlet, TranslatePipe, LocalePathPipe],
   template: `
     <section class="docs-shell">
@@ -30,6 +31,7 @@ import { Router } from '@angular/router';
           </select>
           @if (docs.version()?.version !== current && docs.version()) {<span class="docs-archive-note">{{ 'Versione archiviata' | t }}</span>}
         </div>
+        <ng-content />
         <router-outlet />
       </div>
     </section>

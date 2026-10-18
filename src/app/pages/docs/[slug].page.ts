@@ -8,6 +8,7 @@ import { DocumentationContext } from '../../docs/context';
 import type { GuideData } from '../../docs/resolver';
 
 @Component({
+  selector: 'fastang-doc-article',
   imports: [RouterLink, TranslatePipe, LocalePathPipe, DocInline],
   template: `
     @if (guide().article; as article) {

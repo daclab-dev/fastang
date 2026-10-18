@@ -14,6 +14,7 @@ test('documentation navigation keeps release identity and falls back only on an 
   assert.equal(switchDocumentation('/docs/typed-api', previous), documentationPath(previous));
   assert.equal(documentationLocation('/docs/v/unknown/api').version, undefined);
   assert.equal(documentationLocation('/docs/v/unknown').version, undefined);
+  assert.equal(documentationLocation('/docs/v/0-1-0-alpha-2/api/extra').version, undefined);
   assert.equal(new Set(documentationVersions.map(version => version.slug)).size, documentationVersions.length);
 });
 test('archived documentation and navigation match their recorded Git source', async () => {
