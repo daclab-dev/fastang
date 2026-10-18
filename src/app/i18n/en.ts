@@ -1,5 +1,17 @@
 // English copy for the public demo site. Italian source strings are the keys.
 export const english: Readonly<Record<string, string>> = {
+  "Crea con il tuo assistente AI": "Build with your AI assistant",
+  "Copia il prompt nel tuo editor o assistente con accesso al terminale. Sostituisci my-app con il nome del progetto.": "Copy the prompt into your editor or assistant with terminal access. Replace my-app with your project name.",
+  "Copia prompt": "Copy prompt",
+  "Prompt di creazione del progetto": "Project creation prompt",
+  "Copia non disponibile: seleziona il prompt e copialo manualmente.": "Copy is unavailable: select the prompt and copy it manually.",
+  "Prompt copiato negli appunti.": "Prompt copied to clipboard.",
+  "Indice per AI": "AI documentation index",
+  "Documentazione completa per AI": "Full AI documentation",
+  "Guide correnti · documento completo in inglese": "Current guides · full document in English",
+  "Risorse per assistenti AI": "AI assistant resources",
+  "Come usarla": "How to use it",
+
   "Versione della documentazione": "Documentation version",
   "Versione non trovata": "Version not found",
   "Versione archiviata": "Archived version",

@@ -1,10 +1,11 @@
 import { TranslatePipe, LocalePathPipe } from '../i18n/i18n';
 import { Component, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { AgentStart } from '../components/agent-start';
 import brandMark from '../../assets/brand/fastang-shield-880.webp';
 
 @Component({
-  imports: [TranslatePipe, LocalePathPipe, RouterLink],
+  imports: [TranslatePipe, LocalePathPipe, RouterLink, AgentStart],
   template: `
     <section class="hero">
       <div class="hero-copy">
@@ -26,6 +27,7 @@ import brandMark from '../../assets/brand/fastang-shield-880.webp';
       <div class="terminal-stack"><span><i></i> Angular + Vite</span><span><i></i> Fastify API + SSR</span></div>
       <a href="/api/health" target="_blank" rel="noopener">API health <span>↗</span></a>
     </section>
+    <fastang-agent-start />
     <section class="features" [aria-label]="'Funzionalità disponibili' | t">
       <article><span class="card-number"><b>01</b> / RENDERING</span><h2>{{ 'HTML dal server.' | t }}</h2><p>{{ 'SSR Angular, hydration ed event replay. La pagina arriva già renderizzata e diventa interattiva nel browser.' | t }}</p><div class="counter"><button type="button" (click)="count.set(count() + 1)" data-testid="counter">Click: {{ count() }}</button><span>{{ 'Prova l\\'interattività ↗' | t }}</span></div></article>
       <article><span class="card-number"><b>02</b> / SERVER</span><h2>{{ 'Fastify, direttamente.' | t }}</h2><p>{{ 'Endpoint con schemi di validazione e serializzazione. Plugin e hook rimangono quelli del server che conosci.' | t }}</p><code>GET /api/products/:id</code><a [routerLink]="'/products/workshop' | localePath">{{ 'Vedi il flusso completo →' | t }}</a></article>

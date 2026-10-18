@@ -338,3 +338,21 @@ html[lang="en"] .hero h1 { font-size: clamp(38px, 4.2vw, 64px); }
 .docs-archive-note { font-size: 11px; color: var(--brand-orange); }
 
 .docs-toolbar select:disabled { opacity: .65; cursor: wait; }
+
+.agent-start { margin: 0 0 28px; padding: 24px; border: 1px solid var(--border); border-radius: 7px; background: var(--surface); }
+.agent-start-heading { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.agent-start h2 { margin: 10px 0; font-size: 22px; }
+.agent-start p { color: var(--text-muted); font-size: 13px; line-height: 1.7; }
+.agent-start-heading .button { flex-shrink: 0; cursor: pointer; }
+.agent-start textarea { display: block; width: 100%; box-sizing: border-box; resize: vertical; margin-top: 18px; padding: 16px; border: 1px solid var(--border); border-radius: 5px; background: #071222; color: #c9ddf4; font: 13px/1.8 monospace; }
+.agent-start textarea:focus-visible { outline: 2px solid var(--brand-cyan); outline-offset: 3px; }
+.agent-copy-status { min-height: 22px; margin: 6px 0; }
+.agent-resources, .docs-ai-links { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 24px; font-size: 12px; }
+.agent-resources a, .docs-ai-links a { color: var(--brand-cyan); }
+.agent-resources > span, .docs-ai-links > span { color: var(--text-subtle); font-size: 11px; }
+.docs-ai-links { padding: 0 0 20px; margin-bottom: 24px; border-bottom: 1px solid var(--border); }
+@media (max-width: 640px) {
+  .agent-start { padding: 18px; }
+  .agent-start-heading { align-items: flex-start; flex-direction: column; gap: 8px; }
+  .agent-start textarea { font-size: 12px; }
+}

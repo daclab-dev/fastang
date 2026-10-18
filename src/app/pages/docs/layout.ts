@@ -31,6 +31,12 @@ import { Router } from '@angular/router';
           </select>
           @if (docs.version()?.version !== current && docs.version()) {<span class="docs-archive-note">{{ 'Versione archiviata' | t }}</span>}
         </div>
+        <nav class="docs-ai-links" [aria-label]="'Risorse per assistenti AI' | t">
+          <span>AI / CONTEXT</span>
+          <a href="/llms.txt">{{ 'Indice per AI' | t }} ↗</a>
+          <a href="/llms-full.txt">{{ 'Documentazione completa per AI' | t }} ↗</a>
+          <a [routerLink]="'/docs/getting-started' | localePath" [fragment]="language.current() === 'it' ? 'usare-fastang-con-un-assistente-ai' : 'use-fastang-with-an-ai-assistant'">{{ 'Come usarla' | t }} →</a>
+        </nav>
         <ng-content />
         <router-outlet />
       </div>
