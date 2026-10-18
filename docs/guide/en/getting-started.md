@@ -100,6 +100,30 @@ In development, `/about` also renders on the server for each request. Prerenderi
 - `src/server/plugins.ts`: server plugins and hooks.
 - `fastang.config.ts`: prerender URLs and Vercel options.
 
+## Use FastAng with an AI assistant
+
+Give your assistant the [llms.txt](https://fastang.dev/llms.txt) URL. It contains
+a FastAng overview and links to Markdown guides without the website navigation.
+You can start with this request:
+
+Read https://fastang.dev/llms.txt and the relevant guides. Before proposing
+changes, check the @fastang/core version in the project's package.json.
+Use the documented FastAng, Angular and Fastify APIs and keep server code
+separate from browser code.
+
+If your tool accepts attached documents but cannot follow links, download
+[llms-full.txt](https://fastang.dev/llms-full.txt) and add it to the context:
+it contains all current guides in English. You can also supply just the
+individual Markdown guides listed in the index to keep the context focused
+on the task.
+
+Not every assistant reads these files automatically: explicitly provide the
+URL or attach the document. Before v1, the guides track the current alpha;
+for projects on older versions, also read the
+[release notes](https://github.com/daclab-dev/fastang/releases).
+Always verify generated changes with `npm run check` and `npm run build`,
+or the equivalent pnpm commands, and your application's tests.
+
 ## Check production
 
 ```bash
