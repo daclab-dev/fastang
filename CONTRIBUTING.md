@@ -93,3 +93,11 @@ Browser test apps add a client-only readiness marker after `afterNextRender` and
 ## Typed API contracts
 
 `tests/contracts-types.ts` contains positive and `@ts-expect-error` checks compiled by `npm run check`. Runtime tests cover URL encoding, Fastify validation/serialization and native HttpClient options/errors. Browser starter tests apply `examples/typed-api` before building and also verify its packaged Vercel SSR function. Copied files in `tests/e2e/fixture` use target-app-relative imports and are type-checked inside that standalone app, rather than by the repository node tsconfig.
+
+## Pull requests and security
+
+Use a feature branch or fork and open a pull request; `main` requires successful
+CI and cannot be pushed to directly. Report vulnerabilities through the private
+channel in [SECURITY.md](SECURITY.md). Maintainers should follow
+[repository operations](docs/repository-operations.md) before approving external
+workflow runs, changing permissions or publishing a release.

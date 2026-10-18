@@ -9,7 +9,8 @@ The `latest` tag is reserved for a later release decision.
 - The npm account owns the `fastang` organization and can publish `create-fastang`.
 - Run `npm login` locally; enable the authentication npm requires for publishing.
 - Keep credentials and one-time codes out of this repository and issue reports.
-- Commit the release sources and push them to GitHub. Wait for CI to succeed.
+- Open a pull request with the release sources, wait for all required checks
+  and merge it. Prepare the published tarballs from that clean, merged commit.
 
 ## Verify and prepare
 
@@ -104,3 +105,7 @@ instructions must identify application bindings that changed; the generator must
 not overwrite an existing application as an update mechanism.
 
 The documentation site currently has a deployment budget of 12 Vercel functions. Known documentation versions are prerendered; versioned URLs use a catch-all through the existing SSR fallback, rather than adding a function for every documentation route. The Vercel output test enforces this site-specific budget.
+
+Release tags matching `v*` are protected against updates and deletion. Correct a
+release by publishing a new version rather than moving an existing tag. See
+[repository operations](repository-operations.md) for the protected workflow.
