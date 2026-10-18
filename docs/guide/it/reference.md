@@ -1,6 +1,6 @@
 # Riferimento API pubbliche e supporto
 
-Questo riferimento descrive `0.1.0-alpha.3`. Tutte le API FastAng sono sperimentali:
+Questo riferimento descrive `0.1.0-alpha.4`. Tutte le API FastAng sono sperimentali:
 un export rende un’API pubblica, non stabile tra release alpha. Per riprodurre
 un progetto, fissa core e generatore a versioni corrispondenti.
 
@@ -133,3 +133,7 @@ background e stato distribuito appartengono all’applicazione o ai suoi servizi
 Le funzioni Vercel condivise e per rotta non condividono la memoria del processo.
 Il [contratto HTTP SSR](https://github.com/daclab-dev/fastang/blob/main/docs/ssr-http.md#requests-and-sessions)
 descrive credenziali, cookie e redirect.
+
+## Controlli CLI delle route
+
+`fastang check [--project <tsconfig>] [--json] [--strict]` verifica route e contratti senza eseguire l’applicazione. Vedi [API tipizzate](typed-api.md#controllo-statico-delle-route).

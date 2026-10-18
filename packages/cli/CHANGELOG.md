@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-alpha.4
+
+- Forward `fastang check` and its options to the installed application core.
+
 ## 0.1.0-alpha.3
 
 - Standalone lightweight `fastang` and `fastang-cli` commands.

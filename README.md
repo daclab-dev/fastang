@@ -48,7 +48,7 @@ This repository is the runnable prototype: clone or download it, install its dep
 | Command | Purpose |
 | --- | --- |
 | `npm run dev` | Development server with Vite and backend restarts |
-| `npm run check` | Generate routes, check TypeScript and Angular templates |
+| `npm run check` | Generate routes, check API contracts, TypeScript and Angular templates |
 | `npm test` | Routing, runtime, HTTP bridge and browser/server boundary tests |
 | `npm run build` | Client, standalone Node server and prerendered pages |
 | `npm run test:production` | Test the latest production build |
@@ -163,7 +163,7 @@ To test local package changes before another release:
 
 ```sh
 npm pack --workspace @fastang/core --pack-destination /tmp
-npm run create -- /tmp/my-fastang-app --core-package /tmp/fastang-core-0.1.0-alpha.3.tgz
+npm run create -- /tmp/my-fastang-app --core-package /tmp/fastang-core-0.1.0-alpha.4.tgz
 cd /tmp/my-fastang-app
 npm install
 npm run dev

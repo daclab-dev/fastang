@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-alpha.4
+
+- Pin the new core release and include static route checks in the generated app check script.
+
 ## 0.1.0-alpha.3
 
 - Pin generated applications to core alpha.3; support creation through the standalone CLI.

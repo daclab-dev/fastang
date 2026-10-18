@@ -57,8 +57,8 @@ Dalla release `0.1.0-alpha.3`, il pacchetto separato `@fastang/cli` gestisce
 creazione e aggiornamenti. Puoi usarlo anche con un core precedente:
 
 ```sh
-npx --package=@fastang/cli@0.1.0-alpha.3 fastang-cli update --to alpha
-npx --package=@fastang/cli@0.1.0-alpha.3 fastang-cli update --to alpha --yes
+npx --package=@fastang/cli@0.1.0-alpha.4 fastang-cli update --to alpha
+npx --package=@fastang/cli@0.1.0-alpha.4 fastang-cli update --to alpha --yes
 ```
 
 Il primo comando mostra un piano; il secondo applica l’installazione npm.

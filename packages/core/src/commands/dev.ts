@@ -11,6 +11,11 @@ let timer: ReturnType<typeof setTimeout>;
 let queue = Promise.resolve();
 
 async function restart() {
+  if (stopping) return;
+  // Keep the previous server available for Vite diagnostics while an edit is invalid.
+  const checker = spawn(process.execPath, [fileURLToPath(new URL('../cli.js', import.meta.url)), 'check'], { stdio: 'inherit', env: process.env });
+  const [checked] = await once(checker, 'exit');
+  if (checked !== 0 || stopping) return;
   await stopChild(child);
   if (stopping) return;
   // Processo nuovo: anche le modifiche al generatore sono applicate al riavvio.
@@ -27,7 +32,7 @@ function changed() {
   }, 150);
 }
 // Solo sorgenti backend e configurazione: i moduli temporanei di Vite non causano riavvii.
-const watchers = ['src/server', 'src/shared', 'vite.config.ts', 'fastang.config.ts'].filter(existsSync).map(path => watch(path, { recursive: true }, changed));
+const watchers = ['src/server', 'src/shared', 'vite.config.ts', 'fastang.config.ts', 'tsconfig.json', 'tsconfig.node.json'].filter(existsSync).map(path => watch(path, { recursive: true }, changed));
 
 async function shutdown() {
   stopping = true;

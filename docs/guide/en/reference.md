@@ -1,6 +1,6 @@
 # Public API and support reference
 
-This reference describes `0.1.0-alpha.3`. All FastAng APIs are experimental:
+This reference describes `0.1.0-alpha.4`. All FastAng APIs are experimental:
 being exported makes an API public, not stable across alpha releases. Pin the
 core and generator to matching versions when reproducing a project.
 
@@ -130,3 +130,7 @@ jobs and distributed state belong to the application or its services. Shared and
 per-route Vercel functions do not share process memory. Read the
 [SSR HTTP contract](https://github.com/daclab-dev/fastang/blob/main/docs/ssr-http.md#requests-and-sessions)
 for credentials, cookies and redirects.
+
+## CLI route checks
+
+`fastang check [--project <tsconfig>] [--json] [--strict]` checks route/contract correspondence without application execution. See [typed APIs](typed-api.md#static-route-checks).

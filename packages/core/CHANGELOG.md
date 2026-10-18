@@ -1,6 +1,9 @@
 # Changelog
 
-## Unreleased
+## 0.1.0-alpha.4
+
+- Add source-only `fastang check` diagnostics for API route/contract correspondence, with tsconfig resolution, JSON and strict mode.
+- Run checks before builds and development restarts; share diagnostics with the Vite overlay.
 
 - Bound development server shutdown to three seconds before forced termination.
 - Use English for framework diagnostics.

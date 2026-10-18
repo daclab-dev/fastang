@@ -37,3 +37,9 @@ keeps the two executables separate.
 The plan compares installed versions and Node with target requirements. Applying
 is blocked on incompatibility. An identical installed version is a no-op;
 downgrades require `--allow-downgrade` explicitly. Source migrations remain manual.
+
+## Route checks (from 0.1.0-alpha.4)
+
+`fastang check [--project <tsconfig>] [--json] [--strict]` forwards to the app’s
+local core. Both CLI and core must contain this new command; use `0.1.0-alpha.4` or later for both packages. It does not run the application. See the core
+README for diagnostics and static-analysis limits.

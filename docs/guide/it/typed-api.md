@@ -87,3 +87,41 @@ nativo e `defineApiRoute()`. I tipi delle risposte nel browser non sono validazi
 runtime: il disallineamento tra versioni client e server richiede ancora gestione
 applicativa. Il [contratto HTTP SSR](https://github.com/daclab-dev/fastang/blob/main/docs/ssr-http.md#requests-and-sessions)
 descrive credenziali e cache.
+
+## Controllo statico delle route
+
+Dalla versione `0.1.0-alpha.4` è disponibile un comando di diagnostica route/contratti:
+
+```sh
+npx fastang check
+npx fastang check --json
+npx fastang check --strict --project tsconfig.node.json
+```
+
+Il comando usa `tsconfig.node.json`, oppure `tsconfig.json` se il primo manca,
+rispettando configurazioni ereditate, `paths`, alias e re-export. Parte dalle
+route API del filesystem e segue il contratto passato a `defineContractRoute`;
+un contratto inutilizzato non implica una route mancante. Non importa moduli
+applicativi, non esegue le configurazioni FastAng/Vite, non scrive file e non
+si connette ai servizi dell’applicazione.
+
+Supporta stringhe letterali, riferimenti const, oggetti e spread risolvibili.
+Contratti costruiti da funzioni, variabili mutabili, wrapper e import non
+risolvibili producono `FA1003`: verifica non possibile. `--strict` trasforma
+questi avvisi in errori. Un disallineamento certo di metodo/path produce `FA1002`;
+errori di configurazione/sintassi `FA1000`, errori di discovery `FA1001`.
+Gli errori terminano con codice 1. Il JSON ha `schemaVersion: 1`, conteggi,
+diagnostiche con posizione e posizione del contratto per i disallineamenti.
+Le route `defineApiRoute` non richiedono un confronto con un contratto.
+
+È un controllo delle convenzioni sorgente, non un valutatore generico di costanti
+o un sostituto dei controlli TypeScript/Angular. Mantieni dichiarativi metodo e
+path: mutazioni ed effetti collaterali altrove non vengono valutati. Risolvere
+un alias TS non configura gli alias runtime. Resta il controllo alla registrazione.
+
+`fastang build` verifica prima di caricare la configurazione applicativa o pulire
+l’output. Il plugin Vite riusa il motore per terminale e overlay alle modifiche;
+la correzione provoca un reload. `fastang dev` verifica prima di riavviare il
+backend e conserva il server precedente durante una modifica non valida.
+La CLI dedicata delega `check` al core dell’app: entrambi devono contenere il
+comando. Usa la versione `0.1.0-alpha.4` o successiva per entrambi.

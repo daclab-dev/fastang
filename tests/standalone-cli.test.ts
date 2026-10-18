@@ -25,6 +25,9 @@ test('standalone CLI works outside an app and forwards commands to the local cor
     const result = run('build', '--vercel', 'argument with spaces');
     assert.equal(result.status, 7);
     assert.deepEqual(JSON.parse(result.stdout), ['build', '--vercel', 'argument with spaces']);
+    const check = run('check', '--json', '--strict');
+    assert.equal(check.status, 7);
+    assert.deepEqual(JSON.parse(check.stdout), ['check', '--json', '--strict']);
   } finally { await rm(directory, { recursive: true, force: true }); }
 });
 

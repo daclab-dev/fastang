@@ -1,7 +1,7 @@
 # @fastang/core
 
 Experimental FastAng runtime and tooling for Angular + Fastify applications.
-Version 0.1.0-alpha.3 is an experimental alpha. Public APIs may change between alpha releases.
+Version 0.1.0-alpha.4 is an experimental alpha. Public APIs may change between alpha releases.
 
 The package contains compiled JavaScript and TypeScript declarations. Angular,
 Fastify, Vite and the Angular compiler are explicit peer dependencies so the app
@@ -82,7 +82,45 @@ See the [public API and support reference](https://fastang.dev/en/docs/reference
 ## Standalone CLI
 
 Project creation and upgrades belong to the separate lightweight `@fastang/cli`
-package introduced in alpha.3. Core provides `dev`, `build`, `generate` and `routes`.
+package introduced in alpha.3. Core provides `dev`, `build`, `generate`, `routes` and (from alpha.4) `check`.
 The global CLI forwards these commands to the app's installed core.
 
 See [CLI behavior and limitations](../../docs/cli.md).
+
+## Static route checks
+
+From `0.1.0-alpha.4`, FastAng includes a route/contract diagnostic command:
+
+```sh
+npx fastang check
+npx fastang check --json
+npx fastang check --strict --project tsconfig.node.json
+```
+
+The checker defaults to `tsconfig.node.json`, falling back to `tsconfig.json`.
+It uses TypeScript module resolution, including inherited compiler settings,
+`paths`, aliases and re-exports. It starts from file-based API routes and checks
+only the contract actually passed to `defineContractRoute`; unused contracts
+are not treated as missing routes. It never imports application modules, loads
+FastAng/Vite configuration, emits files or connects to application services.
+
+Literal strings, const references, object literals and resolvable spreads are
+supported. Function calls that construct contracts, mutable variables, wrappers
+and unresolved imports produce `FA1003` (unverified), rather than a successful
+verification. `--strict` makes these warnings errors. A known method/path mismatch
+is `FA1002`; configuration/syntax errors are `FA1000`, and route discovery errors
+are `FA1001`. Errors exit with code 1. JSON output has `schemaVersion: 1`, counts
+and diagnostics with source positions and a related contract location for
+mismatches. `defineApiRoute` needs no contract correspondence check.
+
+This is a source-convention check, not general constant evaluation or a replacement
+for TypeScript/Angular checks. Keep method/path definitions declarative; mutations
+or side effects elsewhere are not evaluated. Resolving a TS alias here does not
+configure runtime aliases. Registration-time validation remains in place.
+
+`fastang build` checks before loading application configuration or clearing build
+output. The Vite plugin reuses the checker and reports errors in its terminal and
+overlay on route/contract edits; fixing them triggers a full reload. `fastang dev`
+checks before restarting the backend and keeps an existing server during an invalid
+edit. The standalone CLI delegates `check` to the app's installed core: both need
+a release containing this command. Use `0.1.0-alpha.4` or later for both packages.

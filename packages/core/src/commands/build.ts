@@ -7,6 +7,11 @@ import { buildVercelOutput } from '../adapters/vercel.ts';
 import { staticFile } from '../static-path.ts';
 import { loadFastangConfig } from './load-config.ts';
 
+const { checkRoutes, formatCheck } = await import('../check.ts');
+const check = await checkRoutes();
+if (check.diagnostics.length) console.log(formatCheck(check));
+if (check.diagnostics.some(diagnostic => diagnostic.severity === 'error')) throw new Error('FastAng route check failed');
+
 const config = await loadFastangConfig('build');
 
 const vercel = process.argv.includes('--vercel');

@@ -4,7 +4,7 @@ Create a project, start the server and try an Angular page that reads a Fastify 
 
 ## Requirements
 
-This guide targets FastAng `0.1.0-alpha.3`. Use Node `^22.22.3`, `^24.15.0` or `>=26.0.0`, with npm. The starter uses Angular `22.2.3`, Vite `8.3.4` and Fastify `^5.12.7`. APIs may change between alpha releases.
+This guide targets FastAng `0.1.0-alpha.4`. Use Node `^22.22.3`, `^24.15.0` or `>=26.0.0`, with npm. The starter uses Angular `22.2.3`, Vite `8.3.4` and Fastify `^5.12.7`. APIs may change between alpha releases.
 
 ## Create and run
 

@@ -55,8 +55,8 @@ Starting with `0.1.0-alpha.3`, the separate `@fastang/cli` package owns
 project creation and upgrades. It also works with older installed cores:
 
 ```sh
-npx --package=@fastang/cli@0.1.0-alpha.3 fastang-cli update --to alpha
-npx --package=@fastang/cli@0.1.0-alpha.3 fastang-cli update --to alpha --yes
+npx --package=@fastang/cli@0.1.0-alpha.4 fastang-cli update --to alpha
+npx --package=@fastang/cli@0.1.0-alpha.4 fastang-cli update --to alpha --yes
 ```
 
 The first command shows a plan; the second applies the npm installation.
