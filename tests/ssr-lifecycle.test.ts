@@ -5,7 +5,7 @@ import { createServer } from '@fastang/core/server';
 
 const base = { template: async () => '<app-root></app-root>', render: async () => '<p>ok</p>' };
 
-test('SSR deadline covers template loading and never starts the renderer afterwards', async () => {
+test('SSR deadline covers template loading and never starts the renderer afterwards', { timeout: 5_000 }, async () => {
   let renderCount = 0;
   let finish!: (html: string) => void;
   const app = await createServer({ ...base, renderTimeoutMs: 25,
@@ -23,7 +23,7 @@ test('SSR deadline covers template loading and never starts the renderer afterwa
   } finally { await app.close(); }
 });
 
-test('timed-out dispatch aborts its transport, discards cookies and leaves concurrent renders isolated', async () => {
+test('timed-out dispatch aborts its transport, discards cookies and leaves concurrent renders isolated', { timeout: 5_000 }, async () => {
   let release!: () => void;
   let aborted = false;
   const gate = new Promise<void>(resolve => { release = resolve; });
@@ -56,7 +56,7 @@ test('timed-out dispatch aborts its transport, discards cookies and leaves concu
   } finally { release(); await app.close(); }
 });
 
-test('closing the server aborts active SSR and does not wait for an uncooperative renderer', async () => {
+test('closing the server aborts active SSR and does not wait for an uncooperative renderer', { timeout: 5_000 }, async () => {
   let started!: () => void;
   const ready = new Promise<void>(resolve => { started = resolve; });
   let signal!: AbortSignal;
@@ -70,7 +70,7 @@ test('closing the server aborts active SSR and does not wait for an uncooperativ
   assert.equal((await request).statusCode, 503);
 });
 
-test('a disconnected HTTP client aborts only its own render', async () => {
+test('a disconnected HTTP client aborts only its own render', { timeout: 5_000 }, async () => {
   let started!: () => void;
   let cancelled!: () => void;
   const ready = new Promise<void>(resolve => { started = resolve; });
@@ -94,13 +94,13 @@ test('a disconnected HTTP client aborts only its own render', async () => {
   } finally { await app.close(); }
 });
 
-test('SSR deadline rejects invalid configuration before creating the server', async () => {
+test('SSR deadline rejects invalid configuration before creating the server', { timeout: 5_000 }, async () => {
   for (const renderTimeoutMs of [0, -1, NaN, Infinity, 1.5, 2 ** 31]) {
     await assert.rejects(createServer({ ...base, renderTimeoutMs }), /renderTimeoutMs/);
   }
 });
 
-test('a failed render discards cookies and redirects queued before the deadline', async () => {
+test('a failed render discards cookies and redirects queued before the deadline', { timeout: 5_000 }, async () => {
   const app = await createServer({ ...base, renderTimeoutMs: 50,
     configure(app) { app.get('/api/cookie', async (_request, reply) => reply.header('set-cookie', 'session=private').send({ ok: true })); },
     async render(_url, _document, context) {
@@ -117,12 +117,12 @@ test('a failed render discards cookies and redirects queued before the deadline'
   } finally { await app.close(); }
 });
 
-test('individual dispatch cancellation permits another dispatch in the same render', async () => {
+test('individual dispatch cancellation permits another dispatch in the same render', { timeout: 5_000 }, async () => {
   let release!: () => void;
   const gate = new Promise<void>(resolve => { release = resolve; });
   const app = await createServer({ ...base,
     configure(app) {
-      app.get('/api/wait', async () => { await gate; return { late: true }; });
+      app.get('/api/wait', { timeout: 5_000 }, async () => { await gate; return { late: true }; });
       app.get('/api/ready', async () => ({ ok: true }));
     },
     async render(_url, _document, context) {

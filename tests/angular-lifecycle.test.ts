@@ -7,7 +7,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { createRenderer } from '@fastang/core/angular';
 import { createServer } from '@fastang/core/server';
 
-test('deadline destroys a zoneless Angular application waiting for stability', async () => {
+test('deadline destroys a zoneless Angular application waiting for stability', { timeout: 5_000 }, async () => {
   let destroyed!: () => void;
   const disposed = new Promise<void>(resolve => { destroyed = resolve; });
   const SlowApp = Component({ selector: 'app-root', template: '<p>slow</p>' })(class {
@@ -29,7 +29,7 @@ test('deadline destroys a zoneless Angular application waiting for stability', a
 });
 
 
-test('cancellation during an asynchronous initializer releases its request injector', async () => {
+test('cancellation during an asynchronous initializer releases its request injector', { timeout: 5_000 }, async () => {
   let destroyed!: () => void;
   const disposed = new Promise<void>(resolve => { destroyed = resolve; });
   const App = Component({ selector: 'app-root', template: '<p>ready</p>' })(class {});

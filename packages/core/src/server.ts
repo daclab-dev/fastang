@@ -69,7 +69,6 @@ export async function createServer(options: ServerOptions): Promise<FastifyInsta
       active.add(controller);
       const timeoutReason = new Error('SSR deadline exceeded');
       const timer = setTimeout(() => controller.abort(timeoutReason), timeoutMs);
-      timer.unref();
       const disconnected = () => {
         if (!reply.raw.writableFinished) controller.abort(new Error('SSR client disconnected'));
       };
