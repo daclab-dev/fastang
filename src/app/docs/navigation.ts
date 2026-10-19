@@ -4,6 +4,7 @@ export const guideNavigation = [
   { slug: 'api', it: 'API e validazione', en: 'APIs and validation' },
   { slug: 'typed-api', it: 'Contratti API tipizzati', en: 'Typed API contracts' },
   { slug: 'rendering', it: 'Dati e rendering', en: 'Data and rendering' },
+  { slug: 'router-resources', it: 'Route Resources e Signals', en: 'Route Resources and Signals' },
   { slug: 'errors', it: 'Errori e redirect', en: 'Errors and redirects' },
   { slug: 'configuration', it: 'Configurazione e plugin', en: 'Configuration and plugins' },
   { slug: 'upgrading', it: 'Aggiornare il progetto', en: 'Upgrade a project' },

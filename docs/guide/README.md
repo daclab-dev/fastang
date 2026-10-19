@@ -8,6 +8,7 @@ These tutorials target `0.1.0-alpha.5`. The website renders the same Markdown fi
 | Routing | [Pagine e layout](it/routing.md) | [Pages and layouts](en/routing.md) |
 | Server | [API e validazione](it/api.md) | [APIs and validation](en/api.md) |
 | Rendering | [Dati, SSR e prerendering](it/rendering.md) | [Data, SSR and prerendering](en/rendering.md) |
+| Signal route data (preview) | [Route Resources](it/router-resources.md) | [Route Resources](en/router-resources.md) |
 | Errors | [Errori e redirect](it/errors.md) | [Errors and redirects](en/errors.md) |
 | Configuration | [Plugin e ambiente](it/configuration.md) | [Plugins and environment](en/configuration.md) |
 | Deployment | [Node e Vercel](it/deployment.md) | [Node and Vercel](en/deployment.md) |

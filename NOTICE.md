@@ -3,7 +3,8 @@
 FastAng source code and documentation are covered by the root MIT license.
 The following assets have separate terms and are excluded from that grant:
 
-- `fastang.jpeg` and images in `src/assets/brand/` identify the FastAng project.
+- `fastang.jpeg` and images in `src/assets/brand/`, including the starter copy
+  `examples/starter/src/assets/fastang-logo.webp`, identify the FastAng project.
   Their inclusion in this repository does not grant permission to reuse the
   branding for another product or imply endorsement. See the provenance in
   [the brand guide](docs/brand/README.md).

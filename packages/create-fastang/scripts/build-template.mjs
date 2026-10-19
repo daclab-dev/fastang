@@ -45,7 +45,9 @@ Open http://localhost:3278. Use PORT and HOST to override the defaults.
 - \`src/server/plugins.ts\`: Fastify hooks and plugins.
 - \`fastang.config.ts\`: explicit prerender URLs and Vercel function configuration.
 
-The home page includes an interactive counter. \`/greet/world\` resolves data from
+The home page includes the FastAng welcome artwork and an interactive counter.
+Replace or remove the artwork when creating your own product identity; the
+FastAng name and logo are not covered by the source-code MIT license. \`/greet/world\` resolves data from
 \`/api/greet/world\` during SSR and uses Angular's HTTP transfer cache during
 hydration. \`/about\` is prerendered. Unknown pages return HTTP 404.
 

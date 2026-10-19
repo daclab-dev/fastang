@@ -50,6 +50,7 @@ try {
   if (browser) {
     await command(['install', '@sinclair/typebox@^0.34.41', '--no-audit', '--no-fund']);
     await cp(resolve('examples/typed-api/src'), join(app, 'src'), { recursive: true });
+    await cp(resolve('examples/router-resources/src'), join(app, 'src'), { recursive: true });
     await addBrowserProbe(app);
     await cp(resolve('tests/e2e/fixture'), join(app, 'src/app/pages/greet'), { recursive: true });
   }
