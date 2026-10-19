@@ -71,7 +71,7 @@ List concrete URLs, including for parameterized pages. In this alpha, `/`, `/api
 
 Continue with [errors and redirects](errors.md). Read about the lifecycle of [Angular resolvers](https://angular.dev/guide/routing/data-resolvers).
 
-## SSR deadlines (unreleased)
+## SSR deadlines (0.1.0-alpha.6)
 
 The server allows 30 seconds for template loading and rendering. A timeout
 returns HTTP 504 with a private, non-cacheable response and discards queued
@@ -90,5 +90,5 @@ are interrupted, then Angular destroys the request's providers. Cancellation
 does not undo side effects or interrupt synchronous work. Custom renderers,
 database operations and asynchronous serialization hooks must cooperate with
 cancellation; already-running serialization hooks may outlive the HTTP response.
-See the [SSR HTTP contract](https://github.com/daclab-dev/fastang/blob/main/docs/ssr-http.md#render-deadlines-and-cancellation-unreleased)
+See the [SSR HTTP contract](https://github.com/daclab-dev/fastang/blob/main/docs/ssr-http.md#render-deadlines-and-cancellation-010-alpha6)
 for the lifecycle and its limits.

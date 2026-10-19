@@ -163,7 +163,7 @@ To test local package changes before another release:
 
 ```sh
 npm pack --workspace @fastang/core --pack-destination /tmp
-npm run create -- /tmp/my-fastang-app --core-package /tmp/fastang-core-0.1.0-alpha.5.tgz
+npm run create -- /tmp/my-fastang-app --core-package /tmp/fastang-core-0.1.0-alpha.6.tgz
 cd /tmp/my-fastang-app
 npm install
 npm run dev

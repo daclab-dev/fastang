@@ -57,8 +57,8 @@ Dalla release `0.1.0-alpha.3`, il pacchetto separato `@fastang/cli` gestisce
 creazione e aggiornamenti. Puoi usarlo anche con un core precedente:
 
 ```sh
-npx --package=@fastang/cli@0.1.0-alpha.5 fastang-cli update --to alpha
-npx --package=@fastang/cli@0.1.0-alpha.5 fastang-cli update --to alpha --yes
+npx --package=@fastang/cli@0.1.0-alpha.6 fastang-cli update --to alpha
+npx --package=@fastang/cli@0.1.0-alpha.6 fastang-cli update --to alpha --yes
 ```
 
 Il primo comando mostra un piano; il secondo applica l’installazione npm.
@@ -120,7 +120,7 @@ Se pubblichi su Vercel, esegui anche `pnpm run build:vercel`. Rivedi le modifich
 e committa insieme `package.json`, `pnpm-lock.yaml` e gli eventuali interventi sui sorgenti.
 
 Per scegliere una release precisa, sostituisci `alpha` dopo `--to` con il suo
-numero, ad esempio `--to 0.1.0-alpha.5`.
+numero, ad esempio `--to 0.1.0-alpha.6`.
 
 ### Se l’aggiornamento si interrompe
 

@@ -1,6 +1,6 @@
 # Public API and support reference
 
-This reference describes `0.1.0-alpha.5`. All FastAng APIs are experimental:
+This reference describes `0.1.0-alpha.6`. All FastAng APIs are experimental:
 being exported makes an API public, not stable across alpha releases. Pin the
 core and generator to matching versions when reproducing a project.
 

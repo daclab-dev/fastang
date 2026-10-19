@@ -67,7 +67,7 @@ not prevent application code from rendering private data into its own response.
 References: [Angular SSR and HTTP transfer cache](https://angular.dev/best-practices/performance/ssr),
 [Fastify reply headers](https://fastify.dev/docs/latest/Reference/Reply/).
 
-## Render deadlines and cancellation (unreleased)
+## Render deadlines and cancellation (0.1.0-alpha.6)
 
 `createServer` from `@fastang/core/server` bounds template loading and SSR to
 30,000 ms per request. Set `renderTimeoutMs` in its options to a positive integer
