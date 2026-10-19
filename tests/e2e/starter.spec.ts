@@ -108,3 +108,92 @@ test('returns a real 404 and recovers after client-side missing routes', async (
   await page.getByRole('button', { name: 'Clicked 0 times', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Clicked 1 time', exact: true })).toBeVisible();
 });
+
+test('starter artwork loads and respects reduced motion', async ({ page }) => {
+  await page.goto('/');
+  await hydrated(page);
+  const logo = page.getByRole('img', { name: 'FastAng shield' });
+  await expect(logo).toBeVisible();
+  expect(await logo.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
+  expect(await page.locator('.logo-float').evaluate(element => getComputedStyle(element).animationName)).toBe('levitation');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  expect(await page.locator('.logo-float').evaluate(element => getComputedStyle(element).animationName)).toBe('none');
+  expect(await page.locator('.orbit-front').evaluate(element => getComputedStyle(element, '::after').animationName)).toBe('none');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
+test('route resources hydrate without refetching and react to parameters and query inputs', async ({ page }) => {
+  const requests: string[] = [];
+  page.on('request', request => {
+    if (new URL(request.url()).pathname.startsWith('/api/greet/')) requests.push(request.url());
+  });
+  let release!: () => void;
+  const gate = new Promise<void>(resolve => { release = resolve; });
+  await page.route('**/*.js', async route => { await gate; await route.continue(); });
+  try {
+    await page.goto('/resources/Ada', { waitUntil: 'commit' });
+    const heading = page.getByRole('heading', { name: 'Hello, Ada!', exact: true });
+    await expect(heading).toBeVisible();
+    const element = await heading.elementHandle();
+    release();
+    await hydrated(page);
+    expect(await element!.evaluate(node => node.isConnected)).toBe(true);
+    expect(requests).toEqual([]);
+    await page.getByRole('link', { name: 'Grace', exact: true }).click();
+    await expect(page.getByRole('heading', { name: 'Hello, Grace!', exact: true })).toBeVisible();
+    expect(requests).toHaveLength(1);
+    await page.getByRole('link', { name: 'Details', exact: true }).click();
+    await expect(page.getByTestId('resource-details')).toBeVisible();
+    expect(requests).toHaveLength(1);
+    await page.getByRole('link', { name: 'Grace', exact: true }).click();
+    await expect(page.getByTestId('resource-details')).toHaveCount(0);
+    expect(requests).toHaveLength(1);
+    await page.goBack();
+    await expect(page.getByTestId('resource-details')).toBeVisible();
+    expect(requests).toHaveLength(1);
+  } finally { release(); }
+});
+
+test('route resources recover from API errors and apply guard redirects', async ({ page }) => {
+  await page.goto('/resources/Ada');
+  await hydrated(page);
+  await page.getByRole('link', { name: 'API failure', exact: true }).click();
+  await expect(page).toHaveURL(/\/resource-error$/);
+  await expect(page.getByRole('heading', { name: 'Greeting unavailable.' })).toBeVisible();
+  await page.getByRole('link', { name: 'Try again', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Hello, Ada!', exact: true })).toBeVisible();
+  await page.getByRole('link', { name: 'Redirect', exact: true }).click();
+  await expect(page).toHaveURL(/\/about$/);
+});
+
+test('credentialed resource requests are excluded from hydration transfer cache', async ({ page, context, baseURL }) => {
+  await context.addCookies([{ name: 'session', value: 'resource-cache-test', url: baseURL! }]);
+  const requests: string[] = [];
+  page.on('request', request => {
+    if (new URL(request.url()).pathname.startsWith('/api/greet/')) requests.push(request.url());
+  });
+  const response = await page.goto('/resources/Ada');
+  expect(response!.headers()['cache-control']).toBe('private, no-store');
+  await hydrated(page);
+  await expect(page.getByRole('heading', { name: 'Hello, Ada!', exact: true })).toBeVisible();
+  await expect.poll(() => requests.length).toBe(1);
+});
+
+test('route resources isolate concurrent server renders and redirect failed initial navigation', async ({ request }) => {
+  const names = Array.from({ length: 10 }, (_, index) => `Visitor${index}`);
+  const responses = await Promise.all(names.map(name => request.get(`/resources/${name}`, {
+    headers: { cookie: `session=${name}` },
+  })));
+  for (let index = 0; index < responses.length; index++) {
+    expect(responses[index].status()).toBe(200);
+    const html = await responses[index].text();
+    expect(html).toContain(`Hello, ${names[index]}!`);
+    for (const other of names.filter(name => name !== names[index])) expect(html).not.toContain(`Hello, ${other}!`);
+  }
+  const failure = await request.get('/resources/' + 'a'.repeat(81), { maxRedirects: 0 });
+  expect(failure.status()).toBe(302);
+  expect(failure.headers()['location']).toBe('/resource-error');
+  const guard = await request.get('/resources/Ada?preview=blocked', { maxRedirects: 0 });
+  expect(guard.status()).toBe(302);
+  expect(guard.headers()['location']).toBe('/about');
+});

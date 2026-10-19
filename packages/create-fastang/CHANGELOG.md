@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Add a branded, responsive starter welcome page with a floating FastAng shield, an animated orbit and reduced-motion support.
+
 ## 0.1.0-alpha.5
 
 - Detect npm/pnpm, accept --package-manager and generate matching scripts, metadata and explicit Angular toolchain build policies.

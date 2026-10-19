@@ -61,6 +61,15 @@ try {
         const failure = await server.inject('/greet/' + 'a'.repeat(81));
         assert.equal(failure.statusCode, 502); assert.match(failure.body, /Greeting unavailable/);
       }
+      if (guide.slug === 'router-resources') {
+        const resource = await server.inject('/resources/Ada?mode=details');
+        assert.equal(resource.statusCode, 200);
+        assert.match(resource.body, /Hello, Ada!/);
+        assert.match(resource.body, /resource-details/);
+        const failure = await server.inject('/resources/' + 'a'.repeat(81));
+        assert.equal(failure.statusCode, 302);
+        assert.equal(failure.headers.location, '/resource-error');
+      }
       if (guide.slug === 'configuration') assert.equal((await server.inject('/api/health')).headers['x-app-name'], 'my-fastang-app');
     } finally { await server.close(); }
     assert.equal(process.cwd(), repository);

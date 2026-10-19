@@ -101,3 +101,15 @@ CI and cannot be pushed to directly. Report vulnerabilities through the private
 channel in [SECURITY.md](SECURITY.md). Maintainers should follow
 [repository operations](docs/repository-operations.md) before approving external
 workflow runs, changing permissions or publishing a release.
+
+## Signal-based routing example
+
+`examples/router-resources` opts into Angular 22.2 Route Resources (developer
+preview) without changing the stable-resolver starter. The packaged browser
+suite applies this overlay and covers SSR/hydration, reactive navigation,
+error recovery and credentialed transfer-cache exclusion. Keep its complete
+source files synchronized with both `router-resources.md` guides.
+
+The starter welcome artwork uses an existing FastAng asset and CSS animation.
+Keep motion decorative, preserve `prefers-reduced-motion` and the working counter,
+and retain the branding notice in generated applications.
