@@ -122,7 +122,7 @@ test('individual dispatch cancellation permits another dispatch in the same rend
   const gate = new Promise<void>(resolve => { release = resolve; });
   const app = await createServer({ ...base,
     configure(app) {
-      app.get('/api/wait', { timeout: 5_000 }, async () => { await gate; return { late: true }; });
+      app.get('/api/wait', async () => { await gate; return { late: true }; });
       app.get('/api/ready', async () => ({ ok: true }));
     },
     async render(_url, _document, context) {
