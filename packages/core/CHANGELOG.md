@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Bound template loading and SSR to 30 seconds by default (`renderTimeoutMs`). Cancel request-scoped dispatch on deadline, disconnect and shutdown; expose `RenderContext.signal` and per-dispatch cancellation.
+- Stop waiting for Angular bootstrap/stability on cancellation and let Angular destroy its request platform. Dispose internal HTTP dispatch when its Angular subscription ends.
+
 ## 0.1.0-alpha.5
 
 - Default development Fastify/Vite logging to warn, retain the startup address and allow FASTANG_LOG_LEVEL overrides. Suppress successful dev check summaries with check --quiet.

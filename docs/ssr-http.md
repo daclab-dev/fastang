@@ -66,3 +66,40 @@ not prevent application code from rendering private data into its own response.
 
 References: [Angular SSR and HTTP transfer cache](https://angular.dev/best-practices/performance/ssr),
 [Fastify reply headers](https://fastify.dev/docs/latest/Reference/Reply/).
+
+## Render deadlines and cancellation (unreleased)
+
+`createServer` from `@fastang/core/server` bounds template loading and SSR to
+30,000 ms per request. Set `renderTimeoutMs` in its options to a positive integer
+(up to 2,147,483,647 ms). This is a server option, not a `fastang.config.ts` key.
+The development server uses the same default. Prerendered files and direct API
+requests are outside this deadline. Hosting platforms can impose shorter limits.
+
+A deadline returns HTTP 504 with `{ "error": "SSR rendering timed out" }` and
+`Cache-Control: private, no-store`; queued response cookies and redirects are
+discarded. Client disconnection cancels that render. Server shutdown cancels
+active renders with HTTP 503 when the connection is still writable. Ordinary
+render failures retain the generic HTTP 500 response.
+
+`RenderContext.signal` is an optional `AbortSignal` for compatibility with custom
+contexts; `createServer` always supplies it. Pass it to cancellable operations
+such as `fetch(url, { signal: context.signal })`. The `template` callback also
+receives the signal as its second argument. Internal `dispatchApi` calls
+inherit it; `ApiDispatchOptions.signal` can cancel an individual call without
+cancelling the page. Unsubscribing from Angular's local HTTP backend cancels that
+call's injected transport. External HttpClient requests are unsubscribed on
+render cancellation and use Angular's fetch cancellation.
+
+The Angular renderer stops waiting for bootstrap or application stability when
+cancelled. It rejects inside `renderApplication`, allowing Angular to destroy the
+request's platform and providers through its normal cleanup. It does not call
+`destroyPlatform()` or destroy another request's application.
+
+Cancellation is cooperative. Aborting an injected request does not undo a
+Fastify handler's side effects or stop a database query which ignores
+cancellation. Custom renderers must observe the signal and release their own
+resources. Angular's public `renderApplication` API has no cancellation option:
+asynchronous `BEFORE_APP_SERIALIZED` callbacks that have already started can
+continue after the response deadline, until they settle. Synchronous CPU work
+cannot be interrupted by a Node timer. These deadlines bound response waiting;
+they are not process isolation or a hard execution limit.

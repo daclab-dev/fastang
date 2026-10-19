@@ -70,3 +70,25 @@ Usa URL concreti, anche per pagine parametriche. In questa alpha la root `/`, `/
 `/greet/world` è servita dall'HTML generato; `/greet/Ada` continua a usare SSR. In sviluppo entrambe usano SSR. Le risposte SSR sono private e non memorizzate in una cache HTML condivisa; non c'è ISR.
 
 Continua con [errori e redirect](errors.md). Consulta [i resolver Angular](https://angular.dev/guide/routing/data-resolvers) per il loro lifecycle.
+
+## Scadenze SSR (non ancora rilasciate)
+
+Il server concede 30 secondi al caricamento del template e al rendering. Alla
+scadenza risponde HTTP 504 con una risposta privata e non memorizzabile,
+scartando cookie e redirect accodati. La disconnessione del client o la chiusura
+del server annulla il rendering della richiesta.
+
+In un server personalizzato, imposta `renderTimeoutMs` nelle opzioni di
+`createServer` da `@fastang/core/server`. Accetta un intero positivo espresso in
+millisecondi; non è un'opzione di `fastang.config.ts`. Le richieste API dirette e
+i file prerenderizzati restano esclusi. L'hosting può imporre un limite inferiore.
+
+Il codice server può passare `context.signal` alle operazioni annullabili come
+`fetch`. Il dispatch API interno eredita il segnale del rendering e accetta un
+`signal` separato nelle proprie opzioni. Le attese del bootstrap e della
+stabilità Angular vengono interrotte; Angular distrugge poi i provider della
+richiesta. L'annullamento non revoca effetti già prodotti e non interrompe codice
+sincrono. Renderer personalizzati, query e hook asincroni di serializzazione
+devono cooperare: gli hook di serializzazione già avviati possono continuare
+dopo la risposta HTTP. Il [contratto HTTP SSR](https://github.com/daclab-dev/fastang/blob/main/docs/ssr-http.md#render-deadlines-and-cancellation-unreleased)
+descrive il ciclo di vita e i suoi limiti.
