@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-alpha.6
+
+- Coordinate the release with core SSR lifecycle protection and the branded starter. Existing CLI commands are unchanged.
+
 ## 0.1.0-alpha.5
 
 - Support pnpm 10/11 updates with YAML lockfile validation and manager-aware new commands; reject conflicting lockfiles.

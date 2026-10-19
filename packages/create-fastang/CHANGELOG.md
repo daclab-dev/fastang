@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.1.0-alpha.6
 
 - Add a branded, responsive starter welcome page with a floating FastAng shield, an animated orbit and reduced-motion support.
 

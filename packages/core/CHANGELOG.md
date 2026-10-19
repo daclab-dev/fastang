@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## 0.1.0-alpha.6
+
+- Include generated LLM documentation and Markdown guide assets in Vercel output.
 
 - Bound template loading and SSR to 30 seconds by default (`renderTimeoutMs`). Cancel request-scoped dispatch on deadline, disconnect and shutdown; expose `RenderContext.signal` and per-dispatch cancellation.
 - Stop waiting for Angular bootstrap/stability on cancellation and let Angular destroy its request platform. Dispose internal HTTP dispatch when its Angular subscription ends.

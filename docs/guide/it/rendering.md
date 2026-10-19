@@ -71,7 +71,7 @@ Usa URL concreti, anche per pagine parametriche. In questa alpha la root `/`, `/
 
 Continua con [errori e redirect](errors.md). Consulta [i resolver Angular](https://angular.dev/guide/routing/data-resolvers) per il loro lifecycle.
 
-## Scadenze SSR (non ancora rilasciate)
+## Scadenze SSR (0.1.0-alpha.6)
 
 Il server concede 30 secondi al caricamento del template e al rendering. Alla
 scadenza risponde HTTP 504 con una risposta privata e non memorizzabile,
@@ -90,5 +90,5 @@ stabilità Angular vengono interrotte; Angular distrugge poi i provider della
 richiesta. L'annullamento non revoca effetti già prodotti e non interrompe codice
 sincrono. Renderer personalizzati, query e hook asincroni di serializzazione
 devono cooperare: gli hook di serializzazione già avviati possono continuare
-dopo la risposta HTTP. Il [contratto HTTP SSR](https://github.com/daclab-dev/fastang/blob/main/docs/ssr-http.md#render-deadlines-and-cancellation-unreleased)
+dopo la risposta HTTP. Il [contratto HTTP SSR](https://github.com/daclab-dev/fastang/blob/main/docs/ssr-http.md#render-deadlines-and-cancellation-010-alpha6)
 descrive il ciclo di vita e i suoi limiti.

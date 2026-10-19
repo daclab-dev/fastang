@@ -19,7 +19,7 @@ At the repository root:
 ```sh
 npm ci
 npm pack --workspace @fastang/core --pack-destination /tmp
-npm run create -- /tmp/my-fastang-app --core-package /tmp/fastang-core-0.1.0-alpha.5.tgz
+npm run create -- /tmp/my-fastang-app --core-package /tmp/fastang-core-0.1.0-alpha.6.tgz
 cd /tmp/my-fastang-app
 npm install
 npm run dev
@@ -32,7 +32,7 @@ The core tarball must remain available for future clean dependency installations
 
 ```sh
 npm pack --workspace create-fastang --pack-destination /tmp
-npm exec --package=/tmp/create-fastang-0.1.0-alpha.5.tgz -- create-fastang /tmp/another-app --core-package /tmp/fastang-core-0.1.0-alpha.5.tgz
+npm exec --package=/tmp/create-fastang-0.1.0-alpha.6.tgz -- create-fastang /tmp/another-app --core-package /tmp/fastang-core-0.1.0-alpha.6.tgz
 ```
 
 No checkout files are required by either installed package. The generated app
