@@ -194,3 +194,18 @@ The [reference](docs/guide/en/reference.md) lists public npm entry points, brows
 ## Updating an app and documentation versions
 
 Update the existing app’s `@fastang/core` dependency and align required peers; do not recreate it with the generator. Follow [the upgrade guide](docs/guide/en/upgrading.md). Before v1, the documentation selector exposes only current guides; older alpha sources remain in Git tags. Stable documentation archives start with v1.
+
+## Website analytics
+
+Only the fastang.dev website uses `@vercel/analytics`; the framework and generated
+applications do not include tracking. Enable **Web Analytics** for the website's
+Vercel project, then redeploy. Production builds collect page views only on
+`fastang.dev` and `www.fastang.dev`. Angular completed navigations drive page
+views, with automatic tracking disabled to avoid duplicates. Query strings and
+URL fragments are removed before sending events. Local and preview hosts do not
+collect events. No custom interaction events are configured.
+
+Check **Analytics** in the Vercel project after visiting the deployed website.
+Browser blockers can prevent collection. To distinguish future social campaigns,
+use supported dashboard referral information; this integration deliberately
+strips query parameters, including UTM tags.
