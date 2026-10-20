@@ -1,3 +1,4 @@
+import type {} from '@vercel/analytics';
 import { test, expect } from '@playwright/test';
 
 test('local production server does not enable analytics', async ({ page }) => {
